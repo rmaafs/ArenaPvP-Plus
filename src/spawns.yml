@@ -1,0 +1,14 @@
+spawn:
+  w: world
+  x: 0
+  y: 100
+  z: 0
+  ya: 0
+  p: 0
+hotbar:
+  w: world
+  x: 0
+  y: 100
+  z: 0
+  ya: 0
+  p: 0

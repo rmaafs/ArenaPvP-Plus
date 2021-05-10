@@ -1,0 +1,168 @@
+name: ArenaPvP
+version: 1.1.0
+main: com.rmaafs.arenapvp.Main
+author: Royendero
+description: ArenaPvP
+softdepend: [PlaceholderAPI]
+commands:
+  apvp:
+    description: Admin commands
+  duel:
+    description: Duel a player
+  stats:
+    description: View stats
+  uinventario:
+    description: View last inventory
+  party:
+    description: Party control
+  pc:
+    description: Party chat
+  giftrankeds:
+    description: Gift rankeds matches.
+  spec:
+    description: Spectate a player.
+permissions:
+    apvp.meetup.spectator:
+        description: Use spectator in Meetup
+        default: true
+    apvp.create.kit:
+        description: Create a kit
+        default: op
+    apvp.create.editkit:
+        description: Edit a kit
+        default: op
+    apvp.create.deletekit:
+        description: Delete a kit
+        default: op
+    apvp.create.map:
+        description: Create a map
+        default: op
+    apvp.setspawn:
+        description: Set main spawn
+        default: op
+    apvp.sethotbarspawn:
+        description: Set hotbar spawn
+        default: op
+    apvp.command.tohead:
+        description: Set goldenhead name
+        default: op
+    apvp.command.stats:
+        description: See stats
+        default: true
+    apvp.command.other:
+        description: See stats of other player
+        default: true
+    apvp.command.sharemap:
+        description: Command sharemap
+        default: op
+    apvp.command.resetrankeds:
+        description: Reset Rankeds and UnRankeds
+        default: op
+    apvp.command.setelo:
+        description: Change elo of a player
+        default: op
+    apvp.command.setrankeds:
+        description: Change rankeds of a player
+        default: op
+    apvp.command.setunrankeds:
+        description: Change unrankeds of a player
+        default: op
+    apvp.duel.create:
+        description: Create a duel
+        default: true
+    apvp.duel.accept:
+        description: Accept a duel
+        default: true
+    apvp.duel.best.1:
+        description: Duel best of 1
+        default: true
+    apvp.duel.best.3:
+        description: Duel best of 3
+        default: true
+    apvp.duel.best.5:
+        description: Duel best of 5
+        default: true
+    apvp.duel.kit.*:
+        description: Allow all duel kits
+        default: true
+    apvp.rankeds:
+        description: Ilimited rankeds
+        default: op
+    apvp.unrankeds:
+        description: Ilimited unrankeds
+        default: op
+    apvp.ranked.kit.*:
+        description: Allow all rankeds kit
+        default: op
+    apvp.unranked.kit.*:
+        description: Allow all unrankeds kit
+        default: op
+    apvp.viewlastinventory:
+        description: View last inventory
+        default: true
+    apvp.party.create:
+        description: Party create
+        default: true
+    apvp.party.joinopen:
+        description: Party join
+        default: true
+    apvp.party.invite:
+        description: Party invite
+        default: true
+    apvp.party.accept:
+        description: Party accept invite
+        default: true
+    apvp.party.kick:
+        description: Party kick
+        default: true
+    apvp.party.promote:
+        description: Party promote
+        default: true
+    apvp.party.duelaccept:
+        description: Party duelaccept
+        default: true
+    apvp.party.acceptplayer:
+        description: Party acceptplayer
+        default: true
+    apvp.party.events:
+        description: Party event create
+        default: true
+    apvp.party.duel:
+        description: Party duel create
+        default: true
+    apvp.party.config:
+        description: Party config create
+        default: true
+    apvp.party.config.open:
+        description: Party config open
+        default: true
+    apvp.party.event.ffa:
+        description: Party event create ffa
+        default: true
+    apvp.party.event.ffa.*:
+        description: Party event create ffa all kits
+        default: true
+    apvp.party.chat:
+        description: Party chat
+        default: true
+    apvp.party.chat.staff:
+        description: Party chat
+        default: op
+    apvp.meetup.create:
+        description: Meetup event create
+        default: op
+    apvp.meetup.create.*:
+        description: Meetup event create all kits
+        default: op
+    apvp.meetup.join.kit.*:
+        description: Meetup event join
+        default: true
+    apvp.giftrankeds:
+        description: Gift rankeds matches
+        default: op
+    apvp.spectate:
+        description: Spectate a player
+        default: true
+    apvp.scoreboard:
+        description: Show scoreboards
+        default: true

@@ -1,0 +1,594 @@
+nopermission: '&cYou dont have permission.'
+playeroffline: '&cPlayer offline.'
+spawnset: '&aSpawn set!'
+spawnhotbarset: '&aSpawn of Hotbar seted!'
+headname: '&6GoldenHead'
+kitinuse: '&cYou dont delete this kit because a player is playing in this kit. Put the server in whitelist.'
+kitdeleted: '&aKit deleted!'
+viewheal: '&3&l<player>&b at &c<heal>&4&l ❤'
+wordilimited: 'Unlimited'
+playernotintheworld: '&cPlayer no are in a allowed world.'
+gift:
+  already: '&aYou already gift your rankeds. Please try tomorrow.'
+  gived: '&a<number> rankeds gived to <player>!'
+  yougived: '&2<player> &ahas sent you <number> rankeds!'
+playing:
+  player:
+    one: '&cThis player already playing.'
+    party: '&cPlayer aready in a party.'
+  you:
+    one: '&cYou already playing.'
+    party: '&cYou are in a party.'
+  youarespecting: '&cYou are specting!'
+  youcantcraft: '&cYou cant craft!'
+queue:
+  unranked: '&6Waiting players in UnRanked &e&l<kit>&6.'
+  ranked: '&cWaiting players in Ranked &e&l<kit>&6.'
+nomapsavailable: '&cNo maps availables. Please try later.'
+lastinventory:
+  cantsee: '&cYou cant see the last inventory in this moment.'
+  msg: '&3&l> &bClick to see last inventory!'
+  hovertext: '&aClick to see last inventory of <player>.'
+editinghotbar:
+  msg: '&aEdit your custom hotbar. When you done use &b<cmd>&a.'
+  saved: '&aCustom hotbar of kit &7<kit>&a saved on slot &7<slot>&a!'
+starting:
+  game: '&aStarting in <time>...'
+  duel:
+    start:
+      - '&b&m-----------------'
+      - '&e<player1> VS <player2>'
+      - ''
+      - '&aKit: &7<kit>'
+      - '&aMatch time: &7<time>'
+      - '&aBest &7<format>'
+      - '&aMap name: &7<map>'
+      - ''
+      - '&aGood look!'
+      - '&4&lCAMPING IS ILEGAL'
+      - '&b&m-----------------'
+  ranked:
+    start:
+      - ''
+      - '&c&lRanked <kit>'
+      - '&aMap name: &7<map>'
+      - '&aMatch time: &7<time>'
+      - ''
+      - '&6<player1>'
+      - '&7Elo: &e<elo1>'
+      - '&7Rank: &e<rank1>'
+      - ''
+      - '&6<player2>'
+      - '&7Elo: &e<elo2>'
+      - '&7Rank: &e<rank2>'
+      - ''
+    finish: '&a<winner> (<elo1>) (+<elo>) &c<loser> (<elo2>) (-<elo>)'
+  win: '&2<winner> &awon vs &c<loser>&a. &c<health>&4 ❤ &7(<kit>)'
+  won: '&2<winner>&7 won the game vs &c<loser>&7! (<points1> - <points2>)'
+  stats:
+    - '&2&l&m-------------------'
+    - '&c<winner> &7vs &b<loser>'
+    - '&aMatch time: &e<time>'
+    - ''
+    - '&c<maxcswinner>       &7c/s max       &b<maxcsloser>'
+    - '&c<promcswinner>    &7c/s promedy    &b<promcsloser>'
+    - '&c<hitswinner>      &7Total hits      &b<hitsloser>'
+    - '&c<combowinner>     &7max combo     &b<comboloser>'
+    - '&c<arrowswinner>    &7Total arrows    &b<arrowsloser>'
+    - '&c<pingwinner>        &7ping        &b<pingloser>'
+    - '&2&l&m-------------------'
+    - ''
+duelformat:
+  bestofone: '1 of 1'
+  bestofthree: '2 of 3'
+  bestoffive: '3 of 5'
+  defaultcolor: AQUA
+  text:
+    - '&3<player>&b want 1vs1 &e<bestof>&b. Kit &e<kit>'
+    - '&2&l    > &a&lClick to accept&2&l <'
+  hovertext: '&aClick to accept duel of <player>.'
+  sended: '&aDuel sended to <player>.'
+  thisplayernowantduel: '&cThis player dont want duel in this moment.'
+donthave:
+  rankeds:
+    - '&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-'
+    - '&6You dont have Rankeds!'
+    - ''
+    - '&7Please buy VIP and get infinite rankeds!'
+    - '&ahttp://server.buycraft.net'
+    - '&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-'
+  unrankeds:
+    - '&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-'
+    - '&6You dont have UnRankeds!'
+    - ''
+    - '&7Please buy VIP and get infinite unrankeds!'
+    - '&ahttp://server.buycraft.net'
+    - '&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-&6&l&m-&e&l&m-'
+creating:
+  kit:
+    name: '&aWrite the name of the kit, without colors.'
+    namecolor: '&aWrite the name of the kit, will be showed in the GUIs.'
+    inventory: '&aPlease put items and armor of the kit. Write &3&lReady&a if you done.'
+    itemstodelete: '&aPlease put the items that you want regen when the game is finished. If you dont want regen arenas because the players dont have blocks, only write &3&lReady&a. Write &3&lReady&a if you done. &7Lava bucket and water bucket remove water and lava, flint and steel remove fire.'
+    potions: '&aPlease choose potions effect.'
+    item: '&aChoose a item of the kit. Will be showed in the GUIs.'
+    created: '&aKit &6<kit>&a created!'
+  map:
+    corner: '&aPlease put the block on the corner <number>.'
+    spawn: '&aPlease stay in the spawn player <number> and write &3&lReady&a.'
+    name: '&aPlease write the name of the map without colors.'
+    nameexist: '&cThis name of map already exist.'
+    created: '&aMap &6<map>&a for &6<kit>&a created!'
+  meetup:
+    corner: '&aPlease put the block on the corner <number>.'
+    spawn: '&aPut all the posibles spawns that you want. Dont worry, the wool will be removed automatically. Number of posibles spawnpoints showed in the XP level. Write &b&lReady&a if you done.'
+    spawnremoved: '&aSpawn removed!'
+    name: '&aPlease write the name of the map without colors.'
+    nameexist: '&cThis name of map already exist.'
+    created: '&aMeetup map &6<map>&a for &6<kit>&a created!'
+  gui:
+    guiname: '&6Kit config.'
+    speed:
+      name: '&aSpeed Level <level>'
+      lore:
+        - ''
+        - '&2Left Click > &aEnable/Disable'
+        - '&4Right Click > &cChange level.'
+    strength:
+      name: '&cStrength Level <level>'
+      lore:
+        - ''
+        - '&2Left Click > &aEnable/Disable'
+        - '&4Right Click > &cChange level.'
+    slowness:
+      name: '&bSlowness Level <level>'
+      lore:
+        - ''
+        - '&2Left Click > &aEnable/Disable'
+        - '&4Right Click > &cChange level.'
+    fire_resistance:
+      name: '&6Fire resistance'
+      lore:
+        - ''
+        - '&2Left Click > &aEnable/Disable'
+    hitdelay:
+      name: '&6Combo Mode'
+      lore:
+        - ''
+        - '&2Left Click > &aEnable/Disable'
+    naturalregeneration:
+      name: '&cDisable Natural Regeneration'
+      lore:
+        - ''
+        - '&2Left Click > &aEnable/Disable'
+    matchtime:
+      name: '&7Match time: &a<time>'
+      lore:
+        - ''
+        - '&2Left Click > &cRemove 1 minute'
+        - '&2Left Click > &aAdd 1 minute'
+    ready:
+      name: '&aReady'
+      lore:
+        - ''
+        - '&2Click to save config.'
+sharingmap:
+  kitinvalid: '&cKit invalid. Check lowercase and Uppercase.'
+  nomapsforthiskit: '&aNo exist maps for this kit!'
+  mapshared: '&a<size> maps shared of kit <kit> to <kitshared>!'
+meetup:
+  config:
+    cancelled: '&cGame cancelled!'
+    writename: '&aWrite the name of the event!'
+    nomaps: '&cNo maps availables.'
+  game:
+    noexistmeetup: '&cThis meetup no exist or are playing.'
+    needminplayers: '&2&lMEETUP >> &eNeed &6<number>&e more players to start the countdown.'
+    countcancelled: '&2&lMEETUP >> &cCountdown cancelled!'
+    clickjoin:
+      use: true
+      msg: '&2&l   > &aClick to join!'
+      hover: '&aClick to join the event of <owner>'
+    clickjoinstarting:
+      use: true
+      broadcast: '&2&lMEETUP >> &aEvent &e<title>&a of &c<owner>&a starts in 10 seconds...'
+      msg: '&2&l   > &aClick to join!'
+      hover: '&aClick to join the event of <owner>'
+    broadcast: '&2&lMEETUP >> &6<player>&a created a Meetup. Kit &7<kit>&a, name: &7<name>&a.'
+    joinplayer: '&2&lMEETUP >> &2<player>&a joined!'
+    leaveplayer: '&2&lMEETUP >> &4<player>&c left!'
+    starting: '&2&lMEETUP >> &6Starting game in &e<time>&6 seconds...'
+    startinggame: '&aStarting Meetup in <time>...'
+    started:
+      - '&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-'
+      - '&6&lMeetup Event started!'
+      - ''
+      - '&6Title: &e<title>'
+      - '&6Owner: &c<owner>'
+      - ''
+      - '&7Kit: &a<kit>'
+      - '&7Map: &a<map>'
+      - '&7Game time: &e<time>'
+      - '&7Players: &a<players>'
+      - ''
+      - '&4&lTeaming is ilegal!'
+      - ''
+      - '&c&lArenaPvP+ by &4&l@Royendero'
+      - '&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-'
+    playerkilled: '&c<player>&7 killed by &c<killer>&7.'
+    playerdeath: '&c<player>&7 death.'
+    playerdeathdisconnect: '&c<player> &7death (Disconnect).'
+    youdeath: '&cYou death! Thanks for playing with &7<kills>&c kills.'
+    youkilled: '&cYou has been killed by &e<killer>&c at &c<health>&4 ❤&c. Thanks for playing with &7<kills>&c kills.'
+    spectatormode: '&aYou are in spectator mode.'
+    spectatornoperm: '&aPurchase buy to spect any Meetups! &ehttp://ArenaPvPByRoyendero.com'
+    broadcastwin: '&2&lMEETUP >> &e<player>&a win the event &7<title>&a with &e<kills>&a kills.'
+    winner:
+      - '&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-'
+      - '&2<player> &aWIN THE EVENT!'
+      - ''
+      - '&7Kills: &a<kills>'
+      - '&7Total players: &a<players>'
+      - '&7Spectators: &a<spectators>'
+      - '&7Game time: &e<time>'
+      - '&7Map: &a<map>'
+      - ''
+      - '&7Title: &6<title>'
+      - '&eEvent by &c<owner>'
+      - '&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-&2&l&m-&a&l&m-'
+party:
+  create:
+    created:
+      - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+      - '&dParty created!'
+      - ''
+      - '&a/party invite <player>'
+      - '&7Invite a player'
+      - ''
+      - '&a/party promote <player>'
+      - '&7Change owner of the party'
+      - ''
+      - '&a/party kick <player>'
+      - '&7Kick a player'
+      - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+    alreadyinvitedthisplayer: '&cYou already invited this player.'
+    youareinvited: '&e<player> &dhas invited you to their party.'
+    clicktoacceptmsg: '    &2&l> &aClick to accept!'
+    dontinvited: '&cYou dont are invited.'
+    noexist: '&cThis party no exist.'
+    playerjoined: '&5&lPARTY >> &e<player>&d joined!'
+    duelsent: '&aParty sent to <player>!'
+    playerintheparty: '&cThis player are in the party!'
+    playerleave: '&5&lPARTY >> &e<player>&c left!'
+    newowner: '&5&lPARTY >> &e<player>&d is the new owner!'
+    needminplayers: '&5&lPARTY >> &cNeed min &6<min>&c players.'
+    partyfull: '&cParty full!'
+    youdonthaveparty: '&cYou dont have party.'
+    younotaretheowner: '&cYou not are the owner of this party.'
+    playerkicked: '&5&lPARTY >> &e<player>&d kicked!'
+    playernointheparty: '&cThis player dont are in this party.'
+    partyduelsent: '&aParty duel sent to <player>.'
+    duelmatch: '&5&lPARTY >> &5<player>&d want a party duel. Kit &7<kit>&d.'
+    duelmatchclick: '   &2&l >&a Click to accept match!'
+    youareplaying: '&cYour party already playing!'
+    partyplaying: '&cParty playing!'
+    partyopen: '&5&lPARTY >> &aParty opened!'
+    partyclosed: '&5&lPARTY >> &cParty closed!'
+    wantjoin: '&5&lPARTY >> &b<player>&3 want join.'
+    wantjoinclick: '&2&l   > &aClick to accept!'
+    wantjoinhover: '&aClick to accept this player.'
+    invitesent: '&aSent!'
+    youalreadysent: '&cYou already sent a permission.'
+    playerhasparty: '&cThis player has a party.'
+    noarewaiting: '&cThis player dont want join in this moment.'
+    chatformat: '&5&lPARTYCHAT >> &d<player>: &f<msg>'
+    chatformatstaff: '&8&lPARTYCHAT >> &8<player>: &7<msg>'
+  game:
+    startinggame: '&aStarting in <time>...'
+    ffa:
+      started:
+        - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+        - '&d&lEvent FFA Started!'
+        - ''
+        - '&6Owner: &5<owner>'
+        - ''
+        - '&7Kit: &d<kit>'
+        - '&7Map: &d<map>'
+        - '&7Game time: &e<time>'
+        - '&7Players: &d<players>'
+        - ''
+        - '&c&lArenaPvP+ by &4&l@Royendero'
+        - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+      winner:
+        - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+        - '&5<player> &dWIN THE EVENT!'
+        - ''
+        - '&7Kit: &d<kit>'
+        - '&7Total players: &d<players>'
+        - '&7Game time: &e<time>'
+        - '&7Map: &d<map>'
+        - ''
+        - '&5Owner &c<owner>'
+        - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+      playerkilled: '&c<player>&7 killed by &c<killer>&7.'
+    youkilled: '&cYou has been killed by &e<killer>&c at &c<health>&4 ❤&c.'
+    playerdeath: '&c<player>&7 death.'
+    playerdeathdisconnect: '&c<player> &7death (Disconnect).'
+    youdeath: '&cYou death! Thanks for playing.'
+    duel:
+      startinggame: '&aStarting in <time>...'
+      started:
+        - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+        - '&cParty duel started!'
+        - ''
+        - '&7Party1 owner: &c<owner1>'
+        - '&7Players: &c<players1>'
+        - ''
+        - '&7Party2 owner: &c<owner2>'
+        - '&7Players: &c<players2>'
+        - ''
+        - '&7Kit: &c<kit>'
+        - '&7Game time: &e<time>'
+        - '&7Map: &c<map>'
+        - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+      playerkilled: '<player> killed by <killer> at <health> &4❤'
+      playerdeath: '<player> death.'
+      playerdeathdisconnect: '<player> death (Disconnect).'
+      winner:
+        - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+        - '&dParty of &a<owner1> &dwon!'
+        - ''
+        - '&5Kit: &7<kit>'
+        - '&5Game time: &e<time>'
+        - '&5Map: &7<map>'
+        - ''
+        - '&2Winner party: &a<owner1>'
+        - '&2Players: &a<players1>'
+        - ''
+        - '&4Loser party: &c<owner2>'
+        - '&4Players: &c<players2>'
+        - '&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-&5&l&m-&d&l&m-'
+hotbar:
+  ranked:
+    name: '&3&lRanked'
+    lore:
+      - '&7Click to play Ranked.'
+  unranked:
+    name: '&a&lUnRanked'
+    lore:
+      - '&7Click to play UnRanked.'
+  edithotbar:
+    name: '&6&lEdit Hotbar'
+    lore:
+      - '&7Click to edit a hotbars kit.'
+  meetup:
+    name: '&a&lMeetup Events'
+    lore:
+      - '&7Click to join/create.'
+  extra1:
+    name: '&7Item Extra 1'
+    lore:
+      - '&7Change command in config.yml.'
+  extra2:
+    name: '&7Item Extra 2'
+    lore:
+      - '&7Change command in config.yml.'
+  party:
+    name: '&5&lParty'
+    lore:
+      - '&7Click to join/create.'
+    ranked2:
+      name: '&cRanked 2v2'
+      lore:
+        - '&7Click to play Ranked 2v2'
+    ranked3:
+      name: '&cRanked 3v3'
+      lore:
+        - '&7Click to play Ranked 3v3'
+    ranked4:
+      name: '&cRanked 4v4'
+      lore:
+        - '&7Click to play Ranked 4v4'
+    event:
+      name: '&aCreate a PartyEvent'
+      lore:
+        - '&7Click to play'
+    duel:
+      name: '&bDuel a party'
+      lore:
+        - '&7Click to play with other party'
+    config:
+      name: '&7Config'
+      lore:
+        - '&7Change configuration'
+        - '&7of the party.'
+  leave:
+    name: '&cLeave'
+    lore:
+      - '&7Click to leave.'
+gui:
+  movekit:
+    name: '&5&lKits of ArenaPvP++'
+  choosekit:
+    name: '&5&lChoose a kit'
+  ranked:
+    name: '&8&l>> &5&lRanked &8&l<<'
+    kitslore:
+      - ''
+      - '&3&l> &bPlaying: &7<playing>'
+      - '&3&l> &bWaiting: &7<waiting>'
+      - ''
+      - '&6Left/Right Click >&7 Play.'
+      - '&6Middle click > &7See kit.'
+  unranked:
+    name: '&8&l>> &5&lUnRanked &8&l<<'
+    kitslore:
+      - ''
+      - '&3&l> &bPlaying: &7<playing>'
+      - '&3&l> &bWaiting: &7<waiting>'
+      - ''
+      - '&6Left/Right Click >&7 Play.'
+      - '&6Middle click > &7See kit.'
+  duel:
+    name: '&4&l>> &c&lDuel &4&l<<'
+    kitslore:
+      - ''
+      - '&6Left/Right Click >&7 Choose kit.'
+      - '&6Middle click > &7See kit.'
+  choosekit:
+    name: '&9&l>> &3&lChoose a kit &9&l<<'
+  bestof:
+    name: '&4&l>>&c&l Best of... &4&l<<'
+    one:
+      name: '&a1 of 1'
+      lore:
+        - '&7First to win 1 of 1'
+    three:
+      name: '&a2 of 3'
+      lore:
+        - '&7First to win 2 of 3'
+    five:
+      name: '&a3 of 5'
+      lore:
+        - '&7First to win 3 of 5'
+  editinghotbarchoosenumber:
+    name: '&4&l>> &c&lChoose a slot &4&l<<'
+    items:
+      name: '&7Configuration: &a<number>'
+      lore:
+        - ''
+        - '&6Click > &7Edit this hotbar.'
+        - '&6Middle Click > &7See this hotbar.'
+  lastinventory:
+    name: '&5&lLast Inventory'
+  kitpreview:
+    name: '&5&l>> &5Kit Preview &5&l<<'
+    items:
+      close:
+        name: '&cBack.'
+        lore:
+          - ''
+          - '&7Click to back!'
+  meetup:
+    name: '&2&lMeetup Events'
+    wordffa: 'FFA'
+    wordgroups: '2 Groups'
+    items:
+      create:
+        name: '&aCreate an Event.'
+        lore:
+          - ''
+          - '&7Click to create your event!'
+      games:
+        lore:
+          - ''
+          - '&7Owner: &c<owner>'
+          - ''
+          - '&7Title: &a<title>'
+          - '&7Kit: &a<kit>'
+          - '&7Type: &a<type>'
+          - '&7Map: &a<map>'
+          - ''
+          - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+          - '&7Players: &a<players>&7/&c<slots>'
+          - '&7Starting in: &a<time>'
+          - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+          - ''
+          - '&6Middle Click > &7See kit.'
+          - ''
+  meetupconfig:
+    name: '&2&lMeetup config'
+    items:
+      slots:
+        name: '&7Slots: &a<slots>'
+        lore:
+          - ''
+          - '&2Left Click > &aRemove 1 slot'
+          - '&2Right Click > &aAdd 1 slot'
+      type:
+        ffa:
+          name: '&7Type: &cFFA'
+          lore:
+            - ''
+            - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+            - '&7Free For All!'
+            - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+            - ''
+            - '&7Click to change to &cGroups'
+        group:
+          name: '&7Type: &c2 Groups'
+          lore:
+            - ''
+            - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+            - '&7Create 2 groups with'
+            - '&7random players.'
+            - '&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-&4&l&m-&c&l&m-'
+            - ''
+            - '&7Click to change to &cFFA'
+      start:
+        name: '&aStart game'
+        lore:
+          - ''
+          - '&2Click to start countdown!'
+  party:
+    select:
+      name: '&5What do you want?'
+      items:
+        create:
+          name: '&aCreate a party!'
+          lore:
+            - ''
+            - '&7Click to create.'
+        join:
+          name: '&eJoin to a party!'
+          lore:
+            - ''
+            - '&7Click to see all'
+            - '&7open partys!'
+    events:
+      name: '&5Choose a PartyEvent'
+      items:
+        ffa:
+          name: '&cFFA'
+          lore:
+            - ''
+            - '&7Free For All.'
+        group:
+          name: '&a2 Groups'
+          lore:
+            - ''
+            - '&7Group 1 VS Group 2.'
+        redrover:
+          name: '&6Red Rover!'
+          lore:
+            - ''
+            - '&7Random 1vs1 duels.'
+    partys:
+      name: '&5All partys'
+    config:
+      name: '&5&lParty Options'
+      items:
+        open:
+          name: '&aOpen party!'
+          lore:
+            - ''
+            - '&7Click if you want'
+            - '&7allow the access for'
+            - '&7any player!'
+            - '&7If a player want join,'
+            - '&7you will be asked.'
+    open:
+      name: '&aAll open partys.'
+  stats:
+    name: '&5&lStats'
+    kitslore:
+      - ''
+      - '&7Elo: &a<elo>'
+      - '&7Wins: &a<wins>'
+      - '&7Played: &a<played>'
+      - '&7Rank: <rank>'
+      - ''
+      - '&2&lMEETUP'
+      - '&7Kills: &a<kills>'
+      - '&7Wins: &a<meetupwins>'
+      - '&7Played: &a<meetupplayed>'

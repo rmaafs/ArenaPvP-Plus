@@ -1,0 +1,28 @@
+#Please order the ranks! first the greatest elo.
+masters:
+  name: '&5&lMASTERS'
+  elo: 2500
+diamond:
+  name: '&b&lDIAMOND'
+  elo: 2300
+sapphire:
+  name: '&3&lSAPPHIRE'
+  elo: 2100
+emerald:
+  name: '&a&lEMERALD'
+  elo: 1900
+platinum:
+  name: '&7&lPLATINUM'
+  elo: 1700
+gold:
+  name: '&e&lGOLD'
+  elo: 1500
+silver:
+  name: '&8&lSILVER'
+  elo: 1300
+bronze:
+  name: '&6&lBRONZE'
+  elo: 1100
+coal:
+  name: '&7&lCOAL'
+  elo: 0

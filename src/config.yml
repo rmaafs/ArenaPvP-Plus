@@ -1,0 +1,263 @@
+#ArenaPvP by Royendero
+#If you have a problem or bug, sendme a PM in spigot!
+#No distribute this plugin, or your id will disabled for use this plugin.
+#
+teleportonjoin: true
+#Want adventure mode when a player has been teleported to spawn?
+adventureonspawn: true
+#Max time of a match
+defaultmaxtime: 600
+defaultelo: 1400
+defaultrankeds: 20
+defaultunrankeds: 30
+#Choose random maps
+chooserandommaps: true
+#Players execute this command and save the hotbar. 
+commandsavehotbar: '/gh'
+#usespectatormode: true > Use Spectator mode of 1.8
+usespectatormode: false
+antirain: true
+damageindicators: true
+damageindicatorscolor: 4
+#Shotem heal!
+showhealwitharrow: true
+#Number of rankeds gived
+giftrankeds: 50
+#Enable this if you want use PlaceHolderAPI
+useplaceholderapi: false
+#Enable ArenaPvp in worlds...
+worlds:
+  - 'world'
+  - 'BuildUHC'
+#  - 'you can add more worlds!'
+meetup:
+  config:
+    minslots: 5
+    maxslots: 50
+#Max name lenght
+    namelenght: 13
+#Use colors in the event name
+    namecolors: true
+  game:
+    pretime: 60
+    gametime: 900
+party:
+  maxplayers: 50
+  events:
+#Min players to play a event
+    minplayers: 2
+fancy:
+#Pre start match count
+  pretimematch: 5
+  duel:
+#When the player are teleported give effects...
+    efectteleport: true
+    ondeath:
+      blindness: true
+      slow: true
+      invisibility: true
+gui:
+  kits:
+    rows: 5
+  meetup:
+    rows: 6
+    create:
+      id: 120
+      data-value: 0
+  meetupconfig:
+    rows: 4
+    slots:
+      id: 340
+      data-value: 0
+      slot: 11
+    type:
+      slot: 15
+      ffa:
+        id: 267
+        data-value: 0
+      group:
+        id: 311
+        data-value: 0
+    start:
+      id: 388
+      data-value: 0
+      slot: 22
+  bestof:
+    rows: 3
+    one:
+      use: true
+      id: 276
+      data-value: 0
+      slot: 11
+    three:
+      use: true
+      id: 276
+      data-value: 0
+      slot: 13
+    five:
+      use: true
+      id: 276
+      data-value: 0
+      slot: 15
+  editinghotbarchoosenumber:
+    id: 403
+    data-value: 0
+  kitpreview:
+    id: 331
+    data-value: 0
+  party:
+    select:
+      rows: 3
+      create:
+        id: 339
+        data-value: 0
+        slot: 11
+      join:
+        use: true
+        id: 340
+        data-value: 0
+        slot: 15
+    events:
+      rows: 3
+      ffa:
+        use: true
+        id: 276
+        data-value: 0
+        slot: 11
+      group:
+        use: true
+        id: 311
+        data-value: 0
+        slot: 13
+      redrover:
+        use: true
+        id: 340
+        data-value: 0
+        slot: 15
+    config:
+      rows: 3
+      open:
+        id: 324
+        data-value: 0
+        slot: 13
+creating:
+  gui:
+    rows: 3
+    speed:
+      use: true
+      id: 353
+      data-value: 0
+      slot: 1
+    strength:
+      use: true
+      id: 377
+      data-value: 0
+      slot: 3
+    slowness:
+      use: true
+      id: 79
+      data-value: 0
+      slot: 5
+    fire_resistance:
+      use: true
+      id: 327
+      data-value: 0
+      slot: 7
+    hitdelay:
+      use: true
+      id: 349
+      data-value: 0
+      slot: 11
+    naturalregeneration:
+      use: true
+      id: 6
+      data-value: 0
+      slot: 13
+    matchtime:
+      use: true
+      id: 347
+      data-value: 0
+      slot: 15
+    ready:
+      id: 388
+      data-value: 0
+      slot: 22
+hotbar:
+  ranked:
+    use: true
+    id: 276
+    data-value: 0
+    slot: 0
+  unranked:
+    use: true
+    id: 268
+    data-value: 0
+    slot: 1
+  edithotbar:
+    use: true
+    id: 396
+    data-value: 0
+    slot: 4
+  meetup:
+    use: true
+    id: 399
+    data-value: 0
+    slot: 5
+  extra1:
+    use: true
+    id: 6
+    data-value: 0
+    slot: 8
+    cmd: '/me Hello!'
+  extra2:
+    use: true
+    id: 6
+    data-value: 1
+    slot: 7
+    cmd: '/me ArenaPvP By @Royendero'
+  party:
+    use: true
+    id: 421
+    data-value: 0
+    slot: 3
+    ranked2:
+      use: true
+      id: 276
+      data-value: 0
+      slot: 3
+    ranked3:
+      use: true
+      id: 276
+      data-value: 0
+      slot: 4
+    ranked4:
+      use: true
+      id: 276
+      data-value: 0
+      slot: 5
+    event:
+      use: true
+      id: 399
+      data-value: 0
+      slot: 1
+    duel:
+      use: true
+      id: 268
+      data-value: 0
+      slot: 0
+    config:
+      use: true
+      id: 347
+      data-value: 0
+      slot: 7
+  leave:
+    id: 331
+    data-value: 0
+    slot: 8
+mysql:
+  use: false
+  ip: 'localhost'
+  port: '3306'
+  database: 'database'
+  username: 'root'
+  password: ''
