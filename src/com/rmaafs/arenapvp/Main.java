@@ -32,13 +32,8 @@ import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
 import com.rmaafs.arenapvp.Party.PartyControl;
 import com.rmaafs.arenapvp.versions.Packets;
-import com.rmaafs.arenapvp.versions.v1_10_R1;
-import com.rmaafs.arenapvp.versions.v1_11_R1;
-import com.rmaafs.arenapvp.versions.v1_12_R1;
 import com.rmaafs.arenapvp.versions.v1_7_R4;
-import com.rmaafs.arenapvp.versions.v1_8_R3;
-import com.rmaafs.arenapvp.versions.v1_9_R1;
-import com.rmaafs.arenapvp.versions.v1_9_R2;
+import com.rmaafs.arenapvp.versions.v1_X;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -118,46 +113,13 @@ public class Main extends JavaPlugin implements Listener {
             Extra.copy(getResource("cache.yml"), new File(getDataFolder(), "cache.yml"));
         }
 
-        switch (CVERSION) {
-            case "v1_7_R4":
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+> §cDetected 1.7.10 version.");
-                ver = new v1_7_R4();
-                break;
-            case "v1_8_R3":
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected 1.8.8 version.");
-                ver = new v1_8_R3();
-                break;
-            case "v1_9_R1":
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected 1.9.2 version.");
-                ver = new v1_9_R1();
-                break;
-            case "v1_9_R2":
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected 1.9.4 version.");
-                ver = new v1_9_R2();
-                break;
-            case "v1_10_R1":
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected 1.10.2 version.");
-                ver = new v1_10_R1();
-                break;
-            case "v1_11_R1":
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected 1.11.2 version.");
-                ver = new v1_11_R1();
-                break;
-            case "v1_12_R1":
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected 1.12 version.");
-                ver = new v1_12_R1();
-                break;
-            default:
-                VERSIONNUMERO = 8;
-                getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §4Detected " + CVERSION + " version, your version is incompatible, please contact with @Royendero1 on spigot, he will be update this plugin to your version. :D");
-                ver = new v1_12_R1();
-                break;
+        if (CVERSION.equals("v1_7_R4")) {
+            getServer().getConsoleSender().sendMessage("§2§lArenaPvP+> §cDetected 1.7.10 version.");
+            ver = new v1_7_R4();
+        } else {
+            VERSIONNUMERO = 8;
+            getServer().getConsoleSender().sendMessage("§2§lArenaPvP+ > §cDetected " + CVERSION +" version.");
+            ver = new v1_X();
         }
 
         Extra.setFiles();
@@ -199,8 +161,6 @@ public class Main extends JavaPlugin implements Listener {
             extraLang.teleportSpawn(p);
             p.spigot().setCollidesWithEntities(true);
         }
-
-        oops :)
     }
 
     public void registerEvents() {
