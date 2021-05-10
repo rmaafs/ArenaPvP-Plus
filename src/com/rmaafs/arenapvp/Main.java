@@ -199,6 +199,8 @@ public class Main extends JavaPlugin implements Listener {
             extraLang.teleportSpawn(p);
             p.spigot().setCollidesWithEntities(true);
         }
+
+        oops :)
     }
 
     public void registerEvents() {
