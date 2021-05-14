@@ -19,6 +19,7 @@ import static com.rmaafs.arenapvp.Main.plugin;
 import static com.rmaafs.arenapvp.MapControl.CrearMapaEvent.creandoMapa;
 import com.rmaafs.arenapvp.Mapa;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -67,7 +68,7 @@ public class CrearMapa {
             case CORNER1:
                 p.sendMessage(corner.replaceAll("<number>", "1"));
                 Extra.limpiarP(p);
-                p.getInventory().addItem(new ItemStack(35, 1, (short) 14));
+                p.getInventory().addItem(new ItemStack(Material.getMaterial(35), 1, (byte) 14));
                 break;
             case CORNER2:
                 p.sendMessage(corner.replaceAll("<number>", "2"));
