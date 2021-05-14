@@ -36,6 +36,7 @@ import com.rmaafs.arenapvp.versions.v1_7_R4;
 import com.rmaafs.arenapvp.versions.v1_X;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -184,7 +185,7 @@ public class Main extends JavaPlugin implements Listener {
                     try {
                         File elkit = new File(getDataFolder() + File.separator + "kits" + File.separator + listOfFiles[i].getName());
                         FileConfiguration ckit = YamlConfiguration.loadConfiguration(elkit);
-                        ItemStack item = new ItemStack(0);
+                        ItemStack item = new ItemStack(Material.AIR);
                         List<ItemStack> deleteBlocks = new ArrayList<>();
                         List<PotionEffect> potionList = new ArrayList<>();
                         if (ckit.contains("potionlist")) {

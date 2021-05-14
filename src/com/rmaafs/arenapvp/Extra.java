@@ -430,7 +430,7 @@ public class Extra {
     }
 
     public static ItemStack crearId(int id, int dv, String d, List<String> l, int a) {
-        ItemStack item = new ItemStack(id, a, (short) dv);
+        ItemStack item = new ItemStack(Material.getMaterial(id), a, (byte) dv);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', d));
         if (!(l == null)) {
