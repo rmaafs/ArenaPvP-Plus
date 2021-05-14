@@ -7,7 +7,7 @@
     <groupId>com.rmaafs.arenapvp</groupId>
     <artifactId>ArenaPvP</artifactId>
     <name>ArenaPvP+</name>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <description>Plugin de Minecraft competitivo</description>
 
     <repositories>

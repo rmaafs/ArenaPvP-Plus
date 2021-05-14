@@ -23,7 +23,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -443,7 +442,7 @@ public class Extra {
     }
 
     public static void sonido(Player player, String sonido) {
-        player.playSound(player.getLocation(), Sound.valueOf(sonido), 1.0F, 1.0F);
+        Sounds.song(player, sonido);
     }
 
     public static void avisoConsola(String s) {
