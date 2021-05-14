@@ -7,7 +7,7 @@
     <groupId>com.rmaafs.arenapvp</groupId>
     <artifactId>ArenaPvP</artifactId>
     <name>ArenaPvP+</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <description>Plugin de Minecraft competitivo</description>
 
     <repositories>
@@ -60,7 +60,7 @@
                 <filtering>true</filtering>
                 <directory>${basedir}/src/</directory>
                 <includes>
-                    <include>plugin.yml</include>
+                    <include>*.yml</include>
                 </includes>
             </resource>
         </resources>
