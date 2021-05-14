@@ -447,17 +447,27 @@ public class DuelGame {
         if (b.getLocation().getBlockY() > mapa.maxY) {
             mapa.maxY = b.getLocation().getBlockY();
         }
-        if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(259))) {
+        if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
         }
-        return !kit.deleteBlocks.contains(new ItemStack(b.getTypeId(), 1, (short) b.getData()));
+        for (ItemStack it : kit.deleteBlocks) {
+            if (b.getType().name().equals(it.getData().getItemType().name())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean romper(Block b) {
-        if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(259))) {
+        if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
         }
-        return !kit.deleteBlocks.contains(new ItemStack(b.getTypeId(), 1, (short) b.getData()));
+        for (ItemStack it : kit.deleteBlocks) {
+            if (b.getType().name().equals(it.getData().getItemType().name())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void setLava(int y) {

@@ -62,20 +62,28 @@ public class MapaMeetup {
                     List<Block> li = cubo.getBlocks();
                     for (Block b : li) {
                         if (b.getType().equals(Material.STATIONARY_LAVA) || b.getType().equals(Material.LAVA)) {
-                            if (k.deleteBlocks.contains(new ItemStack(326))) {
-                                b.setType(Material.AIR);
+                            for (ItemStack it : k.deleteBlocks) {
+                                if (Material.getMaterial(326).getData().getName().equals(it.getType().getData().getName())) {
+                                    b.setType(Material.AIR);
+                                }
                             }
                         } else if (b.getType().equals(Material.STATIONARY_WATER) || b.getType().equals(Material.WATER)) {
-                            if (k.deleteBlocks.contains(new ItemStack(327))) {
-                                b.setType(Material.AIR);
+                            for (ItemStack it : k.deleteBlocks) {
+                                if (Material.getMaterial(327).getData().getName().equals(it.getType().getData().getName())) {
+                                    b.setType(Material.AIR);
+                                }
                             }
                         } else if (b.getType().equals(Material.FIRE)) {
-                            if (k.deleteBlocks.contains(new ItemStack(259))) {
-                                b.setType(Material.AIR);
+                            for (ItemStack it : k.deleteBlocks) {
+                                if (Material.getMaterial(259).getData().getName().equals(it.getType().getData().getName())) {
+                                    b.setType(Material.AIR);
+                                }
                             }
                         } else {
-                            if (k.deleteBlocks.contains(new ItemStack(b.getTypeId(), 1, (short) b.getData()))) {
-                                b.setType(Material.AIR);
+                            for (ItemStack it : k.deleteBlocks) {
+                                if (Material.getMaterial(b.getTypeId()).getData().getName().equals(it.getType().getData().getName())) {
+                                    b.setType(Material.AIR);
+                                }
                             }
                         }
                     }
