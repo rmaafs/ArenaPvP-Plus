@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.rmaafs.arenapvp.Party.Party;
 import com.rmaafs.arenapvp.Kit;
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,20 +18,20 @@ public class PartyEventFFADeathEvent extends Event{
     List<Player> players, spectators;
     Location spawn1, spawn2, corner1, corner2;
     
-    public PartyEventFFADeathEvent(Party party, Kit kit, Mapa mapa, List<Player> spec, Player d){
+    public PartyEventFFADeathEvent(Party party, Kit kit, Map map, List<Player> spec, Player d){
         players = new ArrayList<>();
         spectators = new ArrayList<>();
         owner = party.owner;
         death = d;
         kitName = kit.getKitName();
-        mapName = mapa.getName();
+        mapName = map.getName();
         players.addAll(party.players);
         spectators.addAll(spec);
-        spawn1 = mapa.getSpawn1();
-        spawn2 = mapa.getSpawn2();
+        spawn1 = map.getSpawn1();
+        spawn2 = map.getSpawn2();
         if (kit.isRegen()){
-            corner1 = mapa.getCorner1();
-            corner2 = mapa.getCorner2();
+            corner1 = map.getCorner1();
+            corner2 = map.getCorner2();
         }
     }
 

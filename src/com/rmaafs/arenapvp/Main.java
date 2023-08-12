@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static com.rmaafs.arenapvp.Extra.cspawns;
@@ -155,7 +154,7 @@ public class Main extends JavaPlugin implements Listener {
         getServer().getConsoleSender().sendMessage("§3----------------------------");
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             hotbars.setMain(p);
             playerConfig.put(p, new PlayerConfig(p));
             Extra.setScore(p, Score.TipoScore.MAIN);
@@ -266,8 +265,8 @@ public class Main extends JavaPlugin implements Listener {
                                 }
                                 lis.add(k);
                                 sharingMaps.put(ckit.getString("mapsharing"), lis);
-                                List<Mapa> lista = new ArrayList<>();
-                                List<Mapa> lista2 = new ArrayList<>();
+                                List<Map> lista = new ArrayList<>();
+                                List<Map> lista2 = new ArrayList<>();
                                 List<MapaMeetup> lista3 = new ArrayList<>();
                                 List<MapaMeetup> lista4 = new ArrayList<>();
                                 mapLibres.put(k, lista);
@@ -291,7 +290,7 @@ public class Main extends JavaPlugin implements Listener {
 
     public void kitsSharingMaps() {
         if (!sharingMaps.isEmpty()) {
-            for (Map.Entry<String, List<Kit>> entry : sharingMaps.entrySet()) {
+            for (java.util.Map.Entry<String, List<Kit>> entry : sharingMaps.entrySet()) {
                 String p = entry.getKey();
                 List<Kit> kl = entry.getValue();
                 for (Kit k : kl) {
@@ -316,18 +315,18 @@ public class Main extends JavaPlugin implements Listener {
         File f = new File(getDataFolder() + File.separator + "maps" + File.separator + k.kitName + ".yml");
         if (f.exists()) {
             FileConfiguration cf = YamlConfiguration.loadConfiguration(f);
-            List<Mapa> lista = new ArrayList<>();
-            List<Mapa> lista2 = new ArrayList<>();
+            List<Map> lista = new ArrayList<>();
+            List<Map> lista2 = new ArrayList<>();
             for (String s : cf.getKeys(false)) {
                 String w = cf.getString(s + ".w");
                 if (cf.contains(s + ".c1")) {
-                    lista.add(new Mapa(s,
+                    lista.add(new Map(s,
                             setLoc(cf, w, s + ".c1", false),
                             setLoc(cf, w, s + ".c2", false),
                             setLoc(cf, w, s + ".s1", true),
                             setLoc(cf, w, s + ".s2", true)));
                 } else {
-                    lista.add(new Mapa(s,
+                    lista.add(new Map(s,
                             setLoc(cf, w, s + ".s1", true),
                             setLoc(cf, w, s + ".s2", true)));
                 }

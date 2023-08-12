@@ -26,24 +26,24 @@ public class PartyDuelDeathEvent extends Event {
             ownerKiller = game.p2.owner;
             playersKilled.addAll(game.players1);
             playersKiller.addAll(game.players2);
-            spawnKilled = game.mapa.getSpawn1();
-            spawnKiller = game.mapa.getSpawn2();
+            spawnKilled = game.map.getSpawn1();
+            spawnKiller = game.map.getSpawn2();
         } else {
             ownerKilled = game.p2.owner;
             ownerKiller = game.p1.owner;
             playersKilled.addAll(game.players2);
             playersKiller.addAll(game.players1);
-            spawnKilled = game.mapa.getSpawn2();
-            spawnKiller = game.mapa.getSpawn1();
+            spawnKilled = game.map.getSpawn2();
+            spawnKiller = game.map.getSpawn1();
         }
         playerDeath = d;
 
         spectators.addAll(game.espectadores);
         kitName = game.kit.getKitName();
-        mapName = game.mapa.getName();
+        mapName = game.map.getName();
 
-        corner1 = game.mapa.getCorner1();
-        corner2 = game.mapa.getCorner2();
+        corner1 = game.map.getCorner1();
+        corner2 = game.map.getCorner2();
     }
 
     public Player getPlayerDeath() {

@@ -3,7 +3,7 @@ version: 1.2.2
 main: com.rmaafs.arenapvp.Main
 author: Royendero
 description: ArenaPvP
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI,SlimeWorldManager]
 commands:
   apvp:
     description: Admin commands

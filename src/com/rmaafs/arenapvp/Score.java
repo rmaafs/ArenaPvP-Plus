@@ -548,9 +548,9 @@ public final class Score {
                 }
             }
         } else if (tipo == TipoScore.RANKED || tipo == TipoScore.UNRANKED || tipo == TipoScore.DUEL) {
-            Partida partida = jugandoUno.get(p);
-            Player p1 = partida.p1;
-            Player p2 = partida.p2;
+            Game game = jugandoUno.get(p);
+            Player p1 = game.p1;
+            Player p2 = game.p2;
             Kit k = jugandoUno.get(p).kit;
             if (m.contains("<player1>")) {
                 total = total.replaceAll("<player1>", p1.getName());
@@ -567,29 +567,29 @@ public final class Score {
                 }
             } else if (tipo == TipoScore.DUEL) {
                 if (m.contains("<point1>")) {
-                    total = total.replaceAll("<point1>", "" + partida.winsp1);
+                    total = total.replaceAll("<point1>", "" + game.winsP1);
                 }
                 if (m.contains("<point2>")) {
-                    total = total.replaceAll("<point2>", "" + partida.winsp2);
+                    total = total.replaceAll("<point2>", "" + game.winsP2);
                 }
                 if (m.contains("<best>")) {
-                    total = total.replaceAll("<best>", "" + partida.bestOf);
+                    total = total.replaceAll("<best>", "" + game.bestOf);
                 }
             }
             if (m.contains("<cs1>")) {
-                total = total.replaceAll("<cs1>", "" + partida.getCs(p1));
+                total = total.replaceAll("<cs1>", "" + game.getCs(p1));
             }
             if (m.contains("<cs2>") && p2.isOnline()) {
-                total = total.replaceAll("<cs2>", "" + partida.getCs(p2));
+                total = total.replaceAll("<cs2>", "" + game.getCs(p2));
             }
             if (m.contains("<time>")) {
-                total = total.replaceAll("<time>", Extra.secToMin(partida.time));
+                total = total.replaceAll("<time>", Extra.secToMin(game.time));
             }
             if (m.contains("<kit>")) {
                 total = total.replaceAll("<kit>", k.getKitName());
             }
             if (m.contains("<map>")) {
-                total = total.replaceAll("<map>", partida.mapa.getName());
+                total = total.replaceAll("<map>", game.map.getName());
             }
             if (m.contains("<ms1>")) {
                 total = total.replaceAll("<ms1>", "" + ver.verPing(p1));
@@ -652,7 +652,7 @@ public final class Score {
                         total = total.replaceAll("<kit>", partyControl.partysEvents.get(partyControl.partys.get(p)).kit.getKitName());
                     }
                     if (m.contains("<map>")) {
-                        total = total.replaceAll("<map>", partyControl.partysEvents.get(partyControl.partys.get(p)).mapa.getName());
+                        total = total.replaceAll("<map>", partyControl.partysEvents.get(partyControl.partys.get(p)).map.getName());
                     }
                     if (m.contains("<spectators>")) {
                         total = total.replaceAll("<spectators>", "" + partyControl.partysEvents.get(partyControl.partys.get(p)).espectadores.size());
@@ -680,7 +680,7 @@ public final class Score {
                         total = total.replaceAll("<kit>", partyControl.partysDuel.get(partyControl.partys.get(p)).kit.getKitName());
                     }
                     if (m.contains("<map>")) {
-                        total = total.replaceAll("<map>", partyControl.partysDuel.get(partyControl.partys.get(p)).mapa.getName());
+                        total = total.replaceAll("<map>", partyControl.partysDuel.get(partyControl.partys.get(p)).map.getName());
                     }
                     if (m.contains("<time>")) {
                         total = total.replaceAll("<time>", Extra.secToMin(partyControl.partysDuel.get(partyControl.partys.get(p)).time));

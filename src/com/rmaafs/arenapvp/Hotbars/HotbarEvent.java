@@ -9,7 +9,6 @@ import static com.rmaafs.arenapvp.Main.meetupControl;
 import static com.rmaafs.arenapvp.Main.partyControl;
 import com.rmaafs.arenapvp.PlayerConfig;
 import com.rmaafs.arenapvp.Score;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -89,7 +88,7 @@ public class HotbarEvent implements Listener {
         Player p = e.getPlayer();
         if (extraLang.worlds.contains(p.getWorld().getName())) {
             if (Extra.isPlaying(p)) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 hotbars.setMain(p);                                     
                 playerConfig.put(p, new PlayerConfig(p));
                 Extra.setScore(p, Score.TipoScore.MAIN);

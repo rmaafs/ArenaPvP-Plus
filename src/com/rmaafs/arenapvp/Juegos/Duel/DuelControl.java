@@ -19,7 +19,7 @@ import com.rmaafs.arenapvp.Kit;
 import static com.rmaafs.arenapvp.Main.extraLang;
 import static com.rmaafs.arenapvp.Main.guis;
 import static com.rmaafs.arenapvp.Main.hotbars;
-import com.rmaafs.arenapvp.Partida;
+import com.rmaafs.arenapvp.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -169,10 +169,10 @@ public class DuelControl {
                             } else if (duel.getTotal() == 5) {
                                 best = bestoffive;
                             }
-                            Partida partida = new Partida(p, o, duel.getKit(), Extra.getMap(duel.getKit()), best, duel.getTotal());
-                            jugandoUno.put(p, partida);
-                            jugandoUno.put(o, partida);
-                            preEmpezandoUno.add(partida);
+                            Game game = new Game(p, o, duel.getKit(), Extra.getMap(duel.getKit()), best, duel.getTotal());
+                            jugandoUno.put(p, game);
+                            jugandoUno.put(o, game);
+                            preEmpezandoUno.add(game);
                             creandoDuel.remove(p);
                         } else {
                             creandoDuel.remove(p);
@@ -199,10 +199,10 @@ public class DuelControl {
                             } else if (duel.getTotal() == 5) {
                                 best = bestoffive;
                             }
-                            Partida partida = new Partida(p, o, duel.getKit(), Extra.getMap(duel.getKit()), best, duel.getTotal());
-                            jugandoUno.put(p, partida);
-                            jugandoUno.put(o, partida);
-                            preEmpezandoUno.add(partida);
+                            Game game = new Game(p, o, duel.getKit(), Extra.getMap(duel.getKit()), best, duel.getTotal());
+                            jugandoUno.put(p, game);
+                            jugandoUno.put(o, game);
+                            preEmpezandoUno.add(game);
                             creandoDuel.remove(p);
                         } else {
                             creandoDuel.remove(p);
@@ -221,10 +221,10 @@ public class DuelControl {
                 if (p.hasPermission("apvp.rankedfree." + k.getKitName().toLowerCase()) || p.hasPermission("apvp.rankeds") || playerConfig.get(p).getRankeds() > 0) {
                     if (esperandoRanked.containsKey(k)) {
                         if (checkMapAvailables(p, esperandoRanked.get(k), k)) {
-                            Partida partida = new Partida(esperandoRanked.get(k), p, k, Extra.getMap(k), true);
-                            jugandoUno.put(p, partida);
-                            jugandoUno.put(esperandoRanked.get(k), partida);
-                            preEmpezandoUno.add(partida);
+                            Game game = new Game(esperandoRanked.get(k), p, k, Extra.getMap(k), true);
+                            jugandoUno.put(p, game);
+                            jugandoUno.put(esperandoRanked.get(k), game);
+                            preEmpezandoUno.add(game);
                             esperandoRanked.remove(k);
                             guis.setNumberRankedPlaying(k, true);
                         } else {
@@ -248,10 +248,10 @@ public class DuelControl {
                 if (p.hasPermission("apvp.unrankedfree." + k.getKitName().toLowerCase()) || p.hasPermission("apvp.unrankeds") || playerConfig.get(p).getUnRankeds() > 0) {
                     if (esperandoUnRanked.containsKey(k)) {
                         if (checkMapAvailables(p, esperandoUnRanked.get(k), k)) {
-                            Partida partida = new Partida(esperandoUnRanked.get(k), p, k, Extra.getMap(k), false);
-                            jugandoUno.put(p, partida);
-                            jugandoUno.put(esperandoUnRanked.get(k), partida);
-                            preEmpezandoUno.add(partida);
+                            Game game = new Game(esperandoUnRanked.get(k), p, k, Extra.getMap(k), false);
+                            jugandoUno.put(p, game);
+                            jugandoUno.put(esperandoUnRanked.get(k), game);
+                            preEmpezandoUno.add(game);
                             esperandoUnRanked.remove(k);
                             guis.setNumberUnRankedPlaying(k, true);
                         } else {
@@ -280,8 +280,8 @@ public class DuelControl {
             o.sendMessage(extraLang.noMapsAvailable);
             Extra.sonido(p, NOTE_BASS);
             Extra.sonido(o, NOTE_BASS);
-            Extra.limpiarP(p);
-            Extra.limpiarP(o);
+            Extra.cleanPlayer(p);
+            Extra.cleanPlayer(o);
             hotbars.setMain(p);
             hotbars.setMain(o);
             return false;

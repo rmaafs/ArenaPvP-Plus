@@ -137,7 +137,7 @@ public class Hotbars {
     }
 
     public void setLeave(Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.getInventory().setItem(slotLeave, itemLeave);
     }
 
@@ -153,7 +153,7 @@ public class Hotbars {
         } else if (specControl.mirando.containsKey(p)) {
             specControl.leave(p, true);
         }
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         setMain(p);
         Extra.sonido(p, NOTE_BASS);
         Extra.setScore(p, Score.TipoScore.MAIN);
@@ -166,7 +166,7 @@ public class Hotbars {
 
     public void clickLibro(Player p, int amount, Kit k, boolean middle) {
         extraLang.teleportSpawnHotbar(p);
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.setGameMode(GameMode.ADVENTURE);
         playerConfig.get(p).putHotbar(amount, k);
         editingHotbar.remove(p);
@@ -185,7 +185,7 @@ public class Hotbars {
         //guis.kitsHotbar.get(k).save();
 
         editingSlotHotbar.remove(p);
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         extraLang.teleportSpawn(p);
         p.sendMessage(editinghotbarsaved.replaceAll("<kit>", k.kitName).replaceAll("<slot>", "" + slot));
         Extra.sonido(p, VILLAGER_YES);
@@ -203,19 +203,19 @@ public class Hotbars {
 
     public void clickPonerHotbar(Player p, int amount) {
         if (jugandoUno.containsKey(p)) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             playerConfig.get(p).putInv(amount, jugandoUno.get(p).kit);
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);
             p.updateInventory();
         } else if (meetupControl.meetupsPlaying.containsKey(p)) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             playerConfig.get(p).putInv(amount, meetupControl.meetupsPlaying.get(p).kit);
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);
             p.updateInventory();
         } else if (partyControl.partys.containsKey(p)) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             if (partyControl.partysEvents.containsKey(partyControl.partys.get(p))) {
                 playerConfig.get(p).putInv(amount, partyControl.partysEvents.get(partyControl.partys.get(p)).kit);
             } else if (partyControl.partysDuel.containsKey(partyControl.partys.get(p))) {

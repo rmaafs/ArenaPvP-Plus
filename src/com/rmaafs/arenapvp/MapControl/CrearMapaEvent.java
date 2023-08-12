@@ -17,17 +17,17 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 public class CrearMapaEvent implements Listener {
 
-    public static HashMap<Player, CrearMapa> creandoMapa = new HashMap<>();
+    public static HashMap<Player, CreateMap> creandoMapa = new HashMap<>();
     
     @EventHandler
     public void onPlace(BlockPlaceEvent e){
         Player p = e.getPlayer();
         if (creandoMapa.containsKey(p)){
-            CrearMapa ck = creandoMapa.get(p);
+            CreateMap ck = creandoMapa.get(p);
             e.setCancelled(true);
-            if (ck.accion == CrearMapa.Accion.CORNER1){
+            if (ck.action == CreateMap.Action.CORNER1){
                 ck.putCorner(e.getBlock().getLocation(), true);
-            } else if (ck.accion == CrearMapa.Accion.CORNER2){
+            } else if (ck.action == CreateMap.Action.CORNER2){
                 ck.putCorner(e.getBlock().getLocation(), false);
             } else {
                 e.setCancelled(false);
@@ -52,13 +52,13 @@ public class CrearMapaEvent implements Listener {
     public void onChat(PlayerChatEvent e){
         Player p = e.getPlayer();
         if (creandoMapa.containsKey(p)){
-            CrearMapa ck = creandoMapa.get(p);
+            CreateMap ck = creandoMapa.get(p);
             e.setCancelled(true);
-            if (ck.accion == CrearMapa.Accion.SPAWN1 && e.getMessage().toLowerCase().equalsIgnoreCase("ready")){
+            if (ck.action == CreateMap.Action.SPAWN1 && e.getMessage().toLowerCase().equalsIgnoreCase("ready")){
                 ck.putSpawn(p.getLocation(), true);
-            } else if (ck.accion == CrearMapa.Accion.SPAWN2 && e.getMessage().toLowerCase().equalsIgnoreCase("ready")){
+            } else if (ck.action == CreateMap.Action.SPAWN2 && e.getMessage().toLowerCase().equalsIgnoreCase("ready")){
                 ck.putSpawn(p.getLocation(), false);
-            } else if (ck.accion == CrearMapa.Accion.NAME){
+            } else if (ck.action == CreateMap.Action.NAME){
                 ck.createMap(ChatColor.stripColor(e.getMessage()));
             } else {
                 e.setCancelled(false);

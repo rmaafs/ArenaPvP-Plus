@@ -27,7 +27,7 @@ import static com.rmaafs.arenapvp.Main.duelControl;
 import static com.rmaafs.arenapvp.Main.guis;
 import static com.rmaafs.arenapvp.Main.meetupControl;
 import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Partida;
+import com.rmaafs.arenapvp.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -288,9 +288,9 @@ public class KitGui {
     public void eliminarKit(Player p, int slot) {
         Kit k = getKitSlot(slot);
         boolean t = true;
-        for (Map.Entry<Player, Partida> entry : jugandoUno.entrySet()) {
-            Partida partida = entry.getValue();
-            if (partida.kit.equals(k)) {
+        for (Map.Entry<Player, Game> entry : jugandoUno.entrySet()) {
+            Game game = entry.getValue();
+            if (game.kit.equals(k)) {
                 p.sendMessage(kitinuse);
                 t = false;
                 break;

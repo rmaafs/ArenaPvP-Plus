@@ -115,7 +115,7 @@ public class GameMeetup {
         pretime = cconfig.getInt("meetup.game.pretime");
 //        pretime = 20;
 
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.setGameMode(GameMode.ADVENTURE);
         p.setLevel(pretime);
         hotbars.setLeave(p);
@@ -321,7 +321,7 @@ public class GameMeetup {
         PotionEffect pot = new PotionEffect(PotionEffectType.BLINDNESS, 30, 1);
         for (Player p : players) {
             if (noTienePreSpawns) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 if (extraLang.duelEffectTeleport) {
                     p.addPotionEffect(pot);
                 }
@@ -353,7 +353,7 @@ public class GameMeetup {
             if (e.getEntity().getKiller() != null && e.getEntity().getKiller() instanceof Player && e.getEntity().getKiller() != p) {
                 Player k = e.getEntity().getKiller();
                 msg(playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()));
-                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())).replaceAll("<kills>", "" + mykills));
+                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())).replaceAll("<kills>", "" + mykills));
                 Extra.sonido(k, ORB_PICKUP);
 
                 if (!kills.containsKey(k)) {
@@ -376,7 +376,7 @@ public class GameMeetup {
             }
 
             if (players.size() == 1) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 espectadores.add(p);
                 p.setGameMode(GameMode.ADVENTURE);
                 e.getDrops().clear();
@@ -395,7 +395,7 @@ public class GameMeetup {
     }
 
     private void ponerSpec(final Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         if (extraLang.usespectatormode) {
             p.setGameMode(GameMode.valueOf("SPECTATOR"));
         } else {
@@ -449,7 +449,7 @@ public class GameMeetup {
                 msg(s);
             }
         }
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.setMaximumNoDamageTicks(20);
         p.spigot().setCollidesWithEntities(true);
         for (Player o : espectadores) {
@@ -513,7 +513,7 @@ public class GameMeetup {
                         public void run() {
                             final Player t = (Player) e.getEntity();
                             final Player dam = (Player) a.getShooter();
-                            String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getSangre(t.getHealth()));
+                            String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getHealt(t.getHealth()));
                             dam.sendMessage(s);
                         }
                     }, 1L);

@@ -66,7 +66,7 @@ public class CreandoMapaMeetup {
         switch (accion) {
             case CORNER1:
                 p.sendMessage(corner.replaceAll("<number>", "1"));
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.getInventory().setItem(0, new ItemStack(35, 1, (short) 14));
                 break;
             case CORNER2:
@@ -74,7 +74,7 @@ public class CreandoMapaMeetup {
                 break;
             case SPAWNS:
                 p.sendMessage(spawn);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.getInventory().setItem(0, new ItemStack(35, 5, (short) 14));
                 p.setGameMode(GameMode.SURVIVAL);
                 p.setAllowFlight(true);
@@ -86,7 +86,7 @@ public class CreandoMapaMeetup {
                     accion = Accion.SPAWNS;
                     paso();
                 } else {
-                    Extra.limpiarP(p);
+                    Extra.cleanPlayer(p);
                     p.sendMessage(name);
                 }
                 break;
@@ -148,7 +148,7 @@ public class CreandoMapaMeetup {
         if (meetupControl.creandoMapaMeetup.containsKey(p)) {
             meetupControl.creandoMapaMeetup.remove(p);
         }
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         hotbars.setMain(p);
         extraLang.teleportSpawn(p);
         Extra.sonido(p, LEVEL_UP);

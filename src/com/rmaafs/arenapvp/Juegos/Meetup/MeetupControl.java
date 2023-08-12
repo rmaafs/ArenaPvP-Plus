@@ -99,7 +99,7 @@ public class MeetupControl {
                 } else {
                     if (Extra.isPerm2(p, "apvp.meetup.join.kit.*", "apvp.meetup.join.kit." + meetups.get(slot).kit.getKitName().toLowerCase())) {
                         p.closeInventory();
-                        Extra.limpiarP(p);
+                        Extra.cleanPlayer(p);
                         meetups.get(slot).join(p);
                         meetupsPlaying.put(p, meetups.get(slot));
                         Extra.setScore(p, Score.TipoScore.MEETUPWAITING);

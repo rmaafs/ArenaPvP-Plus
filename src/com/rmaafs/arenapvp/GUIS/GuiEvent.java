@@ -6,7 +6,7 @@ import java.util.List;
 import com.rmaafs.arenapvp.KitControl.CrearKit;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.KitControl.EditandoKit;
-import com.rmaafs.arenapvp.MapControl.CrearMapa;
+import com.rmaafs.arenapvp.MapControl.CreateMap;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
 
 import static com.rmaafs.arenapvp.Main.duelControl;
@@ -219,6 +219,6 @@ public class GuiEvent implements Listener {
     public void clickCrearMapa(ItemStack i, Player p) {
         p.closeInventory();
         guis.escojiendoCrearMapa.remove(p);
-        CrearMapaEvent.creandoMapa.put(p, new CrearMapa(p, guis.itemKits.get(i)));
+        CrearMapaEvent.creandoMapa.put(p, new CreateMap(p, guis.itemKits.get(i)));
     }
 }

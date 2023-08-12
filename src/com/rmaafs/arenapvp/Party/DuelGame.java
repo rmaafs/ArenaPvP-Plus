@@ -17,7 +17,7 @@ import static com.rmaafs.arenapvp.Main.extraLang;
 import static com.rmaafs.arenapvp.Main.hotbars;
 import static com.rmaafs.arenapvp.Main.partyControl;
 import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.Map;
 import com.rmaafs.arenapvp.Score;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -40,7 +40,7 @@ public class DuelGame {
 
     public Party p1, p2;
     public Kit kit;
-    public Mapa mapa;
+    public Map map;
     Tipo tipo = Tipo.DUEL;
     public int pretime = 6, time;
 
@@ -54,11 +54,11 @@ public class DuelGame {
     String startinggame, playerkilled, youkilled, playerdeath, playerdeathdisconnect,
             youdeath;
 
-    public DuelGame(Party pp1, Party pp2, Kit k, Mapa m) {
+    public DuelGame(Party pp1, Party pp2, Kit k, Map m) {
         p1 = pp1;
         p2 = pp2;
         kit = k;
-        mapa = m;
+        map = m;
 
         time = kit.maxTime;
         players1.addAll(p1.players);
@@ -98,7 +98,7 @@ public class DuelGame {
         PotionEffect pot = new PotionEffect(PotionEffectType.BLINDNESS, 30, 1);
         for (Player p : p1.players) {
             if (!teleportados) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 if (extraLang.duelEffectTeleport) {
                     p.addPotionEffect(pot);
                 }
@@ -112,12 +112,12 @@ public class DuelGame {
 //                }
                 hotbars.ponerItemsHotbar(p);
             }
-            p.teleport(mapa.getSpawn1());
+            p.teleport(map.getSpawn1());
         }
 
         for (Player p : p2.players) {
             if (!teleportados) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 if (extraLang.duelEffectTeleport) {
                     p.addPotionEffect(pot);
                 }
@@ -131,7 +131,7 @@ public class DuelGame {
                 }
                 hotbars.ponerItemsHotbar(p);
             }
-            p.teleport(mapa.getSpawn2());
+            p.teleport(map.getSpawn2());
         }
 
         teleportados = true;
@@ -146,7 +146,7 @@ public class DuelGame {
                         .replaceAll("<owner2>", p2.owner.getName())
                         .replaceAll("<players1>", "" + p1.players.size())
                         .replaceAll("<players2>", "" + p2.players.size())
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", map.getName())
                         .replaceAll("<time>", Extra.secToMin(time)));
             } else {
                 msgAll(s);
@@ -200,14 +200,14 @@ public class DuelGame {
             if (e.getEntity().getKiller() != null && e.getEntity().getKiller() instanceof Player && e.getEntity().getKiller() != p) {
                 Player k = e.getEntity().getKiller();
                 if (players1.contains(p)) {
-                    p1.msg("§c" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
-                    p2.msg("§a" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                    p1.msg("§c" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                    p2.msg("§a" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 } else {
-                    p1.msg("§a" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
-                    p2.msg("§c" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                    p1.msg("§a" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                    p2.msg("§c" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 }
 
-                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 Extra.sonido(k, ORB_PICKUP);
             } else {
                 if (players1.contains(p)) {
@@ -232,7 +232,7 @@ public class DuelGame {
             espectadores.add(p);
 
             if (players1.isEmpty() || players2.isEmpty()) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.ADVENTURE);
                 e.getDrops().clear();
                 ganador();
@@ -312,7 +312,7 @@ public class DuelGame {
                         .replaceAll("<owner2>", l.owner.getName())
                         .replaceAll("<players1>", "" + w.players.size())
                         .replaceAll("<players2>", "" + l.players.size())
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", map.getName())
                         .replaceAll("<time>", Extra.secToMin(kit.maxTime - time)));
             } else {
                 msgAll(s);
@@ -320,13 +320,13 @@ public class DuelGame {
         }
 
         for (Player p : w.players) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             p.setMaximumNoDamageTicks(20);
             p.spigot().setCollidesWithEntities(true);
             Extra.setScore(p, Score.TipoScore.PARTYMAIN);
         }
         for (Player p : l.players) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             p.setMaximumNoDamageTicks(20);
             p.spigot().setCollidesWithEntities(true);
             Extra.setScore(p, Score.TipoScore.PARTYMAIN);
@@ -343,7 +343,7 @@ public class DuelGame {
             public void run() {
                 removeParty(p1);
                 removeParty(p2);
-                Extra.terminarMapa(mapa, kit);
+                Extra.terminarMapa(map, kit);
             }
         }, 20L);
     }
@@ -366,7 +366,7 @@ public class DuelGame {
     }
 
     private void ponerSpec(final Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         if (extraLang.usespectatormode) {
             p.setGameMode(GameMode.valueOf("SPECTATOR"));
         } else {
@@ -430,7 +430,7 @@ public class DuelGame {
                             public void run() {
                                 final Player t = (Player) e.getEntity();
                                 final Player dam = (Player) a.getShooter();
-                                String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getSangre(t.getHealth()));
+                                String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getHealt(t.getHealth()));
                                 dam.sendMessage(s);
                                 msgSpec(s);
                             }
@@ -442,10 +442,10 @@ public class DuelGame {
     }
 
     public boolean place(Block b) {
-        mapa.puesto = true;
-        mapa.bloques.add(b);
-        if (b.getLocation().getBlockY() > mapa.maxY) {
-            mapa.maxY = b.getLocation().getBlockY();
+        map.poss = true;
+        map.blocks.add(b);
+        if (b.getLocation().getBlockY() > map.maxY) {
+            map.maxY = b.getLocation().getBlockY();
         }
         if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
@@ -471,10 +471,10 @@ public class DuelGame {
     }
 
     public void setLava(int y) {
-        mapa.lava = true;
-        mapa.puesto = true;
-        if (y > mapa.maxY) {
-            mapa.maxY = y;
+        map.lava = true;
+        map.poss = true;
+        if (y > map.maxY) {
+            map.maxY = y;
         }
     }
     

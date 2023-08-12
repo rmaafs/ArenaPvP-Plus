@@ -51,42 +51,7 @@ public class MapaMeetup {
                 if (corner1 == null || corner2 == null) {
                     Bukkit.getConsoleSender().sendMessage("§4ArenaPvP++ >> §cError to regen Meetup map " + name + " of kit " + k.kitName + ". Corner1 and Corner2 not set.");
                 } else {
-                    Location loc1 = corner1.clone();
-                    Location loc2 = corner2.clone();
-                    if (loc1.getBlockY() > loc2.getBlockY()) {
-                        loc1.setY(maxY);
-                    } else {
-                        loc2.setY(maxY);
-                    }
-                    Cuboid cubo = new Cuboid(loc1, loc2);
-                    List<Block> li = cubo.getBlocks();
-                    for (Block b : li) {
-                        if (b.getType().equals(Material.STATIONARY_LAVA) || b.getType().equals(Material.LAVA)) {
-                            for (ItemStack it : k.deleteBlocks) {
-                                if (Material.getMaterial(326).getData().getName().equals(it.getType().getData().getName())) {
-                                    b.setType(Material.AIR);
-                                }
-                            }
-                        } else if (b.getType().equals(Material.STATIONARY_WATER) || b.getType().equals(Material.WATER)) {
-                            for (ItemStack it : k.deleteBlocks) {
-                                if (Material.getMaterial(327).getData().getName().equals(it.getType().getData().getName())) {
-                                    b.setType(Material.AIR);
-                                }
-                            }
-                        } else if (b.getType().equals(Material.FIRE)) {
-                            for (ItemStack it : k.deleteBlocks) {
-                                if (Material.getMaterial(259).getData().getName().equals(it.getType().getData().getName())) {
-                                    b.setType(Material.AIR);
-                                }
-                            }
-                        } else {
-                            for (ItemStack it : k.deleteBlocks) {
-                                if (Material.getMaterial(b.getTypeId()).getData().getName().equals(it.getType().getData().getName())) {
-                                    b.setType(Material.AIR);
-                                }
-                            }
-                        }
-                    }
+                    Map.regenUtil(k, corner1, corner2, maxY);
                 }
             } else {
                 for (Block b : bloques) {

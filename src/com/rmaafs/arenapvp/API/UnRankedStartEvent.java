@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,7 +13,7 @@ public class UnRankedStartEvent extends Event {
     boolean regen;
     Location spawn1, spawn2, corner1, corner2;
 
-    public UnRankedStartEvent(Player p1, Player p2, String kn, Mapa m) {
+    public UnRankedStartEvent(Player p1, Player p2, String kn, Map m) {
         player1 = p1;
         player2 = p2;
         kitName = kn;

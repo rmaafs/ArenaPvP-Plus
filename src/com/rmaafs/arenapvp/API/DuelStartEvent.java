@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,7 +13,7 @@ public class DuelStartEvent  extends Event {
     Location spawn1, spawn2, corner1, corner2;
     int bestof, winsPlayer1, winsPlayer2;
 
-    public DuelStartEvent(Player p1, Player p2, String kn, Mapa m, int b, int w1, int w2) {
+    public DuelStartEvent(Player p1, Player p2, String kn, Map m, int b, int w1, int w2) {
         player1 = p1;
         player2 = p2;
         kitName = kn;

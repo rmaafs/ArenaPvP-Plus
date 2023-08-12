@@ -26,23 +26,23 @@ public class PartyDuelFinishEvent extends Event {
             ownerLoser = game.p2.owner;
             playersWinner.addAll(game.players1);
             playersLoser.addAll(game.players2);
-            spawnWinner = game.mapa.getSpawn1();
-            spawnLoser = game.mapa.getSpawn2();
+            spawnWinner = game.map.getSpawn1();
+            spawnLoser = game.map.getSpawn2();
         } else {
             ownerWinner = game.p2.owner;
             ownerLoser = game.p1.owner;
             playersWinner.addAll(game.players2);
             playersLoser.addAll(game.players1);
-            spawnWinner = game.mapa.getSpawn2();
-            spawnLoser = game.mapa.getSpawn1();
+            spawnWinner = game.map.getSpawn2();
+            spawnLoser = game.map.getSpawn1();
         }
 
         spectators.addAll(game.espectadores);
         kitName = game.kit.getKitName();
-        mapName = game.mapa.getName();
+        mapName = game.map.getName();
 
-        corner1 = game.mapa.getCorner1();
-        corner2 = game.mapa.getCorner2();
+        corner1 = game.map.getCorner1();
+        corner2 = game.map.getCorner2();
     }
 
     public List<Player> getSpectators() {

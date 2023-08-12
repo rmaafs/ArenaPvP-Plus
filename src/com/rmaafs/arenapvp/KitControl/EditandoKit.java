@@ -145,14 +145,14 @@ public class EditandoKit {
                 break;
             case INVENTARIO:
                 p.sendMessage(inventory);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.getInventory().setContents(hotbar);
                 p.getInventory().setArmorContents(armor);
                 p.setGameMode(GameMode.CREATIVE);
                 break;
             case ITEMSBORRAR:
                 p.sendMessage(itemstodelete);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 for (ItemStack is : deleteBlocks) {
                     p.getInventory().addItem(is);
                 }
@@ -160,7 +160,7 @@ public class EditandoKit {
                 break;
             case POTIONS:
                 p.sendMessage(potions);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.openInventory(inv);
                 break;
             case ITEM:

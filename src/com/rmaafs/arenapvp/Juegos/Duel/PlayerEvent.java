@@ -9,7 +9,6 @@ import static com.rmaafs.arenapvp.Main.*;
 
 import com.rmaafs.arenapvp.PlayerConfig;
 import com.rmaafs.arenapvp.Score;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -212,7 +211,7 @@ public class PlayerEvent implements Listener {
         e.setJoinMessage("");
         Player p = e.getPlayer();
         if (extraLang.worlds.contains(p.getWorld().getName())) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             hotbars.setMain(p);
             playerConfig.put(p, new PlayerConfig(p));
             Extra.setScore(p, Score.TipoScore.MAIN);

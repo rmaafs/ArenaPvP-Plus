@@ -26,11 +26,11 @@ public class PartyDuelStartEvent extends Event {
         players2.addAll(game.players2);
         spectators.addAll(game.espectadores);
         kitName = game.kit.getKitName();
-        mapName = game.mapa.getName();
-        spawn1 = game.mapa.getSpawn1();
-        spawn2 = game.mapa.getSpawn2();
-        corner1 = game.mapa.getCorner1();
-        corner2 = game.mapa.getCorner2();
+        mapName = game.map.getName();
+        spawn1 = game.map.getSpawn1();
+        spawn2 = game.map.getSpawn2();
+        corner1 = game.map.getCorner1();
+        corner2 = game.map.getCorner2();
     }
 
     public Player getOwner1() {

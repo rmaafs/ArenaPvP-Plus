@@ -38,14 +38,14 @@ public class Extra {
     public static HashMap<Player, PlayerConfig> playerConfig = new HashMap<>();
 
     public static HashMap<String, Kit> kits = new HashMap<>();
-    public static HashMap<Kit, List<Mapa>> mapLibres = new HashMap<>();
-    public static HashMap<Kit, List<Mapa>> mapOcupadas = new HashMap<>();
+    public static HashMap<Kit, List<Map>> mapLibres = new HashMap<>();
+    public static HashMap<Kit, List<Map>> mapOcupadas = new HashMap<>();
     public static HashMap<Kit, List<MapaMeetup>> mapMeetupLibres = new HashMap<>();
     public static HashMap<Kit, List<MapaMeetup>> mapMeetupOcupadas = new HashMap<>();
 
-    public static HashMap<Player, Partida> jugandoUno = new HashMap<>();
+    public static HashMap<Player, Game> jugandoUno = new HashMap<>();
 
-    public static List<Partida> preEmpezandoUno = new ArrayList<>();
+    public static List<Game> preEmpezandoUno = new ArrayList<>();
 
     public static HashMap<Player, Score> scores = new HashMap<>();
     public static List<Rangos> rangos = new ArrayList<>();
@@ -317,8 +317,8 @@ public class Extra {
         Main.meetupControl.sacar(p);
     }
 
-    public static Mapa getMap(Kit k) {
-        Mapa m;
+    public static Map getMap(Kit k) {
+        Map m;
         if (Main.extraLang.chooserandommaps) {
             Random r = new Random();
             m = mapLibres.get(k).get(r.nextInt(mapLibres.get(k).size()));
@@ -337,7 +337,7 @@ public class Extra {
         return true;
     }
 
-    public static void terminarMapa(Mapa m, Kit k) {
+    public static void terminarMapa(Map m, Kit k) {
         m.regen(k);
         mapOcupadas.get(k).remove(m);
         if (!mapLibres.get(k).contains(m)) {
@@ -481,7 +481,7 @@ public class Extra {
         p.spigot().sendMessage(l1);
     }
 
-    public static void limpiarP(Player player) {
+    public static void cleanPlayer(Player player) {
         player.getInventory().clear();
         player.getInventory().setHelmet(new ItemStack(Material.AIR));
         player.getInventory().setChestplate(new ItemStack(Material.AIR));
@@ -496,7 +496,7 @@ public class Extra {
         player.setFireTicks(0);
     }
 
-    public static double getSangre(double sangre) {
+    public static double getHealt(double sangre) {
         if (sangre >= 19) {
             sangre = 10.0;
         } else if (sangre >= 18) {

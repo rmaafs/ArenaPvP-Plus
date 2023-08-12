@@ -9,11 +9,11 @@ public class Kit {
 
     public String kitName, kitNameColor;
     public List<String> description = new ArrayList<>();
-    public List<ItemStack> deleteBlocks = new ArrayList<>();
-    public List<PotionEffect> potionList = new ArrayList<>();
+    public List<ItemStack> deleteBlocks;
+    public List<PotionEffect> potionList;
     public ItemStack[] hotbar, armor;
     public ItemStack itemOnGui;
-    public boolean regen = false, natural = true, combo = false;
+    public boolean regen, natural, combo;
     public int slot, maxTime;
 
     public String getKitName() {
@@ -36,7 +36,7 @@ public class Kit {
         this.description = description;
     }
 
-    public Kit(String ki, String kitN, List<ItemStack> del, List<PotionEffect> pot,
+    public Kit(String ki, String kitN, List<ItemStack> deleteBlocks, List<PotionEffect> pot,
             ItemStack[] hot, ItemStack[] ar, ItemStack it, int s, int time, boolean co, boolean na) {
         kitName = ki;
         kitNameColor = kitN;
@@ -44,8 +44,8 @@ public class Kit {
         hotbar = hot;
         armor = ar;
         itemOnGui = it;
-        deleteBlocks = del;
-        regen = !deleteBlocks.isEmpty();
+        this.deleteBlocks = deleteBlocks;
+        regen = !this.deleteBlocks.isEmpty();
         slot = s;
         combo = co;
         natural = na;

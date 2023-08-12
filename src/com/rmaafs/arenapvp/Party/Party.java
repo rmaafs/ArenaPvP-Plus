@@ -51,7 +51,7 @@ public class Party {
     public Party(Player o) {
         owner = o;
         players.add(o);
-        Extra.limpiarP(o);
+        Extra.cleanPlayer(o);
 
         minplayers = cconfig.getInt("party.events.minplayers");
         maxplayers = cconfig.getInt("party.maxplayers");
@@ -288,7 +288,7 @@ public class Party {
     public void join(Player p) {
         partyControl.partys.put(p, partyControl.partys.get(owner));
         players.add(p);
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         hotbars.setLeave(p);
         msg(playerjoined.replaceAll("<player>", p.getName()));
         sonido(ORB_PICKUP);
@@ -310,7 +310,7 @@ public class Party {
         }
 
         if (online) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             extraLang.teleportSpawn(p);
             hotbars.setMain(p);
             Extra.setScore(p, Score.TipoScore.MAIN);
@@ -331,7 +331,7 @@ public class Party {
 
     public void promote(Player p) {
         if (p != owner) {
-            Extra.limpiarP(owner);
+            Extra.cleanPlayer(owner);
             hotbars.setLeave(owner);
             owner = p;
             setHotbar(p);

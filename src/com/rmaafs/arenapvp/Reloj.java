@@ -84,26 +84,26 @@ public class Reloj {
     }
 
     private void preEmpezarDuels() {
-        List<Partida> terminadas = new ArrayList<>();
-        for (Partida partida : Extra.preEmpezandoUno) {
-            if (partida.pretime == 0) {
-                partida.startGame(startingDuelStart);
-                terminadas.add(partida);
+        List<Game> terminadas = new ArrayList<>();
+        for (Game game : Extra.preEmpezandoUno) {
+            if (game.preTime == 0) {
+                game.startGame(startingDuelStart);
+                terminadas.add(game);
             } else {
-                partida.starting(startingGame.replaceAll("<time>", "" + partida.pretime));
-                partida.pretime--;
+                game.starting(startingGame.replaceAll("<time>", "" + game.preTime));
+                game.preTime--;
             }
         }
         Extra.preEmpezandoUno.removeAll(terminadas);
     }
 
     private void quitarSegundoPartidas() {
-        List<Partida> editadas = new ArrayList<>();
-        for (Map.Entry<Player, Partida> entry : jugandoUno.entrySet()) {
-            Partida partida = entry.getValue();
-            if (!editadas.contains(partida)) {
-                partida.removerSec();
-                editadas.add(partida);
+        List<Game> editadas = new ArrayList<>();
+        for (Map.Entry<Player, Game> entry : jugandoUno.entrySet()) {
+            Game game = entry.getValue();
+            if (!editadas.contains(game)) {
+                game.removerSec();
+                editadas.add(game);
             }
         }
     }

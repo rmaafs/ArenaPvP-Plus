@@ -19,7 +19,7 @@ import com.rmaafs.arenapvp.Kit;
 import static com.rmaafs.arenapvp.Main.guis;
 import static com.rmaafs.arenapvp.Main.hotbars;
 import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -102,17 +102,17 @@ public class CrearKit {
                 break;
             case INVENTARIO:
                 p.sendMessage(inventory);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.CREATIVE);
                 break;
             case ITEMSBORRAR:
                 p.sendMessage(itemstodelete);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.CREATIVE);
                 break;
             case POTIONS:
                 p.sendMessage(potions);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.openInventory(inv);
                 break;
             case ITEM:
@@ -277,10 +277,10 @@ public class CrearKit {
         }
         hotbars.setMain(p);
 
-        List<Mapa> lista1 = new ArrayList<>();
+        List<Map> lista1 = new ArrayList<>();
         mapLibres.put(k, lista1);
         
-        List<Mapa> lista2 = new ArrayList<>();
+        List<Map> lista2 = new ArrayList<>();
         mapOcupadas.put(k, lista2);
         
         File elkit = new File(plugin.getDataFolder() + File.separator + "kits" + File.separator + kitName + ".yml");
