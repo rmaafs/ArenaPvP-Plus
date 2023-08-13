@@ -52,7 +52,7 @@ public class CreateMap {
         spawn = tc(clang.getString("creating.map.spawn"));
         name = tc(clang.getString("creating.map.name"));
         created = tc(clang.getString("creating.map.created"));
-        nameExist = tc(clang.getString("creating.map.nameExist"));
+        nameExist = tc(clang.getString("creating.map.nameexist"));
 
         if (kit.regen) {
             action = Action.CORNER1;

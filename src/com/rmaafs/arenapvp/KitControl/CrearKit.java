@@ -261,7 +261,7 @@ public class CrearKit {
             f.mkdir();
         }
 
-//        guis.saveItems();
+        guis.saveItems();
         for (int i = 0; i < guis.acomodacion.getContents().length; i++) {
             if (guis.acomodacion.getContents()[i] != null && guis.acomodacion.getContents()[i].isSimilar(itemOnGui)) {
                 slot = i;
