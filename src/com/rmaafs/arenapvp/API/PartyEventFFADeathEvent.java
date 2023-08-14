@@ -13,10 +13,16 @@ import org.bukkit.event.HandlerList;
 
 public class PartyEventFFADeathEvent extends Event{
 
-    Player owner, death;
-    String kitName, mapName;
-    List<Player> players, spectators;
-    Location spawn1, spawn2, corner1, corner2;
+    private final Player owner;
+    private final Player death;
+    private final String kitName;
+    private final String mapName;
+    private final List<Player> players;
+    private final List<Player> spectators;
+    private final Location spawn1;
+    private final Location spawn2;
+    private Location corner1;
+    private Location corner2;
     
     public PartyEventFFADeathEvent(Party party, Kit kit, Map map, List<Player> spec, Player d){
         players = new ArrayList<>();
@@ -74,10 +80,6 @@ public class PartyEventFFADeathEvent extends Event{
     public Player getDeath() {
         return death;
     }
-
-    
-    
-    
     
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {

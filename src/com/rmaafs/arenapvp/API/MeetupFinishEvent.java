@@ -11,10 +11,15 @@ import org.bukkit.event.HandlerList;
 
 public class MeetupFinishEvent extends Event{
 
-    String owner, title, kitName, mapName;
-    List<Player> players, spectators;
-    Player winner;
-    Location corner1, corner2;
+    private final String owner;
+    private final String title;
+    private final String kitName;
+    private final String mapName;
+    private final List<Player> players;
+    private final List<Player> spectators;
+    private final Player winner;
+    private final Location corner1;
+    private final Location corner2;
 
     public MeetupFinishEvent(GameMeetup game, Player w){
         players = new ArrayList<>();
@@ -65,11 +70,7 @@ public class MeetupFinishEvent extends Event{
     public Player getWinner() {
         return winner;
     }
-    
-    
-    
-    
-    
+
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {
         return HANDLERS;

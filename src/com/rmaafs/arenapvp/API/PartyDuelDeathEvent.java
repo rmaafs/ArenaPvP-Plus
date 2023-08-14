@@ -12,10 +12,18 @@ import org.bukkit.event.HandlerList;
 
 public class PartyDuelDeathEvent extends Event {
 
-    Player ownerKilled, ownerKiller, playerDeath;
-    List<Player> playersKilled, playersKiller, spectators;
-    String kitName, mapName;
-    Location spawnKilled, spawnKiller, corner1, corner2;
+    private final Player ownerKilled;
+    private final Player ownerKiller;
+    private final Player playerDeath;
+    private final List<Player> playersKilled;
+    private final List<Player> playersKiller;
+    private final List<Player> spectators;
+    private final String kitName;
+    private final String mapName;
+    private final Location spawnKilled;
+    private final Location spawnKiller;
+    private final Location corner1;
+    private final Location corner2;
 
     public PartyDuelDeathEvent(DuelGame game, Player d, Party p) {
         playersKilled = new ArrayList<>();
@@ -93,9 +101,6 @@ public class PartyDuelDeathEvent extends Event {
     public Location getSpawnKiller() {
         return spawnKiller;
     }
-    
-    
-    
 
     private static final HandlerList HANDLERS = new HandlerList();
 

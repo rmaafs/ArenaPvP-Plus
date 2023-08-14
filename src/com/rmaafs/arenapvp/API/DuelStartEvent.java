@@ -85,7 +85,7 @@ public class DuelStartEvent  extends Event {
     public int getWinsPlayer2() {
         return winsPlayer2;
     }
-    
+
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {
         return HANDLERS;

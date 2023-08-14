@@ -10,10 +10,15 @@ import org.bukkit.event.HandlerList;
 
 public class PartyEventFFAStartEvent extends Event{
 
-    Player owner;
-    String kitName, mapName;
-    List<Player> players, spectators;
-    Location spawn1, spawn2, corner1, corner2;
+    private final Player owner;
+    private final String kitName;
+    private final String mapName;
+    private final List<Player> players;
+    private final List<Player> spectators;
+    private final Location spawn1;
+    private final Location spawn2;
+    private Location corner1;
+    private Location corner2;
     
     public PartyEventFFAStartEvent(Player ow, List<Player> pla, String kit, Map map){
         players = new ArrayList<>();
@@ -69,13 +74,12 @@ public class PartyEventFFAStartEvent extends Event{
     public static HandlerList getHANDLERS() {
         return HANDLERS;
     }
-    
-    
-    
+
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {
         return HANDLERS;
     }
+
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }

@@ -11,10 +11,17 @@ import org.bukkit.event.HandlerList;
 
 public class PartyDuelStartEvent extends Event {
 
-    Player owner1, owner2;
-    List<Player> players1, players2, spectators;
-    String kitName, mapName;
-    Location spawn1, spawn2, corner1, corner2;
+    private final Player owner1;
+    private final Player owner2;
+    private final List<Player> players1;
+    private final List<Player> players2;
+    private final List<Player> spectators;
+    private final String kitName;
+    private final String mapName;
+    private final Location spawn1;
+    private final Location spawn2;
+    private final Location corner1;
+    private final Location corner2;
     
     public PartyDuelStartEvent(DuelGame game){
         players1 = new ArrayList<>();
@@ -76,11 +83,6 @@ public class PartyDuelStartEvent extends Event {
     public Location getCorner2() {
         return corner2;
     }
-    
-    
-    
-    
-    
     
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {

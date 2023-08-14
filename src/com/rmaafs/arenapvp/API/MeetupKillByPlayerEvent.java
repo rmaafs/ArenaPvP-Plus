@@ -11,10 +11,16 @@ import org.bukkit.event.HandlerList;
 
 public class MeetupKillByPlayerEvent extends Event{
 
-    String owner, title, kitName, mapName;
-    List<Player> players, spectators;
-    Player death, killer;
-    Location corner1, corner2;
+    private final String owner;
+    private final String title;
+    private final String kitName;
+    private final String mapName;
+    private final List<Player> players;
+    private final List<Player> spectators;
+    private final Player death;
+    private final Player killer;
+    private final Location corner1;
+    private final Location corner2;
     
     public MeetupKillByPlayerEvent(GameMeetup game, Player d, Player k){
         players = new ArrayList<>();
@@ -70,9 +76,7 @@ public class MeetupKillByPlayerEvent extends Event{
     public Player getKiller() {
         return killer;
     }
-    
-    
-    
+
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {
         return HANDLERS;

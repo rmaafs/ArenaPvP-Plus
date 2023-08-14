@@ -13,10 +13,16 @@ import org.bukkit.event.HandlerList;
 
 public class PartyEventFFAFinishEvent extends Event {
 
-    Player owner, winner;
-    String kitName, mapName;
-    List<Player> players, spectators;
-    Location spawn1, spawn2, corner1, corner2;
+    private final Player owner;
+    private final Player winner;
+    private final String kitName;
+    private final String mapName;
+    private final List<Player> players;
+    private final List<Player> spectators;
+    private final Location spawn1;
+    private final Location spawn2;
+    private Location corner1;
+    private Location corner2;
     
     public PartyEventFFAFinishEvent(Party party, Kit kit, Map map, List<Player> spec, Player w){
         players = new ArrayList<>();
@@ -74,10 +80,6 @@ public class PartyEventFFAFinishEvent extends Event {
     public Player getWinner() {
         return winner;
     }
-
-    
-    
-    
     
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {
