@@ -1,4 +1,4 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.manager.kit;
 
 import java.util.ArrayList;
 import java.util.List;

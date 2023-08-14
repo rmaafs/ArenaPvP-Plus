@@ -1,21 +1,23 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.jugandoUno;
-import static com.rmaafs.arenapvp.Extra.scores;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
+import static com.rmaafs.arenapvp.util.Extra.scores;
 
 import com.rmaafs.arenapvp.Juegos.Meetup.GameMeetup;
 import com.rmaafs.arenapvp.Party.DuelGame;
 import com.rmaafs.arenapvp.Party.EventGame;
 import com.rmaafs.arenapvp.Party.Party;
 
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import static com.rmaafs.arenapvp.Main.plugin;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 
+import com.rmaafs.arenapvp.game.Game;
+import com.rmaafs.arenapvp.util.Extra;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

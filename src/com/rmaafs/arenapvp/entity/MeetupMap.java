@@ -1,44 +1,39 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.rmaafs.arenapvp.manager.kit.Kit;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
-public class MapaMeetup {
+public class MeetupMap {
 
-    String name;
-    Location corner1, corner2;
-    List<Location> spawns = new ArrayList<>();
-    
-    int totalspawn = 0;
-
-    public List<Block> bloques = new ArrayList<>();
+    private String name;
+    private  Location corner1;
+    private Location corner2;
+    private  List<Location> spawns = new ArrayList<>();
+    private  int totalSpawns = 0;
+    public List<Block> blocks = new ArrayList<>();
     public boolean lava = false;
-    public boolean puesto = false;
-
+    public boolean set = false;
     public int maxY = 0;
 
-    public MapaMeetup(String s, Location c1, Location c2, List<Location> locs) {
+    public MeetupMap(String s, Location c1, Location c2, List<Location> locs) {
         name = s;
         corner1 = c1;
         corner2 = c2;
         spawns = locs;
-        if (corner1.getBlockY() > corner2.getBlockY()) {
-            maxY = corner2.getBlockY();
-        } else {
-            maxY = corner1.getBlockY();
-        }
+        maxY = Math.min(corner1.getBlockY(), corner2.getBlockY());
     }
     
     public Location getLoc(){
-        if (totalspawn >= spawns.size()){
-            totalspawn = 0;
+        if (totalSpawns >= spawns.size()){
+            totalSpawns = 0;
         }
-        return spawns.get(totalspawn++);
+        return spawns.get(totalSpawns++);
     }
     
     public Location getLoc(int i){
@@ -46,7 +41,7 @@ public class MapaMeetup {
     }
 
     public void regen(Kit k) {
-        if (k.regen && puesto) {
+        if (k.regen && set) {
             if (lava) {
                 if (corner1 == null || corner2 == null) {
                     Bukkit.getConsoleSender().sendMessage("§4ArenaPvP++ >> §cError to regen Meetup map " + name + " of kit " + k.kitName + ". Corner1 and Corner2 not set.");
@@ -54,13 +49,13 @@ public class MapaMeetup {
                     Map.regenUtil(k, corner1, corner2, maxY);
                 }
             } else {
-                for (Block b : bloques) {
+                for (Block b : blocks) {
                     b.setType(Material.AIR);
                 }
             }
-            bloques.clear();
+            blocks.clear();
             lava = false;
-            puesto = false;
+            set = false;
         }
     }
 

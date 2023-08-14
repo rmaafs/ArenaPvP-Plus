@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import static com.rmaafs.arenapvp.Main.duelControl;
+import static com.rmaafs.arenapvp.ArenaPvP.duelControl;
 import org.bukkit.entity.Player;
 
 public class CreateDuel {

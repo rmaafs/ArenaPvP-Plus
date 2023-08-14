@@ -1,11 +1,11 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.manager.data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import static com.rmaafs.arenapvp.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
 import static org.bukkit.Bukkit.getServer;
 
 public class MySQL {

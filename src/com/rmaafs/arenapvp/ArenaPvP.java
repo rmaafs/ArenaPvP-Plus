@@ -7,14 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static com.rmaafs.arenapvp.Extra.cspawns;
-import static com.rmaafs.arenapvp.Extra.cstats;
-import static com.rmaafs.arenapvp.Extra.kits;
-import static com.rmaafs.arenapvp.Extra.mapLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupOcupadas;
-import static com.rmaafs.arenapvp.Extra.mapOcupadas;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
+import static com.rmaafs.arenapvp.util.Extra.cspawns;
+import static com.rmaafs.arenapvp.util.Extra.cstats;
+import static com.rmaafs.arenapvp.util.Extra.kits;
+import static com.rmaafs.arenapvp.util.Extra.mapLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupOcupadas;
+import static com.rmaafs.arenapvp.util.Extra.mapOcupadas;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
 
 import com.rmaafs.arenapvp.GUIS.GuiEvent;
 import com.rmaafs.arenapvp.GUIS.KitGui;
@@ -30,6 +30,19 @@ import com.rmaafs.arenapvp.Juegos.Stats.ClickPerSecond;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
 import com.rmaafs.arenapvp.Party.PartyControl;
+import com.rmaafs.arenapvp.commands.Command;
+import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.entity.MeetupMap;
+import com.rmaafs.arenapvp.manager.config.Lang;
+import com.rmaafs.arenapvp.manager.config.PlayerConfig;
+import com.rmaafs.arenapvp.manager.data.MySQL;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
+import com.rmaafs.arenapvp.manager.spec.SpecControl;
+import com.rmaafs.arenapvp.util.Convertor;
+import com.rmaafs.arenapvp.util.Extra;
+import com.rmaafs.arenapvp.util.Reloj;
+import com.rmaafs.arenapvp.util.file.FileKits;
 import com.rmaafs.arenapvp.versions.Packets;
 import com.rmaafs.arenapvp.versions.v1_7_R4;
 import com.rmaafs.arenapvp.versions.v1_X;
@@ -45,11 +58,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Main extends JavaPlugin implements Listener {
+public class ArenaPvP extends JavaPlugin implements Listener {
 
     //Todo listo al iniciar, leave de la party.
     public static Packets ver;
-    public static Main plugin;
+    public static ArenaPvP plugin;
     public static KitGui guis;
     public static Hotbars hotbars;
     public static DuelControl duelControl;
@@ -83,7 +96,7 @@ public class Main extends JavaPlugin implements Listener {
             cstats.save(stats);
             cspawns.save(spawns);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ArenaPvP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -267,8 +280,8 @@ public class Main extends JavaPlugin implements Listener {
                                 sharingMaps.put(ckit.getString("mapsharing"), lis);
                                 List<Map> lista = new ArrayList<>();
                                 List<Map> lista2 = new ArrayList<>();
-                                List<MapaMeetup> lista3 = new ArrayList<>();
-                                List<MapaMeetup> lista4 = new ArrayList<>();
+                                List<MeetupMap> lista3 = new ArrayList<>();
+                                List<MeetupMap> lista4 = new ArrayList<>();
                                 mapLibres.put(k, lista);
                                 mapOcupadas.put(k, lista2);
                                 mapMeetupLibres.put(k, lista3);
@@ -278,7 +291,7 @@ public class Main extends JavaPlugin implements Listener {
                             loadMaps(k);
                         }
                     } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ArenaPvP.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -350,8 +363,8 @@ public class Main extends JavaPlugin implements Listener {
         File f = new File(getDataFolder() + File.separator + "meetupmaps" + File.separator + k.kitName + ".yml");
         if (f.exists()) {
             FileConfiguration cf = YamlConfiguration.loadConfiguration(f);
-            List<MapaMeetup> lista = new ArrayList<>();
-            List<MapaMeetup> lista2 = new ArrayList<>();
+            List<MeetupMap> lista = new ArrayList<>();
+            List<MeetupMap> lista2 = new ArrayList<>();
             for (String s : cf.getKeys(false)) {
                 String w = cf.getString(s + ".w");
                 if (cf.contains(s + ".c1")) {
@@ -362,7 +375,7 @@ public class Main extends JavaPlugin implements Listener {
                                 cf.getInt(s + ".spawn." + number + ".y"),
                                 cf.getInt(s + ".spawn." + number + ".z")));
                     }
-                    lista.add(new MapaMeetup(s,
+                    lista.add(new MeetupMap(s,
                             setLoc(cf, w, s + ".c1", false),
                             setLoc(cf, w, s + ".c2", false),
                             locs));

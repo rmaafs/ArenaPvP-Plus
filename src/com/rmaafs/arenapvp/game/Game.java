@@ -1,4 +1,4 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,22 +13,28 @@ import com.rmaafs.arenapvp.API.RankedStartEvent;
 import com.rmaafs.arenapvp.API.UnRankedFinishEvent;
 import com.rmaafs.arenapvp.API.UnRankedStartEvent;
 
-import static com.rmaafs.arenapvp.Extra.BURP;
-import static com.rmaafs.arenapvp.Extra.LEVEL_UP;
-import static com.rmaafs.arenapvp.Extra.NOTE_STICKS;
-import static com.rmaafs.arenapvp.Extra.SPLASH2;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_NO;
-import static com.rmaafs.arenapvp.Extra.jugandoUno;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import static com.rmaafs.arenapvp.Extra.preEmpezandoUno;
-import static com.rmaafs.arenapvp.Main.duelControl;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.plugin;
-import static com.rmaafs.arenapvp.Main.ver;
+import static com.rmaafs.arenapvp.util.Extra.BURP;
+import static com.rmaafs.arenapvp.util.Extra.LEVEL_UP;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_STICKS;
+import static com.rmaafs.arenapvp.util.Extra.SPLASH2;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_NO;
+import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import static com.rmaafs.arenapvp.util.Extra.preEmpezandoUno;
+import static com.rmaafs.arenapvp.ArenaPvP.duelControl;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+import static com.rmaafs.arenapvp.ArenaPvP.ver;
 import static org.bukkit.potion.PotionEffectType.BLINDNESS;
 
+import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.manager.config.PlayerConfig;
+import com.rmaafs.arenapvp.manager.data.SQL;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
+import com.rmaafs.arenapvp.util.Extra;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -41,7 +47,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Game {
-
     enum GameType {
         DUEL, UNRANKED, RANKED
     }

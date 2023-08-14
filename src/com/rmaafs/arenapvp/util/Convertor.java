@@ -1,4 +1,4 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

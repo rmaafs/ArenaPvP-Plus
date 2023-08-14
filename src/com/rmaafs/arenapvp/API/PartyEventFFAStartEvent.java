@@ -2,7 +2,7 @@ package com.rmaafs.arenapvp.API;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.rmaafs.arenapvp.Map;
+import com.rmaafs.arenapvp.entity.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.Party;
 
-import com.rmaafs.arenapvp.Kit;
+import com.rmaafs.arenapvp.manager.kit.Kit;
 
 public class PreDuelGame {
 

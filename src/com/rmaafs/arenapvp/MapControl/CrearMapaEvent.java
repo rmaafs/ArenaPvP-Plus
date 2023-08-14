@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.rmaafs.arenapvp.Juegos.Meetup.CreandoMapaMeetup;
 
-import static com.rmaafs.arenapvp.Main.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;

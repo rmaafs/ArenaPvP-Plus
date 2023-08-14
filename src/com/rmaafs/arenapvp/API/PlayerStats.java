@@ -1,7 +1,7 @@
 package com.rmaafs.arenapvp.API;
 
-import static com.rmaafs.arenapvp.Extra.kits;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
+import static com.rmaafs.arenapvp.util.Extra.kits;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

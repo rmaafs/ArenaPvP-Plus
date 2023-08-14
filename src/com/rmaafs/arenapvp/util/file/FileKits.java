@@ -1,9 +1,11 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.util.file;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.rmaafs.arenapvp.ArenaPvP;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class FileKits {
@@ -20,7 +22,7 @@ public class FileKits {
         try {
             cfile.save(file);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ArenaPvP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -3,20 +3,19 @@ package com.rmaafs.arenapvp.MapControl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.rmaafs.arenapvp.Extra;
-import com.rmaafs.arenapvp.Kit;
 
-import static com.rmaafs.arenapvp.Extra.*;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.plugin;
+import com.rmaafs.arenapvp.util.Extra;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+
+import static com.rmaafs.arenapvp.util.Extra.*;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 import static com.rmaafs.arenapvp.MapControl.CrearMapaEvent.creandoMapa;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Logger.getLogger;
 
-import com.rmaafs.arenapvp.Map;
+import com.rmaafs.arenapvp.entity.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;

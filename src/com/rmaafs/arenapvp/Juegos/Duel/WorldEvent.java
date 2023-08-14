@@ -1,10 +1,10 @@
 package com.rmaafs.arenapvp.Juegos.Duel;
 
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import com.rmaafs.arenapvp.Main;
-import static com.rmaafs.arenapvp.Main.specControl;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import com.rmaafs.arenapvp.ArenaPvP;
+import static com.rmaafs.arenapvp.ArenaPvP.specControl;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,7 +46,7 @@ public class WorldEvent implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
         specControl.teleport(e.getPlayer(), e.getTo());
-        if (Main.VERSIONNUMERO != 7 && e.getCause().equals(PlayerTeleportEvent.TeleportCause.valueOf("SPECTATE"))) {
+        if (ArenaPvP.VERSIONNUMERO != 7 && e.getCause().equals(PlayerTeleportEvent.TeleportCause.valueOf("SPECTATE"))) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(youarespecting);
         }

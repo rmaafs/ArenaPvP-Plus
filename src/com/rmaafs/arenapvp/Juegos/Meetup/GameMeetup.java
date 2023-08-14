@@ -7,24 +7,24 @@ import com.rmaafs.arenapvp.API.MeetupDeathEvent;
 import com.rmaafs.arenapvp.API.MeetupFinishEvent;
 import com.rmaafs.arenapvp.API.MeetupKillByPlayerEvent;
 import com.rmaafs.arenapvp.API.MeetupStartEvent;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.CHICKEN_EGG_POP;
-import static com.rmaafs.arenapvp.Extra.FIREWORK_LARGE_BLAST;
-import static com.rmaafs.arenapvp.Extra.LEVEL_UP;
-import static com.rmaafs.arenapvp.Extra.NOTE_BASS;
-import static com.rmaafs.arenapvp.Extra.NOTE_PLING;
-import static com.rmaafs.arenapvp.Extra.ORB_PICKUP;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_NO;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.MapaMeetup;
-import com.rmaafs.arenapvp.Score;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.CHICKEN_EGG_POP;
+import static com.rmaafs.arenapvp.util.Extra.FIREWORK_LARGE_BLAST;
+import static com.rmaafs.arenapvp.util.Extra.LEVEL_UP;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_BASS;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_PLING;
+import static com.rmaafs.arenapvp.util.Extra.ORB_PICKUP;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_NO;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+import com.rmaafs.arenapvp.entity.MeetupMap;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -48,7 +48,7 @@ public class GameMeetup {
     public String title;
     public String owner;
     public Kit kit;
-    public MapaMeetup mapa;
+    public MeetupMap mapa;
     boolean ffa = false, count = false;
     int slots;
     public int pretime, time;
@@ -71,7 +71,7 @@ public class GameMeetup {
     int totalplayers = 0;
     boolean daño = false;
 
-    public GameMeetup(Player p, String ti, Kit k, int slot, boolean f, MapaMeetup ma, int min) {
+    public GameMeetup(Player p, String ti, Kit k, int slot, boolean f, MeetupMap ma, int min) {
         owner = p.getName();
         title = ti;
         kit = k;
@@ -523,8 +523,8 @@ public class GameMeetup {
     }
 
     public boolean place(Block b) {
-        mapa.puesto = true;
-        mapa.bloques.add(b);
+        mapa.set = true;
+        mapa.blocks.add(b);
         if (b.getLocation().getBlockY() > mapa.maxY) {
             mapa.maxY = b.getLocation().getBlockY();
         }
@@ -553,7 +553,7 @@ public class GameMeetup {
 
     public void setLava(int y) {
         mapa.lava = true;
-        mapa.puesto = true;
+        mapa.set = true;
         if (y > mapa.maxY) {
             mapa.maxY = y;
         }

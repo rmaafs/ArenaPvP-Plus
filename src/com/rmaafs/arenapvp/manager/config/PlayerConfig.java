@@ -1,16 +1,20 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.manager.config;
 
 import java.util.HashMap;
 
 import com.rmaafs.arenapvp.Hotbars.SavedHotbars;
+import com.rmaafs.arenapvp.manager.data.SQL;
+import com.rmaafs.arenapvp.manager.data.Stats;
+import com.rmaafs.arenapvp.manager.data.StatsMeetup;
+import com.rmaafs.arenapvp.manager.kit.Kit;
 import org.bukkit.entity.Player;
 
 public class PlayerConfig {
 
-    HashMap<Kit, SavedHotbars> hotbars = new HashMap<>();
-    Stats stats;
-    StatsMeetup statsMeetup;
-    Player p;
+    private final HashMap<Kit, SavedHotbars> hotbars = new HashMap<>();
+    public Stats stats;
+    public final StatsMeetup statsMeetup;
+    private final Player p;
 
     public PlayerConfig(Player pp) {
         p = pp;
@@ -19,9 +23,7 @@ public class PlayerConfig {
     }
     
     public void removeKit(Kit k){
-        if (hotbars.containsKey(k)){
-            hotbars.remove(k);
-        }
+        hotbars.remove(k);
         stats.removeKit(k);
     }
 

@@ -1,6 +1,6 @@
 name: ArenaPvP
 version: 1.2.2
-main: com.rmaafs.arenapvp.Main
+main: com.rmaafs.arenapvp.ArenaPvP
 author: Royendero
 description: ArenaPvP
 softdepend: [PlaceholderAPI,SlimeWorldManager]
