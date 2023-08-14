@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 public class CreateDuel {
 
-    public static void createFakeDuel(Player p, Player bot){
-        duelControl.createFakeDuel(p, bot);
+    public static void createFakeDuel(Player player, Player bot){
+        duelControl.createFakeDuel(player, bot);
     }
 }
