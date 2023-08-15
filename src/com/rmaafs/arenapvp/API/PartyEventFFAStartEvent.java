@@ -1,7 +1,7 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import com.rmaafs.arenapvp.entity.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,20 +13,20 @@ public class PartyEventFFAStartEvent extends Event{
     private final Player owner;
     private final String kitName;
     private final String mapName;
-    private final List<Player> players;
-    private final List<Player> spectators;
+    private final Set<UUID> players;
+    private final Set<UUID> spectators;
     private final Location spawn1;
     private final Location spawn2;
     private Location corner1;
     private Location corner2;
     
-    public PartyEventFFAStartEvent(Player ow, List<Player> pla, String kit, Map map){
-        players = new ArrayList<>();
+    public PartyEventFFAStartEvent(Player ow, Set<UUID> pla, String kit, Map map){
+        players = new HashSet<>();
         owner = ow;
         kitName = kit;
         mapName = map.getName();
         players.addAll(pla);
-        spectators = new ArrayList<>();
+        spectators = new HashSet<>();
         spawn1 = map.getSpawn1();
         spawn2 = map.getSpawn2();
         if (map.getCorner1() != null){
@@ -47,11 +47,11 @@ public class PartyEventFFAStartEvent extends Event{
         return mapName;
     }
 
-    public List<Player> getPlayers() {
+    public Set<UUID> getPlayers() {
         return players;
     }
 
-    public List<Player> getSpectators() {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 

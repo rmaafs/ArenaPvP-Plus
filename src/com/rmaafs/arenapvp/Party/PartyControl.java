@@ -1,9 +1,7 @@
 package com.rmaafs.arenapvp.Party;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import com.rmaafs.arenapvp.util.Extra;
 import static com.rmaafs.arenapvp.util.Extra.CAT_MEOW;
 import static com.rmaafs.arenapvp.util.Extra.FIREWORK_LARGE_BLAST;
@@ -126,41 +124,41 @@ public class PartyControl {
 
     public void refreshPartyItems() {
         invPartys.clear();
-        List<Party> allp = new ArrayList<>();
+        List<Party> all = new ArrayList<>();
         for (Map.Entry<Player, Party> entry : partys.entrySet()) {
             Party party = entry.getValue();
-            if (!allp.contains(party)) {
-                allp.add(party);
+            if (!all.contains(party)) {
+                all.add(party);
             }
         }
         int i = 0;
-        for (Party p : allp) {
+        for (Party p : all) {
             List<String> lore = new ArrayList<>();
             lore.add("§6Players:");
-            for (Player o : p.players) {
-                lore.add("§e  - " + o.getName());
+            for (UUID o : p.players) {
+                lore.add("§e  - " + Bukkit.getPlayer(o).getName());
             }
             invPartys.setItem(i, Extra.crearId(421, 0, "§e" + p.owner.getName(), lore, p.players.size()));
             i++;
         }
-        refreshPartyOpeneds(allp);
+        refreshPartyOpeneds(all);
     }
 
     public void refreshPartyOpeneds() {
         invPartysOpen.clear();
-        List<Party> allp = new ArrayList<>();
+        List<Party> all = new ArrayList<>();
         for (Map.Entry<Player, Party> entry : partys.entrySet()) {
             Party party = entry.getValue();
-            if (!allp.contains(party) && party.open) {
-                allp.add(party);
+            if (!all.contains(party) && party.open) {
+                all.add(party);
             }
         }
         int i = 0;
-        for (Party p : allp) {
+        for (Party p : all) {
             List<String> lore = new ArrayList<>();
             lore.add("§6Players:");
-            for (Player o : p.players) {
-                lore.add("§e  - " + o.getName());
+            for (UUID o : p.players) {
+                lore.add("§e  - " + Bukkit.getPlayer(o).getName());
             }
             invPartysOpen.setItem(i, Extra.crearId(324, 0, "§e" + p.owner.getName(), lore, p.players.size()));
             i++;
@@ -174,8 +172,8 @@ public class PartyControl {
             if (p.open) {
                 List<String> lore = new ArrayList<>();
                 lore.add("§6Players:");
-                for (Player o : p.players) {
-                    lore.add("§e  - " + o.getName());
+                for (UUID o : p.players) {
+                    lore.add("§e  - " + Bukkit.getPlayer(o).getName());
                 }
                 invPartysOpen.setItem(i, Extra.crearId(324, 0, "§e" + p.owner.getName(), lore, p.players.size()));
                 i++;
@@ -309,13 +307,15 @@ public class PartyControl {
                         Bukkit.getServer().getConsoleSender().sendMessage("§6§lARENAPVP >> §ep2 = " + p2 + ", p2.owner = " + p2.owner);
                     }
                     p1.sonido(ORB_PICKUP);
-
                     p2.msg(duelmatch.replaceAll("<player>", p1.owner.getName()).replaceAll("<kit>", game.getKit().getKitName()));
                     p2.sonido(VILLAGER_YES);
 
-                    String pla = p1.players.get(0).getName();
-                    for (int i = 1; i < p1.players.size(); i++) {
-                        pla = ", " + p1.players.get(i).getName();
+                    StringBuilder pla = new StringBuilder(p1.players.size() > 0 ? Bukkit.getPlayer(p1.players.iterator().next()).getName() : "");
+                    for (UUID playerUUID : p1.players) {
+                        Player player = Bukkit.getPlayer(playerUUID);
+                        if (player != null) {
+                            pla.append(", ").append(player.getName());
+                        }
                     }
                     Extra.text(p2.owner, duelmatchclick, "§e" + pla, "/party duelaccept " + p1.owner.getName(), "AQUA");
                 } else {

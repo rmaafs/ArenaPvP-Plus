@@ -1,7 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.rmaafs.arenapvp.Party.DuelGame;
 import org.bukkit.Location;
@@ -13,9 +12,9 @@ public class PartyDuelStartEvent extends Event {
 
     private final Player owner1;
     private final Player owner2;
-    private final List<Player> players1;
-    private final List<Player> players2;
-    private final List<Player> spectators;
+    private final Set<UUID> players1;
+    private final Set<UUID> players2;
+    private final Set<UUID> spectators;
     private final String kitName;
     private final String mapName;
     private final Location spawn1;
@@ -24,14 +23,14 @@ public class PartyDuelStartEvent extends Event {
     private final Location corner2;
     
     public PartyDuelStartEvent(DuelGame game){
-        players1 = new ArrayList<>();
-        players2 = new ArrayList<>();
-        spectators = new ArrayList<>();
+        players1 = new HashSet<>();
+        players2 = new HashSet<>();
+        spectators = new HashSet<>();
         owner1 = game.p1.owner;
         owner2 = game.p2.owner;
         players1.addAll(game.players1);
         players2.addAll(game.players2);
-        spectators.addAll(game.espectadores);
+        spectators.addAll(game.spectators);
         kitName = game.kit.getKitName();
         mapName = game.map.getName();
         spawn1 = game.map.getSpawn1();
@@ -48,15 +47,15 @@ public class PartyDuelStartEvent extends Event {
         return owner2;
     }
 
-    public List<Player> getPlayers1() {
+    public Set<UUID> getPlayers1() {
         return players1;
     }
 
-    public List<Player> getPlayers2() {
+    public Set<UUID> getPlayers2() {
         return players2;
     }
 
-    public List<Player> getSpectators() {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 

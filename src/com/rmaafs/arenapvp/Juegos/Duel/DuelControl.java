@@ -330,9 +330,7 @@ public class DuelControl {
     }
 
     public void sacar(Player p) {
-        if (creandoDuel.containsKey(p)) {
-            creandoDuel.remove(p);
-        }
+        creandoDuel.remove(p);
         if (esperandoUnRanked.containsValue(p)) {
             sacarUnRanked(p);
         }

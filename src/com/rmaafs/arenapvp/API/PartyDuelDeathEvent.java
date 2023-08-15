@@ -1,7 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.rmaafs.arenapvp.Party.DuelGame;
 import com.rmaafs.arenapvp.Party.Party;
@@ -15,9 +14,9 @@ public class PartyDuelDeathEvent extends Event {
     private final Player ownerKilled;
     private final Player ownerKiller;
     private final Player playerDeath;
-    private final List<Player> playersKilled;
-    private final List<Player> playersKiller;
-    private final List<Player> spectators;
+    private final Set<UUID> playersKilled;
+    private final Set<UUID> playersKiller;
+    private final Set<UUID> spectators;
     private final String kitName;
     private final String mapName;
     private final Location spawnKilled;
@@ -26,9 +25,9 @@ public class PartyDuelDeathEvent extends Event {
     private final Location corner2;
 
     public PartyDuelDeathEvent(DuelGame game, Player d, Party p) {
-        playersKilled = new ArrayList<>();
-        playersKiller = new ArrayList<>();
-        spectators = new ArrayList<>();
+        playersKilled = new HashSet<>();
+        playersKiller = new HashSet<>();
+        spectators = new HashSet<>();
         if (game.p1 == p) {
             ownerKilled = game.p1.owner;
             ownerKiller = game.p2.owner;
@@ -46,7 +45,7 @@ public class PartyDuelDeathEvent extends Event {
         }
         playerDeath = d;
 
-        spectators.addAll(game.espectadores);
+        spectators.addAll(game.spectators);
         kitName = game.kit.getKitName();
         mapName = game.map.getName();
 
@@ -58,7 +57,7 @@ public class PartyDuelDeathEvent extends Event {
         return playerDeath;
     }
 
-    public List<Player> getSpectators() {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 
@@ -86,11 +85,11 @@ public class PartyDuelDeathEvent extends Event {
         return ownerKiller;
     }
 
-    public List<Player> getPlayersKilled() {
+    public Set<UUID> getPlayersKilled() {
         return playersKilled;
     }
 
-    public List<Player> getPlayersKiller() {
+    public Set<UUID> getPlayersKiller() {
         return playersKiller;
     }
 

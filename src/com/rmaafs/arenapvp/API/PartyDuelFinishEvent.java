@@ -1,7 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.rmaafs.arenapvp.Party.DuelGame;
 import com.rmaafs.arenapvp.Party.Party;
@@ -14,9 +13,9 @@ public class PartyDuelFinishEvent extends Event {
 
     private final Player ownerWinner;
     private final Player ownerLoser;
-    private final List<Player> playersWinner;
-    private final List<Player> playersLoser;
-    private final List<Player> spectators;
+    private final Set<UUID> playersWinner;
+    private final Set<UUID> playersLoser;
+    private final Set<UUID> spectators;
     private final String kitName;
     private final String mapName;
     private final Location spawnWinner;
@@ -25,9 +24,9 @@ public class PartyDuelFinishEvent extends Event {
     private final Location corner2;
 
     public PartyDuelFinishEvent(DuelGame game, Party p) {
-        playersWinner = new ArrayList<>();
-        playersLoser = new ArrayList<>();
-        spectators = new ArrayList<>();
+        playersWinner = new HashSet<>();
+        playersLoser = new HashSet<>();
+        spectators = new HashSet<>();
         if (game.p1 == p) {
             ownerWinner = game.p1.owner;
             ownerLoser = game.p2.owner;
@@ -44,7 +43,7 @@ public class PartyDuelFinishEvent extends Event {
             spawnLoser = game.map.getSpawn1();
         }
 
-        spectators.addAll(game.espectadores);
+        spectators.addAll(game.spectators);
         kitName = game.kit.getKitName();
         mapName = game.map.getName();
 
@@ -52,7 +51,7 @@ public class PartyDuelFinishEvent extends Event {
         corner2 = game.map.getCorner2();
     }
 
-    public List<Player> getSpectators() {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 
@@ -80,11 +79,11 @@ public class PartyDuelFinishEvent extends Event {
         return ownerLoser;
     }
 
-    public List<Player> getPlayersWinner() {
+    public Set<UUID> getPlayersWinner() {
         return playersWinner;
     }
 
-    public List<Player> getPlayersLoser() {
+    public Set<UUID> getPlayersLoser() {
         return playersLoser;
     }
 

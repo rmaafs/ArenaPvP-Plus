@@ -690,7 +690,7 @@ public final class Score {
                         total = total.replaceAll("<time>", Extra.secToMin(partyControl.partysDuel.get(partyControl.partys.get(p)).time));
                     }
                     if (m.contains("<spectators>")) {
-                        total = total.replaceAll("<spectators>", "" + partyControl.partysDuel.get(partyControl.partys.get(p)).espectadores.size());
+                        total = total.replaceAll("<spectators>", "" + partyControl.partysDuel.get(partyControl.partys.get(p)).spectators.size());
                     }
                 }
 

@@ -1,7 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.rmaafs.arenapvp.Party.Party;
 import com.rmaafs.arenapvp.manager.kit.Kit;
@@ -11,22 +10,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PartyEventFFADeathEvent extends Event{
+public class PartyEventFFADeathEvent extends Event {
 
     private final Player owner;
     private final Player death;
     private final String kitName;
     private final String mapName;
-    private final List<Player> players;
-    private final List<Player> spectators;
+    private final Set<UUID> players;
+    private final Set<UUID> spectators;
     private final Location spawn1;
     private final Location spawn2;
     private Location corner1;
     private Location corner2;
-    
-    public PartyEventFFADeathEvent(Party party, Kit kit, Map map, List<Player> spec, Player d){
-        players = new ArrayList<>();
-        spectators = new ArrayList<>();
+
+    public PartyEventFFADeathEvent(Party party, Kit kit, Map map,  Set<UUID> spec, Player d) {
+        players = new HashSet<>();
+        spectators = new HashSet<>();
         owner = party.owner;
         death = d;
         kitName = kit.getKitName();
@@ -35,7 +34,7 @@ public class PartyEventFFADeathEvent extends Event{
         spectators.addAll(spec);
         spawn1 = map.getSpawn1();
         spawn2 = map.getSpawn2();
-        if (kit.isRegen()){
+        if (kit.isRegen()) {
             corner1 = map.getCorner1();
             corner2 = map.getCorner2();
         }
@@ -53,11 +52,11 @@ public class PartyEventFFADeathEvent extends Event{
         return mapName;
     }
 
-    public List<Player> getPlayers() {
+    public  Set<UUID> getPlayers() {
         return players;
     }
 
-    public List<Player> getSpectators() {
+    public  Set<UUID> getSpectators() {
         return spectators;
     }
 
@@ -80,11 +79,13 @@ public class PartyEventFFADeathEvent extends Event{
     public Player getDeath() {
         return death;
     }
-    
+
     private static final HandlerList HANDLERS = new HandlerList();
+
     public HandlerList getHandlers() {
         return HANDLERS;
     }
+
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }

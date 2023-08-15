@@ -1,7 +1,7 @@
 package com.rmaafs.arenapvp.Party;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import com.rmaafs.arenapvp.util.Extra;
 import static com.rmaafs.arenapvp.util.Extra.BURP;
 import static com.rmaafs.arenapvp.util.Extra.CAT_MEOW;
@@ -17,6 +17,8 @@ import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
 import static com.rmaafs.arenapvp.ArenaPvP.guis;
 import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
 import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static org.bukkit.enchantments.Enchantment.LUCK;
+
 import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -29,9 +31,9 @@ import org.bukkit.inventory.ItemStack;
 public class Party {
 
     public Player owner;
-    public List<Player> players = new ArrayList<>();
-    List<Player> invitados = new ArrayList<>();
-    List<Player> preguntar = new ArrayList<>();
+    public Set<UUID> players = new HashSet<>();
+    Set<UUID> invitados = new HashSet<>();
+    Set<UUID> preguntar = new HashSet<>();
     boolean open = false;
 
     public Inventory invConfig;
@@ -50,7 +52,7 @@ public class Party {
 
     public Party(Player o) {
         owner = o;
-        players.add(o);
+        players.add(o.getUniqueId());
         Extra.cleanPlayer(o);
 
         minplayers = cconfig.getInt("party.events.minplayers");
@@ -174,14 +176,14 @@ public class Party {
             }
         } else if (i.isSimilar(itemConfigOpen)) {
             if (Extra.isPerm(p, "apvp.party.config.open")) {
-                if (i.containsEnchantment(Enchantment.LUCK)) {
-                    i.removeEnchantment(Enchantment.LUCK);
+                if (i.containsEnchantment(LUCK)) {
+                    i.removeEnchantment(LUCK);
                     open = false;
                     msg(partyclosed);
                     sonido(NOTE_PLING);
                     partyControl.refreshPartyOpeneds();
                 } else {
-                    i.addUnsafeEnchantment(Enchantment.LUCK, 1);
+                    i.addUnsafeEnchantment(LUCK, 1);
                     open = true;
                     msg(partyopen);
                     sonido(NOTE_BASS);
@@ -215,35 +217,47 @@ public class Party {
     }
 
     public void invitar(Player p) {
-        if (!players.contains(p)) {
-            if (players.size() < maxplayers) {
-                if (!invitados.contains(p) && p != owner) {
-                    String pla = players.get(0).getName();
-                    for (int i = 1; i < players.size(); i++) {
-                        pla = ", " + players.get(i).getName();
-                    }
-                    invitados.add(p);
-                    p.sendMessage(youareinvited.replaceAll("<player>", owner.getName()));
-                    Extra.text(p, clickMsg, "§e" + pla, "/party accept " + owner.getName(), "GREEN");
-                    Extra.sonido(owner, CAT_MEOW);
-                    owner.sendMessage(duelsent.replaceAll("<player>", p.getName()));
-                    Extra.sonido(owner, VILLAGER_YES);
-                } else {
-                    owner.sendMessage(alreadyinvitedthisplayer);
-                }
-            } else {
-                msg(partyfull);
-            }
-        } else {
+        UUID pUUID = p.getUniqueId();
+        UUID ownerUUID = owner.getUniqueId();
+
+        if (players.contains(pUUID)) {
             owner.sendMessage(playerintheparty);
             Extra.sonido(owner, NOTE_BASS);
+            return;
         }
+
+        if (players.size() >= maxplayers) {
+            owner.sendMessage(partyfull);
+            return;
+        }
+
+        if (invitados.contains(pUUID) || pUUID.equals(ownerUUID)) {
+            owner.sendMessage(alreadyinvitedthisplayer);
+            return;
+        }
+
+        StringBuilder pla = new StringBuilder(players.size() > 0 ? Bukkit.getPlayer(players.iterator().next()).getName() : "");
+        for (UUID playerUUID : players) {
+            Player player = Bukkit.getPlayer(playerUUID);
+            if (player != null) {
+                pla.append(", ").append(player.getName());
+            }
+        }
+
+        invitados.add(pUUID);
+        p.sendMessage(youareinvited.replaceAll("<player>", owner.getName()));
+        Extra.text(p, clickMsg, "§e" + pla, "/aparty accept " + owner.getName(), "GREEN");
+        Extra.sonido(owner, CAT_MEOW);
+        owner.sendMessage(duelsent.replaceAll("<player>", p.getName()));
+        Extra.sonido(owner, VILLAGER_YES);
     }
 
+
+
     public void aceptarInvitado(Player p) {
-        if (invitados.contains(p)) {
+        if (invitados.contains(p.getUniqueId())) {
             if (players.size() < maxplayers) {
-                invitados.remove(p);
+                invitados.remove(p.getUniqueId());
                 join(p);
             } else {
                 p.sendMessage(partyfull);
@@ -255,9 +269,9 @@ public class Party {
     }
 
     public void preguntarEntrar(Player p) {
-        if (!preguntar.contains(p)) {
+        if (!preguntar.contains(p.getUniqueId())) {
             if (Extra.isCheckYouPlaying(p)) {
-                preguntar.add(p);
+                preguntar.add(p.getUniqueId());
                 msg(wantjoin.replaceAll("<player>", p.getName()));
                 sonido(BURP);
                 Extra.text(owner, wantjoinclick, wantjoinhover, "/party acceptplayer " + p.getName(), "AQUA");
@@ -273,10 +287,10 @@ public class Party {
     }
 
     public void aceptarPreguntar(Player p) {
-        if (preguntar.contains(p)) {
+        if (preguntar.contains(p.getUniqueId())) {
             if (Extra.isExist(p, owner)) {
                 if (Extra.isCheckPlayerPlaying(p, owner)) {
-                    preguntar.remove(p);
+                    preguntar.remove(p.getUniqueId());
                     join(p);
                 }
             }
@@ -287,7 +301,7 @@ public class Party {
 
     public void join(Player p) {
         partyControl.partys.put(p, partyControl.partys.get(owner));
-        players.add(p);
+        players.add(p.getUniqueId());
         Extra.cleanPlayer(p);
         hotbars.setLeave(p);
         msg(playerjoined.replaceAll("<player>", p.getName()));
@@ -300,7 +314,7 @@ public class Party {
         msg(playerleave.replaceAll("<player>", p.getName()));
         sonido(NOTE_BASS);
         partyControl.partys.remove(p);
-        players.remove(p);
+        players.remove(p.getUniqueId());
 
         if (partyControl.partysEvents.containsKey(this)) {
             partyControl.partysEvents.get(this).leave(p, online);
@@ -316,14 +330,20 @@ public class Party {
             Extra.setScore(p, Score.TipoScore.MAIN);
         }
 
-        if (p == owner && players.size() > 0) {
-            promote(players.get(0));
+        UUID pUUID = p.getUniqueId();
+        if (pUUID.equals(owner.getUniqueId())) {
+            if (players.size() > 0) {
+                UUID newOwnerUUID = players.iterator().next();
+                Player newOwner = Bukkit.getPlayer(newOwnerUUID);
+                promote(newOwner);
+            }
         }
         partyControl.refreshPartyItems();
     }
 
     public void kick(Player p) {
-        if (p != owner) {
+        UUID id = p.getUniqueId();
+        if (!id.equals(owner.getUniqueId())) {
             msg(playerkicked.replaceAll("<player>", p.getName()));
             leave(p, p.isOnline());
         }
@@ -342,14 +362,20 @@ public class Party {
     }
 
     public void msg(String s) {
-        for (Player p : players) {
-            p.sendMessage(s);
+        for (UUID playerUUID : players) {
+            Player p = Bukkit.getPlayer(playerUUID);
+            if (p != null) {
+                p.sendMessage(s);
+            }
         }
     }
 
     public void sonido(String s) {
-        for (Player p : players) {
-            Extra.sonido(p, s);
+        for (UUID playerUUID : players) {
+            Player p = Bukkit.getPlayer(playerUUID);
+            if (p != null) {
+                Extra.sonido(p, s);
+            }
         }
     }
 }

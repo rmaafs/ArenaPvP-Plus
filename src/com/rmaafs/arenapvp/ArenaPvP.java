@@ -143,7 +143,7 @@ public class ArenaPvP extends JavaPlugin implements Listener {
         getCommand("duel").setExecutor(new Command());
         getCommand("stats").setExecutor(new Command());
         getCommand("uinventario").setExecutor(new Command());
-        getCommand("party").setExecutor(new Command());
+        getCommand("aparty").setExecutor(new Command());
         getCommand("pc").setExecutor(new Command());
         getCommand("giftrankeds").setExecutor(new Command());
         getCommand("spec").setExecutor(new Command());

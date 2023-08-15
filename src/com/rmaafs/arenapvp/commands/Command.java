@@ -172,7 +172,7 @@ public class Command implements CommandExecutor {
             }
         }
 
-        if (cmd.getName().equalsIgnoreCase("party")) {
+        if (cmd.getName().equalsIgnoreCase("aparty")) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
                 if (args.length == 2) {

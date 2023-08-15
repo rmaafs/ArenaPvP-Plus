@@ -7,7 +7,7 @@
     <groupId>com.rmaafs.arenapvp</groupId>
     <artifactId>ArenaPvP</artifactId>
     <name>ArenaPvP+</name>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <description>Plugin de Minecraft competitivo</description>
 
     <repositories>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.8-SNAPSHOT</version>
+            <version>1.16-R0.4</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>

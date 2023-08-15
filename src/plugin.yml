@@ -1,7 +1,7 @@
 name: ArenaPvP
-version: 1.2.2
+version: 1.2.3
 main: com.rmaafs.arenapvp.ArenaPvP
-author: Royendero
+author: [Royendero,Nymoout]
 description: ArenaPvP
 softdepend: [PlaceholderAPI,SlimeWorldManager]
 commands:
@@ -13,7 +13,7 @@ commands:
     description: View stats
   uinventario:
     description: View last inventory
-  party:
+  aparty:
     description: Party control
   pc:
     description: Party chat
