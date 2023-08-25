@@ -148,8 +148,8 @@ public class Hotbars {
             duelControl.sacarRanked(p);
         } else if (meetupControl.meetupsPlaying.containsKey(p)) {
             meetupControl.meetupsPlaying.get(p).leave(p, true);
-        } else if (partyControl.partys.containsKey(p)) {
-            partyControl.partys.get(p).leave(p, true);
+        } else if (partyControl.partyHash.containsKey(p)) {
+            partyControl.partyHash.get(p).leave(p, true);
         } else if (specControl.mirando.containsKey(p)) {
             specControl.leave(p, true);
         }
@@ -214,12 +214,12 @@ public class Hotbars {
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);
             p.updateInventory();
-        } else if (partyControl.partys.containsKey(p)) {
+        } else if (partyControl.partyHash.containsKey(p)) {
             Extra.cleanPlayer(p);
-            if (partyControl.partysEvents.containsKey(partyControl.partys.get(p))) {
-                playerConfig.get(p).putInv(amount, partyControl.partysEvents.get(partyControl.partys.get(p)).kit);
-            } else if (partyControl.partysDuel.containsKey(partyControl.partys.get(p))) {
-                playerConfig.get(p).putInv(amount, partyControl.partysDuel.get(partyControl.partys.get(p)).kit);
+            if (partyControl.partyEvents.containsKey(partyControl.partyHash.get(p))) {
+                playerConfig.get(p).putInv(amount, partyControl.partyEvents.get(partyControl.partyHash.get(p)).kit);
+            } else if (partyControl.partyDuels.containsKey(partyControl.partyHash.get(p))) {
+                playerConfig.get(p).putInv(amount, partyControl.partyDuels.get(partyControl.partyHash.get(p)).kit);
             }
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);

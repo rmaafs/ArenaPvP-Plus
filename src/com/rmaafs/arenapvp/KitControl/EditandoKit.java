@@ -44,7 +44,7 @@ public class EditandoKit {
 
     String kitName, kitNameColor;
     ItemStack[] hotbar, armor;
-    List<ItemStack> deleteBlocks = new ArrayList<>();
+    List<ItemStack> deleteBlocks;
     ItemStack itemSpeed, itemStrength, itemSlow, itemFire, itemCombo, itemTime, itemReady, itemNatural;
     public ItemStack itemOnGui;
     int levelSpeed = 1, levelStrength = 1, levelSlow = 1, slot = 0;

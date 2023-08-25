@@ -16,7 +16,7 @@
           </option>
           <option name="pomFileName" />
           <option name="profilesMap">
-            <map />
+            <gameMap />
           </option>
           <option name="resolveToWorkspace" value="false" />
           <option name="workingDirPath" value="$PROJECT_DIR$" />

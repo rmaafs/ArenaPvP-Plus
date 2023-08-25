@@ -64,9 +64,9 @@ public class HotbarEvent implements Listener {
                         } else if (hotbars.esperandoEscojaHotbar.contains(p)) {
                             e.setCancelled(true);
                             hotbars.clickPonerHotbar(p, item.getAmount());
-                        } else if (partyControl.partys.containsKey(p)) {
+                        } else if (partyControl.partyHash.containsKey(p)) {
                             e.setCancelled(true);
-                            partyControl.partys.get(p).clickItemHotbar(p, e);
+                            partyControl.partyHash.get(p).clickItemHotbar(p, e);
                         }
                     }
                 }
@@ -78,7 +78,7 @@ public class HotbarEvent implements Listener {
     public void onDrop(PlayerDropItemEvent e) {
         if (e.getPlayer().getInventory().contains(hotbars.itemRanked)
                 || hotbars.editingSlotHotbar.containsKey(e.getPlayer()) || e.getItemDrop().getItemStack().equals(hotbars.itemRanked)
-                || partyControl.partys.containsKey(e.getPlayer())) {
+                || partyControl.partyHash.containsKey(e.getPlayer())) {
             e.setCancelled(true);
         }
     }

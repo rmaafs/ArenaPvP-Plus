@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.entity.GameMap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,7 +18,7 @@ public class UnRankedFinishEvent extends Event {
     private Location corner1;
     private Location corner2;
 
-    public UnRankedFinishEvent(Player p1, Player p2, String kn, Map m) {
+    public UnRankedFinishEvent(Player p1, Player p2, String kn, GameMap m) {
         winner = p1;
         loser = p2;
         kitName = kn;

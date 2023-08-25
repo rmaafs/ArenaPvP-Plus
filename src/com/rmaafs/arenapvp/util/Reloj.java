@@ -17,7 +17,6 @@ import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
 import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 
 import com.rmaafs.arenapvp.game.Game;
-import com.rmaafs.arenapvp.util.Extra;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -123,7 +122,7 @@ public class Reloj {
 
     private void quitarSegundoPartyDuel() {
         List<DuelGame> editadas = new ArrayList<>();
-        for (Map.Entry<Party, DuelGame> entry : partyControl.partysDuel.entrySet()) {
+        for (Map.Entry<Party, DuelGame> entry : partyControl.partyDuels.entrySet()) {
             DuelGame partida = entry.getValue();
             if (!editadas.contains(partida)) {
                 partida.removerSec();
@@ -134,7 +133,7 @@ public class Reloj {
 
     private void quitarSegundoPartyEvent() {
         List<EventGame> editadas = new ArrayList<>();
-        for (Map.Entry<Party, EventGame> entry : partyControl.partysEvents.entrySet()) {
+        for (Map.Entry<Party, EventGame> entry : partyControl.partyEvents.entrySet()) {
             EventGame partida = entry.getValue();
             if (!editadas.contains(partida)) {
                 partida.removerSec();
@@ -156,13 +155,13 @@ public class Reloj {
 
     private void quitarSegundoPrePartyEvents() {
         List<EventGame> empezadas = new ArrayList<>();
-        for (EventGame game : partyControl.startingsEvents) {
+        for (EventGame game : partyControl.startingEvents) {
             if (game.removePretime()) {
                 game.start();
                 empezadas.add(game);
             }
         }
-        partyControl.startingsEvents.removeAll(empezadas);
+        partyControl.startingEvents.removeAll(empezadas);
     }
 
     private void quitarSegundoPrePartyDuels() {

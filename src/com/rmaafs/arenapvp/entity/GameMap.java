@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-public class Map {
+public class GameMap {
 
     public String name;
     public Location corner1;
@@ -23,7 +23,7 @@ public class Map {
     public boolean poss = false;
     public int maxY = 0;
 
-    public Map(String s, Location c1, Location c2, Location s1, Location s2) {
+    public GameMap(String s, Location c1, Location c2, Location s1, Location s2) {
         name = s;
         corner1 = c1;
         corner2 = c2;
@@ -33,7 +33,7 @@ public class Map {
         removeAll();
     }
 
-    public Map(String s, Location s1, Location s2) {
+    public GameMap(String s, Location s1, Location s2) {
         name = s;
         spawn1 = s1;
         spawn2 = s2;

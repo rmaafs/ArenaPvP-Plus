@@ -20,7 +20,6 @@ public class WorldEvent implements Listener {
 
     public WorldEvent() {
         antiRain = cconfig.getBoolean("antirain");
-        
         youarespecting = Extra.tc(clang.getString("playing.youarespecting"));
     }
 

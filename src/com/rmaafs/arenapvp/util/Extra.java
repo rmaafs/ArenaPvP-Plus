@@ -4,7 +4,7 @@ import com.rmaafs.arenapvp.ArenaPvP;
 import com.rmaafs.arenapvp.GUIS.GuiEvent;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
-import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.entity.GameMap;
 import com.rmaafs.arenapvp.entity.MeetupMap;
 import com.rmaafs.arenapvp.game.Game;
 import com.rmaafs.arenapvp.manager.config.PlayerConfig;
@@ -39,11 +39,10 @@ public class Extra {
     public static HashMap<Player, PlayerConfig> playerConfig = new HashMap<>();
 
     public static HashMap<String, Kit> kits = new HashMap<>();
-    public static HashMap<Kit, List<Map>> mapLibres = new HashMap<>();
-    public static HashMap<Kit, List<Map>> mapOcupadas = new HashMap<>();
+    public static HashMap<Kit, List<GameMap>> mapLibres = new HashMap<>();
+    public static HashMap<Kit, List<GameMap>> mapOcupadas = new HashMap<>();
     public static HashMap<Kit, List<MeetupMap>> mapMeetupLibres = new HashMap<>();
     public static HashMap<Kit, List<MeetupMap>> mapMeetupOcupadas = new HashMap<>();
-
     public static HashMap<Player, Game> jugandoUno = new HashMap<>();
 
     public static List<Game> preEmpezandoUno = new ArrayList<>();
@@ -206,7 +205,7 @@ public class Extra {
                 || ArenaPvP.hotbars.editingSlotHotbar.containsKey(p)
                 || ArenaPvP.hotbars.editingSlotHotbar.containsKey(p)
                 || ArenaPvP.hotbars.esperandoEscojaHotbar.contains(p)
-                || ArenaPvP.partyControl.partys.containsKey(p)
+                || ArenaPvP.partyControl.partyHash.containsKey(p)
                 || !ArenaPvP.extraLang.worlds.contains(p.getWorld().getName())
                 || ArenaPvP.specControl.mirando.containsKey(p)) {
             return false;
@@ -238,7 +237,7 @@ public class Extra {
                 || ArenaPvP.specControl.mirando.containsKey(p)) {
             mensaje.sendMessage(ArenaPvP.extraLang.playerPlayingOne);
             return false;
-        } else if (ArenaPvP.partyControl.partys.containsKey(p)) {
+        } else if (ArenaPvP.partyControl.partyHash.containsKey(p)) {
             mensaje.sendMessage(ArenaPvP.extraLang.playerInParty);
             return false;
         } else if (!ArenaPvP.extraLang.worlds.contains(p.getWorld().getName())) {
@@ -267,7 +266,7 @@ public class Extra {
                 || ArenaPvP.specControl.mirando.containsKey(p)) {
             p.sendMessage(ArenaPvP.extraLang.youPlayingOne);
             return false;
-        } else if (ArenaPvP.partyControl.partys.containsKey(p)) {
+        } else if (ArenaPvP.partyControl.partyHash.containsKey(p)) {
             p.sendMessage(ArenaPvP.extraLang.youAreInParty);
             return false;
         } else if (!ArenaPvP.extraLang.worlds.contains(p.getWorld().getName())) {
@@ -318,8 +317,8 @@ public class Extra {
         ArenaPvP.meetupControl.sacar(p);
     }
 
-    public static Map getMap(Kit k) {
-        Map m;
+    public static GameMap getMap(Kit k) {
+        GameMap m;
         if (ArenaPvP.extraLang.chooserandommaps) {
             Random r = new Random();
             m = mapLibres.get(k).get(r.nextInt(mapLibres.get(k).size()));
@@ -338,7 +337,7 @@ public class Extra {
         return true;
     }
 
-    public static void terminarMapa(Map m, Kit k) {
+    public static void terminarMapa(GameMap m, Kit k) {
         m.regen(k);
         mapOcupadas.get(k).remove(m);
         if (!mapLibres.get(k).contains(m)) {

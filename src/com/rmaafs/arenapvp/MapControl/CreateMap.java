@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.rmaafs.arenapvp.entity.GameMap;
 import com.rmaafs.arenapvp.util.Extra;
 import com.rmaafs.arenapvp.manager.kit.Kit;
 
@@ -15,7 +16,6 @@ import static com.rmaafs.arenapvp.MapControl.CrearMapaEvent.creandoMapa;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Logger.getLogger;
 
-import com.rmaafs.arenapvp.entity.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -112,18 +112,18 @@ public class CreateMap {
             mapLibres.put(kit, new ArrayList<>());
             mapOcupadas.put(kit, new ArrayList<>());
         }
-        for (Map m : mapLibres.get(kit)) {
+        for (GameMap m : mapLibres.get(kit)) {
             if (m.getName().toLowerCase().equals(s.toLowerCase())) {
                 p.sendMessage(nameExist);
                 paso();
                 return;
             }
         }
-        Map m;
+        GameMap m;
         if (kit.regen) {
-            m = new Map(s, corner1, corner2, spawn1, spawn2);
+            m = new GameMap(s, corner1, corner2, spawn1, spawn2);
         } else {
-            m = new Map(s, spawn1, spawn2);
+            m = new GameMap(s, spawn1, spawn2);
         }
         mapLibres.get(kit).add(m);
         createFiles(s);

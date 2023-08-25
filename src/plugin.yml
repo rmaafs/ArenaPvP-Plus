@@ -21,6 +21,8 @@ commands:
     description: Gift rankeds matches.
   spec:
     description: Spectate a player.
+  duelbot:
+    description: Test a bot
 permissions:
     apvp.meetup.spectator:
         description: Use spectator in Meetup

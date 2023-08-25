@@ -3,8 +3,8 @@ package com.rmaafs.arenapvp.API;
 import java.util.*;
 
 import com.rmaafs.arenapvp.Party.Party;
+import com.rmaafs.arenapvp.entity.GameMap;
 import com.rmaafs.arenapvp.manager.kit.Kit;
-import com.rmaafs.arenapvp.entity.Map;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -23,20 +23,20 @@ public class PartyEventFFAFinishEvent extends Event {
     private Location corner1;
     private Location corner2;
     
-    public PartyEventFFAFinishEvent(Party party, Kit kit, Map map,  Set<UUID> spec, Player w){
+    public PartyEventFFAFinishEvent(Party party, Kit kit, GameMap gameMap, Set<UUID> spec, Player w){
         players = new HashSet<>();
         spectators = new HashSet<>();
         owner = party.owner;
         winner = w;
         kitName = kit.getKitName();
-        mapName = map.getName();
+        mapName = gameMap.getName();
         players.addAll(party.players);
         spectators.addAll(spec);
-        spawn1 = map.getSpawn1();
-        spawn2 = map.getSpawn2();
+        spawn1 = gameMap.getSpawn1();
+        spawn2 = gameMap.getSpawn2();
         if (kit.isRegen()){
-            corner1 = map.getCorner1();
-            corner2 = map.getCorner2();
+            corner1 = gameMap.getCorner1();
+            corner2 = gameMap.getCorner2();
         }
     }
 

@@ -1,11 +1,13 @@
 package com.rmaafs.arenapvp.commands;
 
+import com.rmaafs.arenapvp.API.CreateDuel;
 import com.rmaafs.arenapvp.ArenaPvP;
 import com.rmaafs.arenapvp.GUIS.GuiEvent;
 import com.rmaafs.arenapvp.KitControl.CrearKit;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.manager.data.Stats;
 import com.rmaafs.arenapvp.util.Extra;
+import me.roy.builduhcbot.bot.Bot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -130,21 +132,27 @@ public class Command implements CommandExecutor {
                 sendApvp(p);
             }
         }
+        if (cmd.getName().equalsIgnoreCase("duelbot")) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
+//                CreateDuel.createFakeDuel(p, new Bot(p, "Nymoout2", p.getLocation()));
+            }
+        }
 
         if (cmd.getName().equalsIgnoreCase("duel")) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
                 if (args.length == 1) {
                     if (!args[0].equalsIgnoreCase(p.getName())) {
-                        if (isPerm(p, "apvp.duel.create")) {
+//                        if (isPerm(p, "apvp.duel.create")) {
                             ArenaPvP.duelControl.createDuel(p, args[0]);
-                        }
+//                        }
                     }
                 } else if (args.length == 2) {
                     if (args[0].equalsIgnoreCase("accept")) {
-                        if (isPerm(p, "apvp.duel.accept")) {
+//                        if (isPerm(p, "apvp.duel.accept")) {
                             ArenaPvP.duelControl.aceptarDuel(p, args[1]);
-                        }
+//                        }
                     }
                 } else {
                     sendDuel(p);
@@ -156,16 +164,16 @@ public class Command implements CommandExecutor {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
                 if (args.length == 1) {
-                    if (isPerm(p, "apvp.command.stats.other")) {
+//                    if (isPerm(p, "apvp.command.stats.other")) {
                         Player t = Bukkit.getPlayer(args[0]);
                         if (isExist(t, p)) {
                             ArenaPvP.guis.openPlayerStats(t, p);
                         }
-                    }
+//                    }
                 } else if (args.length == 0) {
-                    if (isPerm(p, "apvp.command.stats")) {
+//                    if (isPerm(p, "apvp.command.stats")) {
                         ArenaPvP.guis.openPlayerStats(p, p);
-                    }
+//                    }
                 } else {
                     sendStats(p);
                 }
@@ -177,29 +185,29 @@ public class Command implements CommandExecutor {
                 Player p = (Player) sender;
                 if (args.length == 2) {
                     if (args[0].equalsIgnoreCase("invite")) {
-                        if (isPerm(p, "apvp.party.invite")) {
+//                        if (isPerm(p, "apvp.party.invite")) {
                             ArenaPvP.partyControl.partyInvite(p, args[1]);
-                        }
+//                        }
                     } else if (args[0].equalsIgnoreCase("accept")) {
-                        if (isPerm(p, "apvp.party.accept")) {
+//                        if (isPerm(p, "apvp.party.accept")) {
                             ArenaPvP.partyControl.aceptarInvitacion(p, args[1]);
-                        }
+//                        }
                     } else if (args[0].equalsIgnoreCase("kick")) {
-                        if (isPerm(p, "apvp.party.kick")) {
+//                        if (isPerm(p, "apvp.party.kick")) {
                             ArenaPvP.partyControl.partyKick(p, args[1]);
-                        }
+//                        }
                     } else if (args[0].equalsIgnoreCase("promote")) {
-                        if (isPerm(p, "apvp.party.promote")) {
+//                        if (isPerm(p, "apvp.party.promote")) {
                             ArenaPvP.partyControl.partyPromote(p, args[1]);
-                        }
+//                        }
                     } else if (args[0].equalsIgnoreCase("duelaccept")) {
-                        if (isPerm(p, "apvp.party.duelaccept")) {
+//                        if (isPerm(p, "apvp.party.duelaccept")) {
                             ArenaPvP.partyControl.aceptarDuel(p, args[1]);
-                        }
+//                        }
                     } else if (args[0].equalsIgnoreCase("acceptplayer")) {
-                        if (isPerm(p, "apvp.party.acceptplayer")) {
+//                        if (isPerm(p, "apvp.party.acceptplayer")) {
                             ArenaPvP.partyControl.aceptarPlayerAbierta(p, args[1]);
-                        }
+//                        }
                     } else if (args[0].equalsIgnoreCase("acceptplayer")) {
                         ArenaPvP.partyControl.partyLeave(p);
                     } else {
@@ -215,13 +223,13 @@ public class Command implements CommandExecutor {
             if (sender instanceof Player) {
                 if (args.length >= 1) {
                     Player p = (Player) sender;
-                    if (isPerm(p, "apvp.party.chat")) {
+//                    if (isPerm(p, "apvp.party.chat")) {
                         String s = args[0];
                         for (int i = 1; i < args.length; i++) {
                             s = s + " " + args[i];
                         }
                         ArenaPvP.partyControl.partyChat(p, s);
-                    }
+//                    }
                 } else {
                     sendParty((Player) sender);
                 }
@@ -244,22 +252,22 @@ public class Command implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("spec")) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                if (isPerm(p, "apvp.spectate")) {
+//                if (isPerm(p, "apvp.spectate")) {
                     if (args.length == 1) {
                         ArenaPvP.specControl.spec(p, args[0]);
                     } else {
                         sendSpec(p);
                     }
-                }
+//                }
             }
         }
 
         if (cmd.getName().equalsIgnoreCase("uinventario")) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                if (isPerm(p, "apvp.viewlastinventory")) {
+//                if (isPerm(p, "apvp.viewlastinventory")) {
                     ArenaPvP.duelControl.abrirUltimoInv(p, args[0]);
-                }
+//                }
             }
         }
         return false;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.rmaafs.arenapvp.entity.GameMap;
 import com.rmaafs.arenapvp.util.Extra;
 import static com.rmaafs.arenapvp.util.Extra.cconfig;
 import static com.rmaafs.arenapvp.util.Extra.clang;
@@ -19,7 +20,7 @@ import com.rmaafs.arenapvp.manager.kit.Kit;
 import static com.rmaafs.arenapvp.ArenaPvP.guis;
 import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
 import static com.rmaafs.arenapvp.ArenaPvP.plugin;
-import com.rmaafs.arenapvp.entity.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -277,10 +278,10 @@ public class CrearKit {
         }
         hotbars.setMain(p);
 
-        List<Map> lista1 = new ArrayList<>();
+        List<GameMap> lista1 = new ArrayList<>();
         mapLibres.put(k, lista1);
         
-        List<Map> lista2 = new ArrayList<>();
+        List<GameMap> lista2 = new ArrayList<>();
         mapOcupadas.put(k, lista2);
         
         File elkit = new File(plugin.getDataFolder() + File.separator + "kits" + File.separator + kitName + ".yml");

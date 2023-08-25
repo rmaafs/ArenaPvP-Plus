@@ -22,7 +22,6 @@ import static org.bukkit.enchantments.Enchantment.LUCK;
 import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -116,7 +115,7 @@ public class Party {
     }
 
     public void setHotbar(Player p) {
-        if (!partyControl.partysEvents.containsKey(this)) {
+        if (!partyControl.partyEvents.containsKey(this)) {
             if (useRanked2) {
                 p.getInventory().setItem(slotRanked2, itemRanked2);
             }
@@ -167,7 +166,7 @@ public class Party {
             if (Extra.isPerm(p, "apvp.party.event.ffa")) {
                 if (players.size() >= minplayers) {
                     p.openInventory(guis.invChooseKit);
-                    partyControl.partysEvents.put(this, new EventGame(EventGame.Tipo.FFA, p));
+                    partyControl.partyEvents.put(this, new EventGame(EventGame.EventType.FFA, p));
                 } else {
                     p.closeInventory();
                     p.sendMessage(needminplayers.replaceAll("<min>", "" + minplayers));
@@ -203,14 +202,14 @@ public class Party {
             String nick = ChatColor.stripColor(i.getItemMeta().getDisplayName());
             if (!nick.equals(p.getName())) {
                 Player p2 = Bukkit.getPlayer(nick);
-                partyControl.preduels.put(p, new PreDuelGame(partyControl.partys.get(p), partyControl.partys.get(p2)));
+                partyControl.preDuels.put(p, new PreDuelGame(partyControl.partyHash.get(p), partyControl.partyHash.get(p2)));
                 p.openInventory(guis.invChooseKit);
             }
         }
     }
 
     public void mandarDuel(Kit k) {
-        PreDuelGame game = partyControl.preduels.get(owner);
+        PreDuelGame game = partyControl.preDuels.get(owner);
         game.setKit(k);
         partyControl.preguntarDuel(game);
         owner.closeInventory();
@@ -300,7 +299,7 @@ public class Party {
     }
 
     public void join(Player p) {
-        partyControl.partys.put(p, partyControl.partys.get(owner));
+        partyControl.partyHash.put(p, partyControl.partyHash.get(owner));
         players.add(p.getUniqueId());
         Extra.cleanPlayer(p);
         hotbars.setLeave(p);
@@ -313,14 +312,14 @@ public class Party {
     public void leave(Player p, boolean online) {
         msg(playerleave.replaceAll("<player>", p.getName()));
         sonido(NOTE_BASS);
-        partyControl.partys.remove(p);
+        partyControl.partyHash.remove(p);
         players.remove(p.getUniqueId());
 
-        if (partyControl.partysEvents.containsKey(this)) {
-            partyControl.partysEvents.get(this).leave(p, online);
+        if (partyControl.partyEvents.containsKey(this)) {
+            partyControl.partyEvents.get(this).leave(p, online);
         }
-        if (partyControl.partysDuel.containsKey(this)) {
-            partyControl.partysDuel.get(this).leave(p, online);
+        if (partyControl.partyDuels.containsKey(this)) {
+            partyControl.partyDuels.get(this).leave(p, online);
         }
 
         if (online) {

@@ -46,7 +46,7 @@ public class MeetupMap {
                 if (corner1 == null || corner2 == null) {
                     Bukkit.getConsoleSender().sendMessage("§4ArenaPvP++ >> §cError to regen Meetup map " + name + " of kit " + k.kitName + ". Corner1 and Corner2 not set.");
                 } else {
-                    Map.regenUtil(k, corner1, corner2, maxY);
+                    GameMap.regenUtil(k, corner1, corner2, maxY);
                 }
             } else {
                 for (Block b : blocks) {

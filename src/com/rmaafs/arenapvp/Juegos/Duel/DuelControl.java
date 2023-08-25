@@ -3,7 +3,9 @@ package com.rmaafs.arenapvp.Juegos.Duel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.rmaafs.arenapvp.util.Extra;
+
 import static com.rmaafs.arenapvp.util.Extra.CHICKEN_EGG_POP;
 import static com.rmaafs.arenapvp.util.Extra.HORSE_ARMOR;
 import static com.rmaafs.arenapvp.util.Extra.NOTE_BASS;
@@ -15,10 +17,13 @@ import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
 import static com.rmaafs.arenapvp.util.Extra.mapLibres;
 import static com.rmaafs.arenapvp.util.Extra.playerConfig;
 import static com.rmaafs.arenapvp.util.Extra.preEmpezandoUno;
+
 import com.rmaafs.arenapvp.manager.kit.Kit;
+
 import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
 import static com.rmaafs.arenapvp.ArenaPvP.guis;
 import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+
 import com.rmaafs.arenapvp.game.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -106,9 +111,9 @@ public class DuelControl {
 
     public void clickKit(Player p, int amount, int slot, boolean kit) {
         if (Extra.isCheckYouPlaying(p)) {
+            PreDuelConfig pre = creandoDuel.get(p);
+            Player p2 = pre.getP2();
             if (kit) {
-                PreDuelConfig pre = creandoDuel.get(p);
-                Player p2 = pre.getP2();
                 if (Extra.isCheckPlayerPlaying(p2, p)) {
                     if (Extra.isExist(p2, p) && Extra.isPerm2(p, "apvp.duel.kit.*", "apvp.duel.kit." + guis.itemKits.get(guis.items.get(slot)).getKitName().toLowerCase())) {
                         creandoDuel.get(p).setKit(guis.itemKits.get(guis.items.get(slot)));
@@ -122,8 +127,6 @@ public class DuelControl {
                     p.closeInventory();
                 }
             } else {
-                PreDuelConfig pre = creandoDuel.get(p);
-                Player p2 = pre.getP2();
                 if (Extra.isCheckPlayerPlaying(p2, p)) {
                     if (Extra.isExist(p2, p) && Extra.isPerm(p, "apvp.duel.best." + amount)) {
                         pre.setTotal(amount);
@@ -184,7 +187,7 @@ public class DuelControl {
             }
         }
     }
-    
+
     public void createFakeDuel(Player o, Player bot) {
         if (Extra.isCheckYouPlaying(o)) {
             Player p = bot;
@@ -217,8 +220,8 @@ public class DuelControl {
 
     public void clickRanked(Player p, Kit k, boolean ranked) {
         if (ranked) {
-            if (Extra.isPerm2(p, "apvp.ranked.kit.*", "apvp.ranked.kit." + k.getKitName().toLowerCase())) {
-                if (p.hasPermission("apvp.rankedfree." + k.getKitName().toLowerCase()) || p.hasPermission("apvp.rankeds") || playerConfig.get(p).getRankeds() > 0) {
+//            if (Extra.isPerm2(p, "apvp.ranked.kit.*", "apvp.ranked.kit." + k.getKitName().toLowerCase())) {
+//                if (p.hasPermission("apvp.rankedfree." + k.getKitName().toLowerCase()) || p.hasPermission("apvp.rankeds") || playerConfig.get(p).getRankeds() > 0) {
                     if (esperandoRanked.containsKey(k)) {
                         if (checkMapAvailables(p, esperandoRanked.get(k), k)) {
                             Game game = new Game(esperandoRanked.get(k), p, k, Extra.getMap(k), true);
@@ -236,41 +239,43 @@ public class DuelControl {
                         Extra.sonido(p, ORB_PICKUP);
                         hotbars.setLeave(p);
                     }
-                } else {
-                    for (String s : noHaveRankeds) {
-                        p.sendMessage(s);
-                    }
-                    Extra.sonido(p, VILLAGER_NO);
-                }
-            }
+
+//                else {
+//                    for (String s : noHaveRankeds) {
+//                        p.sendMessage(s);
+//                    }
+//                    Extra.sonido(p, VILLAGER_NO);
+//                }
+//            }
         } else {
-            if (Extra.isPerm2(p, "apvp.unranked.kit.*", "apvp.unranked.kit." + k.getKitName().toLowerCase())) {
-                if (p.hasPermission("apvp.unrankedfree." + k.getKitName().toLowerCase()) || p.hasPermission("apvp.unrankeds") || playerConfig.get(p).getUnRankeds() > 0) {
-                    if (esperandoUnRanked.containsKey(k)) {
-                        if (checkMapAvailables(p, esperandoUnRanked.get(k), k)) {
-                            Game game = new Game(esperandoUnRanked.get(k), p, k, Extra.getMap(k), false);
-                            jugandoUno.put(p, game);
-                            jugandoUno.put(esperandoUnRanked.get(k), game);
-                            preEmpezandoUno.add(game);
-                            esperandoUnRanked.remove(k);
-                            guis.setNumberUnRankedPlaying(k, true);
-                        } else {
-                            esperandoUnRanked.remove(k);
-                        }
-                    } else {
-                        esperandoUnRanked.put(k, p);
-                        p.sendMessage(waitingUnranked.replaceAll("<kit>", k.kitName));
-                        Extra.sonido(p, ORB_PICKUP);
-                        hotbars.setLeave(p);
-                    }
+//            if (Extra.isPerm2(p, "apvp.unranked.kit.*", "apvp.unranked.kit." + k.getKitName().toLowerCase())) {
+//                if (p.hasPermission("apvp.unrankedfree." + k.getKitName().toLowerCase()) || p.hasPermission("apvp.unrankeds") || playerConfig.get(p).getUnRankeds() > 0) {
+            if (esperandoUnRanked.containsKey(k)) {
+                if (checkMapAvailables(p, esperandoUnRanked.get(k), k)) {
+                    Game game = new Game(esperandoUnRanked.get(k), p, k, Extra.getMap(k), false);
+                    jugandoUno.put(p, game);
+                    jugandoUno.put(esperandoUnRanked.get(k), game);
+                    preEmpezandoUno.add(game);
+                    esperandoUnRanked.remove(k);
+                    guis.setNumberUnRankedPlaying(k, true);
                 } else {
-                    for (String s : noHaveUnRankeds) {
-                        p.sendMessage(s);
-                    }
-                    Extra.sonido(p, VILLAGER_NO);
+                    esperandoUnRanked.remove(k);
                 }
+            } else {
+                esperandoUnRanked.put(k, p);
+                p.sendMessage(waitingUnranked.replaceAll("<kit>", k.kitName));
+                Extra.sonido(p, ORB_PICKUP);
+                hotbars.setLeave(p);
             }
         }
+//        else{
+//            for (String s : noHaveUnRankeds) {
+//                p.sendMessage(s);
+//            }
+//            Extra.sonido(p, VILLAGER_NO);
+//                }
+//            }
+
         p.closeInventory();
     }
 

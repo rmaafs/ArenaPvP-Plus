@@ -31,7 +31,7 @@ import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
 import com.rmaafs.arenapvp.Party.PartyControl;
 import com.rmaafs.arenapvp.commands.Command;
-import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.entity.GameMap;
 import com.rmaafs.arenapvp.entity.MeetupMap;
 import com.rmaafs.arenapvp.manager.config.Lang;
 import com.rmaafs.arenapvp.manager.config.PlayerConfig;
@@ -140,6 +140,7 @@ public class ArenaPvP extends JavaPlugin implements Listener {
         extraLang = new Lang();
 
         getCommand("apvp").setExecutor(new Command());
+        getCommand("duelbot").setExecutor(new Command());
         getCommand("duel").setExecutor(new Command());
         getCommand("stats").setExecutor(new Command());
         getCommand("uinventario").setExecutor(new Command());
@@ -192,10 +193,10 @@ public class ArenaPvP extends JavaPlugin implements Listener {
         File folder = new File(getDataFolder() + File.separator + "kits");
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles != null) {
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
                     try {
-                        File elkit = new File(getDataFolder() + File.separator + "kits" + File.separator + listOfFiles[i].getName());
+                        File elkit = new File(getDataFolder() + File.separator + "kits" + File.separator + listOfFile.getName());
                         FileConfiguration ckit = YamlConfiguration.loadConfiguration(elkit);
                         ItemStack item = new ItemStack(Material.AIR);
                         List<ItemStack> deleteBlocks = new ArrayList<>();
@@ -236,15 +237,15 @@ public class ArenaPvP extends JavaPlugin implements Listener {
                         kits.put(k.kitName, k);
                         guis.acomodacion.setItem(k.slot, item);
                         guis.itemKits.put(item, k);
-                        
-                        
+
+
                         File carpetaHotbar = new File(plugin.getDataFolder() + File.separator + "hotbar");
-                        if (!carpetaHotbar.exists()){
+                        if (!carpetaHotbar.exists()) {
                             carpetaHotbar.mkdir();
                         }
-                        
-                        
-                        File hot = new File(plugin.getDataFolder() + File.separator + "hotbar" + File.separator + listOfFiles[i].getName());
+
+
+                        File hot = new File(plugin.getDataFolder() + File.separator + "hotbar" + File.separator + listOfFile.getName());
                         boolean g = false;
                         if (!hot.exists()) {
                             hot.createNewFile();
@@ -273,13 +274,13 @@ public class ArenaPvP extends JavaPlugin implements Listener {
 //                                    Bukkit.getConsoleSender().sendMessage("§4ArenaPvP++ >> §bError sharing maps to " + k.kitName + ", maps of " + ckit.getString("mapsharing") + " no exist.");
 //                                }
                                 List<Kit> lis = new ArrayList<>();
-                                if (sharingMaps.containsKey(ckit.getString("mapsharing"))){
+                                if (sharingMaps.containsKey(ckit.getString("mapsharing"))) {
                                     lis = sharingMaps.get(ckit.getString("mapsharing"));
                                 }
                                 lis.add(k);
                                 sharingMaps.put(ckit.getString("mapsharing"), lis);
-                                List<Map> lista = new ArrayList<>();
-                                List<Map> lista2 = new ArrayList<>();
+                                List<GameMap> lista = new ArrayList<>();
+                                List<GameMap> lista2 = new ArrayList<>();
                                 List<MeetupMap> lista3 = new ArrayList<>();
                                 List<MeetupMap> lista4 = new ArrayList<>();
                                 mapLibres.put(k, lista);
@@ -328,18 +329,18 @@ public class ArenaPvP extends JavaPlugin implements Listener {
         File f = new File(getDataFolder() + File.separator + "maps" + File.separator + k.kitName + ".yml");
         if (f.exists()) {
             FileConfiguration cf = YamlConfiguration.loadConfiguration(f);
-            List<Map> lista = new ArrayList<>();
-            List<Map> lista2 = new ArrayList<>();
+            List<GameMap> lista = new ArrayList<>();
+            List<GameMap> lista2 = new ArrayList<>();
             for (String s : cf.getKeys(false)) {
                 String w = cf.getString(s + ".w");
                 if (cf.contains(s + ".c1")) {
-                    lista.add(new Map(s,
+                    lista.add(new GameMap(s,
                             setLoc(cf, w, s + ".c1", false),
                             setLoc(cf, w, s + ".c2", false),
                             setLoc(cf, w, s + ".s1", true),
                             setLoc(cf, w, s + ".s2", true)));
                 } else {
-                    lista.add(new Map(s,
+                    lista.add(new GameMap(s,
                             setLoc(cf, w, s + ".s1", true),
                             setLoc(cf, w, s + ".s2", true)));
                 }

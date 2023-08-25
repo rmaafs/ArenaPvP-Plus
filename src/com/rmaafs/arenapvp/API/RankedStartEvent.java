@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.entity.GameMap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,7 +18,7 @@ public class RankedStartEvent extends Event {
     private Location corner1;
     private Location corner2;
 
-    public RankedStartEvent(Player p1, Player p2, String kn, Map m) {
+    public RankedStartEvent(Player p1, Player p2, String kn, GameMap m) {
         player1 = p1;
         player2 = p2;
         kitName = kn;

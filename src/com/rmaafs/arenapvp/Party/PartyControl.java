@@ -21,24 +21,39 @@ import org.bukkit.inventory.ItemStack;
 
 public class PartyControl {
 
-    public HashMap<Player, Party> partys = new HashMap<>();
-    public HashMap<Party, EventGame> partysEvents = new HashMap<>();
-    public List<EventGame> startingsEvents = new ArrayList<>();
+    public HashMap<Player, Party> partyHash = new HashMap<>();
+    public HashMap<Party, EventGame> partyEvents = new HashMap<>();
+    public List<EventGame> startingEvents = new ArrayList<>();
 
-    public HashMap<Player, PreDuelGame> preduels = new HashMap<>();
-    public HashMap<Party, DuelGame> partysDuel = new HashMap<>();
+    public HashMap<Player, PreDuelGame> preDuels = new HashMap<>();
+    public HashMap<Party, DuelGame> partyDuels = new HashMap<>();
     public List<DuelGame> startingPartyDuel = new ArrayList<>();
 
     //public HashMap<Player, EventGame> partyEvents = new HashMap<>();
-    Inventory invSelect, invEvents, invPartys, invPartysOpen;
+    public Inventory invSelect;
+    public Inventory invEvents;
+    public Inventory invPartys;
+    public Inventory invPartysOpen;
 
-    public String invSelectName, invEventsName, invPartysName, invConfigName, invPartysOpenName;
-    String noexist, youdonthaveparty, younotaretheowner, playernointheparty,
-            partyduelsent, duelmatch, duelmatchclick, youareplaying, partyplaying,
-            playerhasparty, chatformat, chatformatstaff;
-
-    ItemStack itemCreate, itemJoin;
-    ItemStack itemPartyFFA, itemPartyGroup, itemPartyRR;
+    public String invSelectName;
+    public String invEventsName;
+    public String invPartysName;
+    public String invConfigName;
+    public String invPartysOpenName;
+    public  String noexist;
+    public String youdonthaveparty;
+    public String younotaretheowner;
+    public String playernointheparty;
+    public String partyduelsent;
+    public String duelmatch;
+    public String duelmatchclick;
+    public String youareplaying;
+    public String partyplaying;
+    public String playerhasparty;
+    public String chatformat;
+    public String chatformatstaff;
+    public ItemStack itemCreate, itemJoin;
+    public  ItemStack itemPartyFFA, itemPartyGroup, itemPartyRR;
 
     public PartyControl() {
         noexist = Extra.tc(clang.getString("party.create.noexist"));
@@ -109,9 +124,9 @@ public class PartyControl {
     }
 
     public void partyChat(Player p, String msg) {
-        if (partys.containsKey(p)) {
+        if (partyHash.containsKey(p)) {
             String s = chatformatstaff.replaceAll("<player>", p.getName()).replaceAll("<msg>", msg);
-            partys.get(p).msg(chatformat.replaceAll("<player>", p.getName()).replaceAll("<msg>", msg));
+            partyHash.get(p).msg(chatformat.replaceAll("<player>", p.getName()).replaceAll("<msg>", msg));
             for (Player o : Bukkit.getServer().getOnlinePlayers()) {
                 if (o.hasPermission("apvp.party.chat.staff")) {
                     o.sendMessage(s);
@@ -125,7 +140,7 @@ public class PartyControl {
     public void refreshPartyItems() {
         invPartys.clear();
         List<Party> all = new ArrayList<>();
-        for (Map.Entry<Player, Party> entry : partys.entrySet()) {
+        for (Map.Entry<Player, Party> entry : partyHash.entrySet()) {
             Party party = entry.getValue();
             if (!all.contains(party)) {
                 all.add(party);
@@ -147,7 +162,7 @@ public class PartyControl {
     public void refreshPartyOpeneds() {
         invPartysOpen.clear();
         List<Party> all = new ArrayList<>();
-        for (Map.Entry<Player, Party> entry : partys.entrySet()) {
+        for (Map.Entry<Player, Party> entry : partyHash.entrySet()) {
             Party party = entry.getValue();
             if (!all.contains(party) && party.open) {
                 all.add(party);
@@ -184,7 +199,7 @@ public class PartyControl {
     public void clickItem(Player p, ItemStack i) {
         if (i.isSimilar(itemCreate)) {
             if (Extra.isPerm(p, "apvp.party.create")) {
-                partys.put(p, new Party(p));
+                partyHash.put(p, new Party(p));
                 Extra.setScore(p, Score.TipoScore.PARTYMAIN);
                 refreshPartyItems();
             } else {
@@ -200,17 +215,17 @@ public class PartyControl {
     public void clickOpenParty(Player p, ItemStack i) {
         Player o = Bukkit.getPlayer(ChatColor.stripColor(i.getItemMeta().getDisplayName()));
         if (Extra.isExist(o, p)) {
-            partys.get(o).preguntarEntrar(p);
+            partyHash.get(o).preguntarEntrar(p);
         }
     }
 
     public void aceptarPlayerAbierta(Player p, String a) {
         Player o = Bukkit.getPlayer(a);
         if (Extra.isExist(o, p)) {
-            if (partys.containsKey(p)) {
-                if (partys.get(p).owner == p) {
-                    if (!partys.containsKey(o)) {
-                        partys.get(p).aceptarPreguntar(o);
+            if (partyHash.containsKey(p)) {
+                if (partyHash.get(p).owner == p) {
+                    if (!partyHash.containsKey(o)) {
+                        partyHash.get(p).aceptarPreguntar(o);
                     } else {
                         p.sendMessage(playerhasparty);
                     }
@@ -224,11 +239,11 @@ public class PartyControl {
     }
 
     public void partyInvite(Player p, String a) {
-        if (partys.containsKey(p)) {
+        if (partyHash.containsKey(p)) {
             Player o = Bukkit.getPlayer(a);
             if (Extra.isExist(o, p)) {
                 if (Extra.isCheckPlayerPlaying(o, p)) {
-                    partys.get(p).invitar(o);
+                    partyHash.get(p).invitar(o);
                 }
             }
         } else {
@@ -239,8 +254,8 @@ public class PartyControl {
     public void aceptarInvitacion(Player p, String a) {
         if (Extra.isCheckYouPlaying(p)) {
             Player o = Bukkit.getPlayer(a);
-            if (partys.containsKey(o)) {
-                partys.get(o).aceptarInvitado(p);
+            if (partyHash.containsKey(o)) {
+                partyHash.get(o).aceptarInvitado(p);
             } else {
                 p.sendMessage(noexist);
                 Extra.sonido(p, NOTE_BASS);
@@ -249,20 +264,20 @@ public class PartyControl {
     }
 
     public void partyLeave(Player p) {
-        if (partys.containsKey(p)) {
-            partys.get(p).leave(p, true);
+        if (partyHash.containsKey(p)) {
+            partyHash.get(p).leave(p, true);
         } else {
             p.sendMessage(youdonthaveparty);
         }
     }
 
     public void partyKick(Player p, String a) {
-        if (partys.containsKey(p)) {
-            if (partys.get(p).owner == p) {
+        if (partyHash.containsKey(p)) {
+            if (partyHash.get(p).owner == p) {
                 Player o = Bukkit.getPlayer(a);
                 if (Extra.isExist(o, p)) {
-                    if (partys.get(p).players.contains(o)) {
-                        partys.get(p).kick(o);
+                    if (partyHash.get(p).players.contains(o)) {
+                        partyHash.get(p).kick(o);
                     } else {
                         p.sendMessage(playernointheparty);
                     }
@@ -276,12 +291,12 @@ public class PartyControl {
     }
 
     public void partyPromote(Player p, String a) {
-        if (partys.containsKey(p)) {
-            if (partys.get(p).owner == p) {
+        if (partyHash.containsKey(p)) {
+            if (partyHash.get(p).owner == p) {
                 Player o = Bukkit.getPlayer(a);
                 if (Extra.isExist(o, p)) {
-                    if (partys.get(p).players.contains(o)) {
-                        partys.get(p).promote(o);
+                    if (partyHash.get(p).players.contains(o)) {
+                        partyHash.get(p).promote(o);
                     } else {
                         p.sendMessage(playernointheparty);
                     }
@@ -297,9 +312,9 @@ public class PartyControl {
     public void preguntarDuel(PreDuelGame game) {
         Party p1 = game.getParty1();
         Party p2 = game.getParty2();
-        if (!partysDuel.containsKey(p1) || partysEvents.containsKey(game.p1)) {
-            if (!partysDuel.containsKey(p2) || partysEvents.containsKey(game.p2)) {
-                if (partys.containsValue(p2)) {
+        if (!partyDuels.containsKey(p1) || partyEvents.containsKey(game.p1)) {
+            if (!partyDuels.containsKey(p2) || partyEvents.containsKey(game.p2)) {
+                if (partyHash.containsValue(p2)) {
                     try {
                         p1.msg(partyduelsent.replaceAll("<player>", p2.owner.getName()));
                     } catch (Exception e) {
@@ -330,18 +345,18 @@ public class PartyControl {
     }
 
     public void aceptarDuel(Player p, String a) {
-        if (partys.containsKey(p)) {
-            if (partys.get(p).owner == p) {
+        if (partyHash.containsKey(p)) {
+            if (partyHash.get(p).owner == p) {
                 Player p2 = Bukkit.getPlayer(a);
-                if (preduels.containsKey(p2) && preduels.get(p2).getParty2().equals(partys.get(p))) {
-                    PreDuelGame game = preduels.get(p2);
-                    preduels.remove(p2);
-                    if (!partysDuel.containsKey(game.p1) || partysEvents.containsKey(game.p1)) {
-                        if (!partysDuel.containsKey(game.p2) || partysEvents.containsKey(game.p2)) {
+                if (preDuels.containsKey(p2) && preDuels.get(p2).getParty2().equals(partyHash.get(p))) {
+                    PreDuelGame game = preDuels.get(p2);
+                    preDuels.remove(p2);
+                    if (!partyDuels.containsKey(game.p1) || partyEvents.containsKey(game.p1)) {
+                        if (!partyDuels.containsKey(game.p2) || partyEvents.containsKey(game.p2)) {
                             if (Extra.checkMapAvailables(game.getKit())) {
                                 DuelGame dgame = new DuelGame(game.p1, game.p2, game.getKit(), Extra.getMap(game.getKit()));
-                                partysDuel.put(game.p1, dgame);
-                                partysDuel.put(game.p2, dgame);
+                                partyDuels.put(game.p1, dgame);
+                                partyDuels.put(game.p2, dgame);
                                 startingPartyDuel.add(dgame);
                             } else {
                                 game.p1.msg(extraLang.noMapsAvailable);
@@ -367,8 +382,8 @@ public class PartyControl {
     }
 
     public void sacar(Player p) {
-        if (partys.containsKey(p)) {
-            partys.get(p).leave(p, false);
+        if (partyHash.containsKey(p)) {
+            partyHash.get(p).leave(p, false);
         }
     }
 }

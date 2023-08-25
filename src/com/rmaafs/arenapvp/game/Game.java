@@ -29,7 +29,7 @@ import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 import static com.rmaafs.arenapvp.ArenaPvP.ver;
 import static org.bukkit.potion.PotionEffectType.BLINDNESS;
 
-import com.rmaafs.arenapvp.entity.Map;
+import com.rmaafs.arenapvp.entity.GameMap;
 import com.rmaafs.arenapvp.manager.config.PlayerConfig;
 import com.rmaafs.arenapvp.manager.data.SQL;
 import com.rmaafs.arenapvp.manager.kit.Kit;
@@ -64,7 +64,7 @@ public class Game {
     public List<Player> spectators = new ArrayList<>();
     public Player p1, p2;
     public Kit kit;
-    public Map map;
+    public GameMap gameMap;
     public int bestOf = 1;
     public int winsP1 = 0;
     public int winsP2 = 0;
@@ -73,11 +73,11 @@ public class Game {
     public String bestFormat = "";
     public GameType gameType = GameType.DUEL;
 
-    public Game(Player p, Player pp, Kit k, Map m, String bestFor, int best) {
-        p1 = p;
-        p2 = pp;
-        kit = k;
-        map = m;
+    public Game(Player player, Player duelPlayer, Kit kit, GameMap gameMap, String bestFor, int best) {
+        p1 = player;
+        p2 = duelPlayer;
+        this.kit = kit;
+        this.gameMap = gameMap;
         bestFormat = bestFor;
         bestOf = best;
         preStart();
@@ -90,11 +90,11 @@ public class Game {
         }
     }
 
-    public Game(Player p, Player pp, Kit k, Map m, boolean ranked) {
+    public Game(Player p, Player pp, Kit k, GameMap m, boolean ranked) {
         p1 = p;
         p2 = pp;
         kit = k;
-        map = m;
+        gameMap = m;
 
         if (!playerConfig.containsKey(p1)) {
             playerConfig.put(p1, new PlayerConfig(p1));
@@ -155,9 +155,9 @@ public class Game {
 
     public void teleportToSpawn(Player p) {
         if (p1 == p) {
-            p1.teleport(map.getSpawn1());
+            p1.teleport(gameMap.getSpawn1());
         } else {
-            p2.teleport(map.getSpawn2());
+            p2.teleport(gameMap.getSpawn2());
         }
         Extra.sonido(p, SPLASH2);
     }
@@ -189,13 +189,13 @@ public class Game {
                         .replaceAll("<elo2>", "" + playerConfig.get(p2).getElo(kit))
                         .replaceAll("<rank1>", playerConfig.get(p1).getRank(kit))
                         .replaceAll("<rank2>", playerConfig.get(p2).getRank(kit))
-                        .replaceAll("<map>", map.getName())
+                        .replaceAll("<map>", gameMap.getName())
                         .replaceAll("<time>", Extra.secToMin(time))
                         .replaceAll("<kit>", kit.kitName));
             }
             Extra.setScore(p1, Score.TipoScore.RANKED);
             Extra.setScore(p2, Score.TipoScore.RANKED);
-            Bukkit.getPluginManager().callEvent(new RankedStartEvent(p1, p2, kit.getKitName(), map));
+            Bukkit.getPluginManager().callEvent(new RankedStartEvent(p1, p2, kit.getKitName(), gameMap));
         } else {
             for (String s : msg) {
                 msg(s.replaceAll("<player1>", p1.getName())
@@ -203,16 +203,16 @@ public class Game {
                         .replaceAll("<kit>", kit.kitName)
                         .replaceAll("<time>", Extra.secToMin(time))
                         .replaceAll("<format>", bestFormat)
-                        .replaceAll("<map>", map.getName()));
+                        .replaceAll("<map>", gameMap.getName()));
             }
             if (gameType == GameType.UNRANKED) {
                 Extra.setScore(p1, Score.TipoScore.UNRANKED);
                 Extra.setScore(p2, Score.TipoScore.UNRANKED);
-                Bukkit.getPluginManager().callEvent(new UnRankedStartEvent(p1, p2, kit.getKitName(), map));
+                Bukkit.getPluginManager().callEvent(new UnRankedStartEvent(p1, p2, kit.getKitName(), gameMap));
             } else {
                 Extra.setScore(p1, Score.TipoScore.DUEL);
                 Extra.setScore(p2, Score.TipoScore.DUEL);
-                Bukkit.getPluginManager().callEvent(new DuelStartEvent(p1, p2, kit.getKitName(), map, bestOf, winsP1, winsP2));
+                Bukkit.getPluginManager().callEvent(new DuelStartEvent(p1, p2, kit.getKitName(), gameMap, bestOf, winsP1, winsP2));
             }
 
         }
@@ -378,14 +378,14 @@ public class Game {
                     .replaceAll("<elo>", "" + elo));
             Extra.sonido(w, LEVEL_UP);
             Extra.sonido(l, VILLAGER_NO);
-            Bukkit.getPluginManager().callEvent(new RankedFinishEvent(w, l, kit.getKitName(), map, elo));
+            Bukkit.getPluginManager().callEvent(new RankedFinishEvent(w, l, kit.getKitName(), gameMap, elo));
         } else if (gameType == GameType.UNRANKED) {
-            Bukkit.getPluginManager().callEvent(new UnRankedFinishEvent(w, l, kit.getKitName(), map));
+            Bukkit.getPluginManager().callEvent(new UnRankedFinishEvent(w, l, kit.getKitName(), gameMap));
         } else {
             if (w == p1) {
-                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), map, bestOf, winsP1, winsP2));
+                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), gameMap, bestOf, winsP1, winsP2));
             } else {
-                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), map, bestOf, winsP2, winsP1));
+                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), gameMap, bestOf, winsP2, winsP1));
             }
         }
 
@@ -399,7 +399,7 @@ public class Game {
                         && ((bestOf == 3 && (winsP1 != 2 && winsP2 != 2))
                         || (bestOf == 5 && (winsP1 != 3 && winsP2 != 3)))) {
                     preEmpezandoUno.add(jugandoUno.get(w));
-                    map.regen(kit);
+                    gameMap.regen(kit);
                     preStart();
                 } else {
                     sacarPartida(w);
@@ -416,7 +416,7 @@ public class Game {
                                 .replaceAll("<points1>", "" + points1)
                                 .replaceAll("<points2>", "" + points2));
                     }
-                    Extra.terminarMapa(map, kit);
+                    Extra.terminarMapa(gameMap, kit);
                     if (gameType == GameType.RANKED) {
                         guis.setNumberRankedPlaying(kit, false);
                         SQL.guardarStats(w, false);
@@ -478,10 +478,10 @@ public class Game {
     }
 
     public boolean place(Block b) {
-        map.poss = true;
-        map.blocks.add(b);
-        if (b.getLocation().getBlockY() > map.maxY) {
-            map.maxY = b.getLocation().getBlockY();
+        gameMap.poss = true;
+        gameMap.blocks.add(b);
+        if (b.getLocation().getBlockY() > gameMap.maxY) {
+            gameMap.maxY = b.getLocation().getBlockY();
         }
         if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
@@ -507,10 +507,10 @@ public class Game {
     }
 
     public void setLava(int y) {
-        map.lava = true;
-        map.poss = true;
-        if (y > map.maxY) {
-            map.maxY = y;
+        gameMap.lava = true;
+        gameMap.poss = true;
+        if (y > gameMap.maxY) {
+            gameMap.maxY = y;
         }
     }
 
