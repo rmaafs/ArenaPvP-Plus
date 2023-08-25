@@ -1,15 +1,14 @@
 package com.rmaafs.arenapvp.Hotbars;
 
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import com.rmaafs.arenapvp.PlayerConfig;
-import com.rmaafs.arenapvp.Score;
-import org.bukkit.Bukkit;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import com.rmaafs.arenapvp.manager.config.PlayerConfig;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -65,9 +64,9 @@ public class HotbarEvent implements Listener {
                         } else if (hotbars.esperandoEscojaHotbar.contains(p)) {
                             e.setCancelled(true);
                             hotbars.clickPonerHotbar(p, item.getAmount());
-                        } else if (partyControl.partys.containsKey(p)) {
+                        } else if (partyControl.partyHash.containsKey(p)) {
                             e.setCancelled(true);
-                            partyControl.partys.get(p).clickItemHotbar(p, e);
+                            partyControl.partyHash.get(p).clickItemHotbar(p, e);
                         }
                     }
                 }
@@ -79,7 +78,7 @@ public class HotbarEvent implements Listener {
     public void onDrop(PlayerDropItemEvent e) {
         if (e.getPlayer().getInventory().contains(hotbars.itemRanked)
                 || hotbars.editingSlotHotbar.containsKey(e.getPlayer()) || e.getItemDrop().getItemStack().equals(hotbars.itemRanked)
-                || partyControl.partys.containsKey(e.getPlayer())) {
+                || partyControl.partyHash.containsKey(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
@@ -89,7 +88,7 @@ public class HotbarEvent implements Listener {
         Player p = e.getPlayer();
         if (extraLang.worlds.contains(p.getWorld().getName())) {
             if (Extra.isPlaying(p)) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 hotbars.setMain(p);                                     
                 playerConfig.put(p, new PlayerConfig(p));
                 Extra.setScore(p, Score.TipoScore.MAIN);

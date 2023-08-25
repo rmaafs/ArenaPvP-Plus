@@ -1,14 +1,16 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.manager.data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import static com.rmaafs.arenapvp.Extra.cstats;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.mysql;
+import static com.rmaafs.arenapvp.util.Extra.cstats;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.mysql;
+
+import com.rmaafs.arenapvp.ArenaPvP;
 import org.bukkit.entity.Player;
 
 public class SQL {
@@ -89,16 +91,16 @@ public class SQL {
                     playerConfig.get(p).statsMeetup.componer();
                     if (!playerConfig.get(p).stats.statsString.equals("")) {
                         if (!playerConfig.get(p).statsMeetup.statsString.equals("")) {
-                            Main.mysql.update("UPDATE APVP SET STATS='" + playerConfig.get(p).stats.statsString + "', MEETUP='" + playerConfig.get(p).statsMeetup.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
+                            ArenaPvP.mysql.update("UPDATE APVP SET STATS='" + playerConfig.get(p).stats.statsString + "', MEETUP='" + playerConfig.get(p).statsMeetup.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
                         } else {
-                            Main.mysql.update("UPDATE APVP SET STATS='" + playerConfig.get(p).stats.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
+                            ArenaPvP.mysql.update("UPDATE APVP SET STATS='" + playerConfig.get(p).stats.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
                         }
                     } else if (!playerConfig.get(p).statsMeetup.statsString.equals("")) {
-                        Main.mysql.update("UPDATE APVP SET MEETUP='" + playerConfig.get(p).statsMeetup.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
+                        ArenaPvP.mysql.update("UPDATE APVP SET MEETUP='" + playerConfig.get(p).statsMeetup.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
                     }
                 } else {
                     if (!playerConfig.get(p).stats.statsString.equals("")) {
-                        Main.mysql.update("UPDATE APVP SET STATS='" + playerConfig.get(p).stats.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
+                        ArenaPvP.mysql.update("UPDATE APVP SET STATS='" + playerConfig.get(p).stats.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
                     }
                 }
             } else {
@@ -130,7 +132,7 @@ public class SQL {
         if (extraLang.sql) {
             if (isExist(p)) {
                 playerConfig.get(p).statsMeetup.componer();
-                Main.mysql.update("UPDATE APVP SET MEETUP='" + playerConfig.get(p).statsMeetup.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
+                ArenaPvP.mysql.update("UPDATE APVP SET MEETUP='" + playerConfig.get(p).statsMeetup.statsString + "' WHERE UUID= '" + p.getUniqueId().toString() + "';");
             } else {
                 playerConfig.get(p).statsMeetup.componer();
                 mysql.update("INSERT INTO APVP(NICK, MEETUP) VALUES ('" + p.getName() + "', '" + playerConfig.get(p).statsMeetup.statsString + "');");

@@ -7,19 +7,20 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.kits;
-import com.rmaafs.arenapvp.Convertor;
-import static com.rmaafs.arenapvp.Extra.mapLibres;
-import static com.rmaafs.arenapvp.Extra.mapOcupadas;
-import com.rmaafs.arenapvp.FileKits;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.kits;
+import com.rmaafs.arenapvp.util.Convertor;
+import static com.rmaafs.arenapvp.util.Extra.mapLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapOcupadas;
+import com.rmaafs.arenapvp.util.file.FileKits;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -102,17 +103,17 @@ public class CrearKit {
                 break;
             case INVENTARIO:
                 p.sendMessage(inventory);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.CREATIVE);
                 break;
             case ITEMSBORRAR:
                 p.sendMessage(itemstodelete);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.CREATIVE);
                 break;
             case POTIONS:
                 p.sendMessage(potions);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.openInventory(inv);
                 break;
             case ITEM:
@@ -261,7 +262,7 @@ public class CrearKit {
             f.mkdir();
         }
 
-//        guis.saveItems();
+        guis.saveItems();
         for (int i = 0; i < guis.acomodacion.getContents().length; i++) {
             if (guis.acomodacion.getContents()[i] != null && guis.acomodacion.getContents()[i].isSimilar(itemOnGui)) {
                 slot = i;
@@ -277,10 +278,10 @@ public class CrearKit {
         }
         hotbars.setMain(p);
 
-        List<Mapa> lista1 = new ArrayList<>();
+        List<GameMap> lista1 = new ArrayList<>();
         mapLibres.put(k, lista1);
         
-        List<Mapa> lista2 = new ArrayList<>();
+        List<GameMap> lista2 = new ArrayList<>();
         mapOcupadas.put(k, lista2);
         
         File elkit = new File(plugin.getDataFolder() + File.separator + "kits" + File.separator + kitName + ".yml");

@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.Juegos.Meetup;
 
-import static com.rmaafs.arenapvp.Main.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;

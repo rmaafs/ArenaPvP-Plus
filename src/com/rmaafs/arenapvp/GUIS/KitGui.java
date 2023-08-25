@@ -8,26 +8,26 @@ import java.util.List;
 import java.util.Map;
 
 import com.rmaafs.arenapvp.Juegos.Duel.PreDuelConfig;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.CHEST_CLOSE;
-import static com.rmaafs.arenapvp.Extra.HORSE_ARMOR;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_YES;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.jugandoUno;
-import static com.rmaafs.arenapvp.Extra.kits;
-import static com.rmaafs.arenapvp.Extra.mapLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupOcupadas;
-import static com.rmaafs.arenapvp.Extra.mapOcupadas;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import com.rmaafs.arenapvp.FileKits;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.duelControl;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Partida;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.CHEST_CLOSE;
+import static com.rmaafs.arenapvp.util.Extra.HORSE_ARMOR;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_YES;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
+import static com.rmaafs.arenapvp.util.Extra.kits;
+import static com.rmaafs.arenapvp.util.Extra.mapLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupOcupadas;
+import static com.rmaafs.arenapvp.util.Extra.mapOcupadas;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import com.rmaafs.arenapvp.util.file.FileKits;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.duelControl;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+import com.rmaafs.arenapvp.game.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -288,9 +288,9 @@ public class KitGui {
     public void eliminarKit(Player p, int slot) {
         Kit k = getKitSlot(slot);
         boolean t = true;
-        for (Map.Entry<Player, Partida> entry : jugandoUno.entrySet()) {
-            Partida partida = entry.getValue();
-            if (partida.kit.equals(k)) {
+        for (Map.Entry<Player, Game> entry : jugandoUno.entrySet()) {
+            Game game = entry.getValue();
+            if (game.kit.equals(k)) {
                 p.sendMessage(kitinuse);
                 t = false;
                 break;

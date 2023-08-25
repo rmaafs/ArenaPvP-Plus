@@ -1,24 +1,27 @@
 package com.rmaafs.arenapvp.Party;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import com.rmaafs.arenapvp.API.PartyDuelDeathEvent;
 import com.rmaafs.arenapvp.API.PartyDuelFinishEvent;
 import com.rmaafs.arenapvp.API.PartyDuelStartEvent;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.CHICKEN_EGG_POP;
-import static com.rmaafs.arenapvp.Extra.FIREWORK_LARGE_BLAST;
-import static com.rmaafs.arenapvp.Extra.ORB_PICKUP;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_NO;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Mapa;
-import com.rmaafs.arenapvp.Score;
+import com.rmaafs.arenapvp.API.PlayerTouchWaterEvent;
+import com.rmaafs.arenapvp.Juegos.Duel.PlayerEvent;
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.CHICKEN_EGG_POP;
+import static com.rmaafs.arenapvp.util.Extra.FIREWORK_LARGE_BLAST;
+import static com.rmaafs.arenapvp.util.Extra.ORB_PICKUP;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_NO;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -26,6 +29,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -33,42 +37,46 @@ import org.bukkit.potion.PotionEffectType;
 
 public class DuelGame {
 
-    public enum Tipo {
-
+    public enum GameType {
         DUEL, RANKED2, RANKED3, RANKED4
-    };
+    }
 
     public Party p1, p2;
     public Kit kit;
-    public Mapa mapa;
-    Tipo tipo = Tipo.DUEL;
+    public GameMap gameMap;
+    GameType gameType = GameType.DUEL;
     public int pretime = 6, time;
 
-    public List<Player> players1 = new ArrayList<>();
-    public List<Player> players2 = new ArrayList<>();
-    public List<Player> espectadores = new ArrayList<>();
+
+    public Set<UUID> players1 = new HashSet<>();
+    public Set<UUID> players2 = new HashSet<>();
+    public Set<UUID> spectators = new HashSet<>();
     List<ItemStack> drops = new ArrayList<>();
-    boolean daño = false;
+    boolean damage = false;
 
     List<String> started, winner;
-    String startinggame, playerkilled, youkilled, playerdeath, playerdeathdisconnect,
-            youdeath;
+    public String startingGame;
+    public String playerKilled;
+    public String youkilled;
+    public String playerdeath;
+    public String playerdeathdisconnect;
+    public String youdeath;
 
-    public DuelGame(Party pp1, Party pp2, Kit k, Mapa m) {
+    public DuelGame(Party pp1, Party pp2, Kit k, GameMap m) {
         p1 = pp1;
         p2 = pp2;
         kit = k;
-        mapa = m;
+        gameMap = m;
 
         time = kit.maxTime;
         players1.addAll(p1.players);
         players2.addAll(p2.players);
 
-        startinggame = Extra.tc(clang.getString("party.game.duel.startinggame"));
+        startingGame = Extra.tc(clang.getString("party.game.duel.startinggame"));
         started = Extra.tCC(clang.getStringList("party.game.duel.started"));
         winner = Extra.tCC(clang.getStringList("party.game.duel.winner"));
 
-        playerkilled = Extra.tc(clang.getString("party.game.duel.playerkilled"));
+        playerKilled = Extra.tc(clang.getString("party.game.duel.playerkilled"));
         youkilled = Extra.tc(clang.getString("party.game.youkilled"));
         playerdeath = Extra.tc(clang.getString("party.game.duel.playerdeath"));
         playerdeathdisconnect = Extra.tc(clang.getString("party.game.duel.playerdeathdisconnect"));
@@ -82,8 +90,8 @@ public class DuelGame {
         if (pretime <= 0) {
             return true;
         }
-        p1.msg(startinggame.replaceAll("<time>", "" + pretime));
-        p2.msg(startinggame.replaceAll("<time>", "" + pretime));
+        p1.msg(startingGame.replaceAll("<time>", "" + pretime));
+        p2.msg(startingGame.replaceAll("<time>", "" + pretime));
         p1.sonido(CHICKEN_EGG_POP);
         p2.sonido(CHICKEN_EGG_POP);
         if (pretime == 3) {
@@ -96,9 +104,10 @@ public class DuelGame {
 
     public void preTeleportar() {
         PotionEffect pot = new PotionEffect(PotionEffectType.BLINDNESS, 30, 1);
-        for (Player p : p1.players) {
+        for (UUID id : p1.players) {
+            Player p = Bukkit.getPlayer(id);
             if (!teleportados) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 if (extraLang.duelEffectTeleport) {
                     p.addPotionEffect(pot);
                 }
@@ -112,12 +121,13 @@ public class DuelGame {
 //                }
                 hotbars.ponerItemsHotbar(p);
             }
-            p.teleport(mapa.getSpawn1());
+            p.teleport(gameMap.getSpawn1());
         }
 
-        for (Player p : p2.players) {
+        for (UUID id : p2.players) {
+            Player p = Bukkit.getPlayer(id);
             if (!teleportados) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 if (extraLang.duelEffectTeleport) {
                     p.addPotionEffect(pot);
                 }
@@ -131,7 +141,7 @@ public class DuelGame {
                 }
                 hotbars.ponerItemsHotbar(p);
             }
-            p.teleport(mapa.getSpawn2());
+            p.teleport(gameMap.getSpawn2());
         }
 
         teleportados = true;
@@ -146,14 +156,15 @@ public class DuelGame {
                         .replaceAll("<owner2>", p2.owner.getName())
                         .replaceAll("<players1>", "" + p1.players.size())
                         .replaceAll("<players2>", "" + p2.players.size())
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", gameMap.getName())
                         .replaceAll("<time>", Extra.secToMin(time)));
             } else {
                 msgAll(s);
             }
         }
 
-        for (Player p : p1.players) {
+        for (UUID id : p1.players) {
+            Player p = Bukkit.getPlayer(id);
             if (hotbars.esperandoEscojaHotbar.contains(p)) {
                 playerConfig.get(p).putInv(1, kit);
                 hotbars.esperandoEscojaHotbar.remove(p);
@@ -172,7 +183,8 @@ public class DuelGame {
             Extra.setScore(p, Score.TipoScore.PARTYDUEL);
         }
 
-        for (Player p : p2.players) {
+        for (UUID id : p2.players) {
+            Player p = Bukkit.getPlayer(id);
             if (hotbars.esperandoEscojaHotbar.contains(p)) {
                 playerConfig.get(p).putInv(1, kit);
                 hotbars.esperandoEscojaHotbar.remove(p);
@@ -190,27 +202,27 @@ public class DuelGame {
             }
             Extra.setScore(p, Score.TipoScore.PARTYDUEL);
         }
-        daño = true;
+        damage = true;
         Bukkit.getPluginManager().callEvent(new PartyDuelStartEvent(this));
     }
 
     public void morir(Player p, PlayerDeathEvent e) {
-        if (players1.contains(p) || players2.contains(p)) {
+        if (players1.contains(p.getUniqueId()) || players2.contains(p.getUniqueId())) {
             p.setHealth(20);
             if (e.getEntity().getKiller() != null && e.getEntity().getKiller() instanceof Player && e.getEntity().getKiller() != p) {
                 Player k = e.getEntity().getKiller();
-                if (players1.contains(p)) {
-                    p1.msg("§c" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
-                    p2.msg("§a" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                if (players1.contains(p.getUniqueId())) {
+                    p1.msg("§c" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                    p2.msg("§a" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 } else {
-                    p1.msg("§a" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
-                    p2.msg("§c" + playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                    p1.msg("§a" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                    p2.msg("§c" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 }
 
-                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 Extra.sonido(k, ORB_PICKUP);
             } else {
-                if (players1.contains(p)) {
+                if (players1.contains(p.getUniqueId())) {
                     p1.msg("§c" + playerdeath.replaceAll("<player>", p.getName()));
                     p2.msg("§a" + playerdeath.replaceAll("<player>", p.getName()));
                 } else {
@@ -222,17 +234,13 @@ public class DuelGame {
 
             Extra.sonido(p, VILLAGER_NO);
 
-            if (players1.contains(p)) {
-                players1.remove(p);
-            }
-            if (players2.contains(p)) {
-                players2.remove(p);
-            }
+            players1.remove(p.getUniqueId());
+            players2.remove(p.getUniqueId());
 
-            espectadores.add(p);
+            spectators.add(p.getUniqueId());
 
             if (players1.isEmpty() || players2.isEmpty()) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.ADVENTURE);
                 e.getDrops().clear();
                 ganador();
@@ -246,26 +254,76 @@ public class DuelGame {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 5));
             }
             drops.addAll(e.getDrops());
-            Bukkit.getPluginManager().callEvent(new PartyDuelDeathEvent(this, p, partyControl.partys.get(p)));
+            Bukkit.getPluginManager().callEvent(new PartyDuelDeathEvent(this, p, partyControl.partyHash.get(p)));
         }
     }
 
+
+    public void deathInSumo(Player p, PlayerTouchWaterEvent e) {
+        if (players1.contains(p.getUniqueId()) || players2.contains(p.getUniqueId())) {
+            p.setHealth(20);
+            if (e.getPlayer().getLastDamageCause() instanceof Player) {
+                Player k =  PlayerEvent.getLastAttacker(p);
+                if (players1.contains(p.getUniqueId())) {
+                    p1.msg("§c" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                    p2.msg("§a" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                } else {
+                    p1.msg("§a" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                    p2.msg("§c" + playerKilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                }
+
+                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                Extra.sonido(k, ORB_PICKUP);
+            } else {
+                if (players1.contains(p.getUniqueId())) {
+                    p1.msg("§c" + playerdeath.replaceAll("<player>", p.getName()));
+                    p2.msg("§a" + playerdeath.replaceAll("<player>", p.getName()));
+                } else {
+                    p1.msg("§a" + playerdeath.replaceAll("<player>", p.getName()));
+                    p2.msg("§c" + playerdeath.replaceAll("<player>", p.getName()));
+                }
+                p.sendMessage(youdeath);
+            }
+
+            Extra.sonido(p, VILLAGER_NO);
+
+            players1.remove(p.getUniqueId());
+            players2.remove(p.getUniqueId());
+
+            spectators.add(p.getUniqueId());
+
+            if (players1.isEmpty() || players2.isEmpty()) {
+                Extra.cleanPlayer(p);
+                p.setGameMode(GameMode.ADVENTURE);
+                ganador();
+            } else {
+                ponerSpec(p);
+            }
+            if (extraLang.duelEffectDeathBlindness) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 1));
+            }
+            if (extraLang.duelEffectDeathSlow) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 5));
+            }
+            Bukkit.getPluginManager().callEvent(new PartyDuelDeathEvent(this, p, partyControl.partyHash.get(p)));
+        }
+    }
+
+
     public void leave(Player p, boolean online) {
-        if (players1.contains(p) || players2.contains(p)) {
-            if (players1.contains(p)) {
+        if (players1.contains(p.getUniqueId()) || players2.contains(p.getUniqueId())) {
+            if (players1.contains(p.getUniqueId())) {
                 p1.msg("§c" + playerdeathdisconnect.replaceAll("<player>", p.getName()));
                 p2.msg("§a" + playerdeathdisconnect.replaceAll("<player>", p.getName()));
-                players1.remove(p);
+                players1.remove(p.getUniqueId());
             } else {
                 p1.msg("§a" + playerdeathdisconnect.replaceAll("<player>", p.getName()));
                 p2.msg("§c" + playerdeathdisconnect.replaceAll("<player>", p.getName()));
-                players2.remove(p);
+                players2.remove(p.getUniqueId());
             }
 
             if (players1.isEmpty() || players2.isEmpty()) {
-                if (partyControl.startingPartyDuel.contains(this)) {
-                    partyControl.startingPartyDuel.remove(this);
-                }
+                partyControl.startingPartyDuel.remove(this);
                 ganador();
             } else {
                 for (ItemStack i : p.getInventory().getContents()) {
@@ -283,8 +341,8 @@ public class DuelGame {
                 p.setFlying(false);
                 p.spigot().setCollidesWithEntities(true);
             }
-        } else if (espectadores.contains(p)) {
-            espectadores.remove(p);
+        } else if (spectators.contains(p.getUniqueId())) {
+            spectators.remove(p.getUniqueId());
             if (online) {
                 mostrarPlayer(p);
                 p.setFlying(false);
@@ -296,7 +354,7 @@ public class DuelGame {
     }
 
     private void ganador() {
-        daño = false;
+        damage = false;
 
         Party w = p1, l = p2;
         if (players1.isEmpty()) {
@@ -312,48 +370,48 @@ public class DuelGame {
                         .replaceAll("<owner2>", l.owner.getName())
                         .replaceAll("<players1>", "" + w.players.size())
                         .replaceAll("<players2>", "" + l.players.size())
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", gameMap.getName())
                         .replaceAll("<time>", Extra.secToMin(kit.maxTime - time)));
             } else {
                 msgAll(s);
             }
         }
 
-        for (Player p : w.players) {
-            Extra.limpiarP(p);
+        for (UUID id : w.players) {
+            Player p = Bukkit.getPlayer(id);
+            Extra.cleanPlayer(p);
             p.setMaximumNoDamageTicks(20);
             p.spigot().setCollidesWithEntities(true);
             Extra.setScore(p, Score.TipoScore.PARTYMAIN);
         }
-        for (Player p : l.players) {
-            Extra.limpiarP(p);
+        for (UUID id : l.players) {
+            Player p = Bukkit.getPlayer(id);
+            Extra.cleanPlayer(p);
             p.setMaximumNoDamageTicks(20);
             p.spigot().setCollidesWithEntities(true);
             Extra.setScore(p, Score.TipoScore.PARTYMAIN);
         }
 
-        for (Player o : espectadores) {
-            mostrarPlayer(o);
+        for (UUID id : spectators) {
+            Player p = Bukkit.getPlayer(id);
+            mostrarPlayer(p);
         }
         for (ItemStack i : drops) {
             i.setTypeId(0);
         }
         Bukkit.getPluginManager().callEvent(new PartyDuelFinishEvent(this, w));
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            public void run() {
-                removeParty(p1);
-                removeParty(p2);
-                Extra.terminarMapa(mapa, kit);
-            }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            removeParty(p1);
+            removeParty(p2);
+            Extra.terminarMapa(gameMap, kit);
         }, 20L);
     }
 
     public void removeParty(Party p) {
-        partyControl.partysDuel.remove(p);
-        for (Player o : p.players) {
-            if (hotbars.esperandoEscojaHotbar.contains(o)) {
-                hotbars.esperandoEscojaHotbar.remove(o);
-            }
+        partyControl.partyDuels.remove(p);
+        for (UUID id : p.players) {
+            Player o = Bukkit.getPlayer(id);
+            hotbars.esperandoEscojaHotbar.remove(o);
             if (o.isOnline()) {
                 extraLang.teleportSpawn(o);
                 if (o == p.owner) {
@@ -366,7 +424,7 @@ public class DuelGame {
     }
 
     private void ponerSpec(final Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         if (extraLang.usespectatormode) {
             p.setGameMode(GameMode.valueOf("SPECTATOR"));
         } else {
@@ -376,22 +434,25 @@ public class DuelGame {
             p.setGameMode(GameMode.CREATIVE);
             p.spigot().setCollidesWithEntities(false);
         }
-        espectadores.add(p);
+        spectators.add(p.getUniqueId());
         hotbars.setLeave(p);
     }
 
     private void ocultarPlayer(Player p) {
-        for (Player o : players1) {
+        for (UUID id : players1) {
+            Player o = Bukkit.getPlayer(id);
             if (o != p) {
                 o.hidePlayer(p);
             }
         }
-        for (Player o : players2) {
+        for (UUID id : players2) {
+            Player o = Bukkit.getPlayer(id);
             if (o != p) {
                 o.hidePlayer(p);
             }
         }
-        for (Player o : espectadores) {
+        for (UUID id : spectators) {
+            Player o = Bukkit.getPlayer(id);
             if (o != p) {
                 o.hidePlayer(p);
             }
@@ -409,31 +470,29 @@ public class DuelGame {
     }
 
     public void hit(final EntityDamageByEntityEvent e) {
-        if (!daño) {
+        if (!damage) {
             e.setCancelled(true);
         } else if (e.getDamager() != null && e.getDamager() instanceof Player) {
             Player k = (Player) e.getDamager();
             Player p = (Player) e.getEntity();
             if (!k.spigot().getCollidesWithEntities()) {
                 e.setCancelled(true);
-            } else if (players1.contains(p) && players1.contains(k)) {
+            } else if (players1.contains(p.getUniqueId()) && players1.contains(k.getUniqueId())) {
                 e.setCancelled(true);
-            } else if (players2.contains(p) && players2.contains(k)) {
+            } else if (players2.contains(p.getUniqueId()) && players2.contains(k.getUniqueId())) {
                 e.setCancelled(true);
             }
 
             if (extraLang.showhealwitharrow) {
                 if (e.getDamager() instanceof Arrow) {
                     final Arrow a = (Arrow) e.getDamager();
-                    if (a.getShooter() instanceof Player && ((Player) a.getShooter()) != ((Player) e.getEntity())) {
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                            public void run() {
-                                final Player t = (Player) e.getEntity();
-                                final Player dam = (Player) a.getShooter();
-                                String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getSangre(t.getHealth()));
-                                dam.sendMessage(s);
-                                msgSpec(s);
-                            }
+                    if (a.getShooter() instanceof Player && a.getShooter() != e.getEntity()) {
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                            final Player t = (Player) e.getEntity();
+                            final Player dam = (Player) a.getShooter();
+                            String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getHealt(t.getHealth()));
+                            dam.sendMessage(s);
+                            msgSpec(s);
                         }, 1L);
                     }
                 }
@@ -442,10 +501,10 @@ public class DuelGame {
     }
 
     public boolean place(Block b) {
-        mapa.puesto = true;
-        mapa.bloques.add(b);
-        if (b.getLocation().getBlockY() > mapa.maxY) {
-            mapa.maxY = b.getLocation().getBlockY();
+        gameMap.poss = true;
+        gameMap.blocks.add(b);
+        if (b.getLocation().getBlockY() > gameMap.maxY) {
+            gameMap.maxY = b.getLocation().getBlockY();
         }
         if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
@@ -471,15 +530,15 @@ public class DuelGame {
     }
 
     public void setLava(int y) {
-        mapa.lava = true;
-        mapa.puesto = true;
-        if (y > mapa.maxY) {
-            mapa.maxY = y;
+        gameMap.lava = true;
+        gameMap.poss = true;
+        if (y > gameMap.maxY) {
+            gameMap.maxY = y;
         }
     }
     
     public void removerSec() {
-        if (daño) {
+        if (damage) {
             time--;
         }
     }
@@ -490,7 +549,8 @@ public class DuelGame {
     }
 
     public void msgSpec(String s) {
-        for (Player p : espectadores) {
+        for (UUID id : spectators) {
+            Player p = Bukkit.getPlayer(id);
             p.sendMessage(s);
         }
     }

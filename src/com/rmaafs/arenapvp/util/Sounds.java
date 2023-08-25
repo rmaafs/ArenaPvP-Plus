@@ -1,4 +1,4 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.util;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

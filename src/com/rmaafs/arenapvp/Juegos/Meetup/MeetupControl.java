@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.FIREWORK_LARGE_BLAST;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.mapMeetupLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupOcupadas;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.guis;
-import com.rmaafs.arenapvp.MapaMeetup;
-import com.rmaafs.arenapvp.Score;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.FIREWORK_LARGE_BLAST;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupOcupadas;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import com.rmaafs.arenapvp.entity.MeetupMap;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -99,7 +99,7 @@ public class MeetupControl {
                 } else {
                     if (Extra.isPerm2(p, "apvp.meetup.join.kit.*", "apvp.meetup.join.kit." + meetups.get(slot).kit.getKitName().toLowerCase())) {
                         p.closeInventory();
-                        Extra.limpiarP(p);
+                        Extra.cleanPlayer(p);
                         meetups.get(slot).join(p);
                         meetupsPlaying.put(p, meetups.get(slot));
                         Extra.setScore(p, Score.TipoScore.MEETUPWAITING);
@@ -129,8 +129,8 @@ public class MeetupControl {
         return (mapMeetupLibres.containsKey(k) && !mapMeetupLibres.get(k).isEmpty());
     }
 
-    public MapaMeetup getMap(Kit k) {
-        MapaMeetup m;
+    public MeetupMap getMap(Kit k) {
+        MeetupMap m;
         if (extraLang.chooserandommaps) {
             Random r = new Random();
             m = mapMeetupLibres.get(k).get(r.nextInt(mapMeetupLibres.get(k).size()));

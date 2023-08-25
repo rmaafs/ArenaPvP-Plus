@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.rmaafs.arenapvp.Convertor;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.guis;
+import com.rmaafs.arenapvp.util.Convertor;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

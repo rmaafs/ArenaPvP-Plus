@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.entity.GameMap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -8,12 +8,17 @@ import org.bukkit.event.HandlerList;
 
 public class RankedStartEvent extends Event {
 
-    Player player1, player2;
-    String kitName, mapName;
-    boolean regen;
-    Location spawn1, spawn2, corner1, corner2;
+    private final Player player1;
+    private final Player player2;
+    private final String kitName;
+    private final String mapName;
+    private  boolean regen;
+    private final Location spawn1;
+    private final Location spawn2;
+    private Location corner1;
+    private Location corner2;
 
-    public RankedStartEvent(Player p1, Player p2, String kn, Mapa m) {
+    public RankedStartEvent(Player p1, Player p2, String kn, GameMap m) {
         player1 = p1;
         player2 = p2;
         kitName = kn;
@@ -62,8 +67,6 @@ public class RankedStartEvent extends Event {
     public Location getCorner2() {
         return corner2;
     }
-    
-    
     
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {

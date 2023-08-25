@@ -1,7 +1,6 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.rmaafs.arenapvp.Party.DuelGame;
 import com.rmaafs.arenapvp.Party.Party;
@@ -12,45 +11,53 @@ import org.bukkit.event.HandlerList;
 
 public class PartyDuelDeathEvent extends Event {
 
-    Player ownerKilled, ownerKiller, playerDeath;
-    List<Player> playersKilled, playersKiller, spectators;
-    String kitName, mapName;
-    Location spawnKilled, spawnKiller, corner1, corner2;
+    private final Player ownerKilled;
+    private final Player ownerKiller;
+    private final Player playerDeath;
+    private final Set<UUID> playersKilled;
+    private final Set<UUID> playersKiller;
+    private final Set<UUID> spectators;
+    private final String kitName;
+    private final String mapName;
+    private final Location spawnKilled;
+    private final Location spawnKiller;
+    private final Location corner1;
+    private final Location corner2;
 
     public PartyDuelDeathEvent(DuelGame game, Player d, Party p) {
-        playersKilled = new ArrayList<>();
-        playersKiller = new ArrayList<>();
-        spectators = new ArrayList<>();
+        playersKilled = new HashSet<>();
+        playersKiller = new HashSet<>();
+        spectators = new HashSet<>();
         if (game.p1 == p) {
             ownerKilled = game.p1.owner;
             ownerKiller = game.p2.owner;
             playersKilled.addAll(game.players1);
             playersKiller.addAll(game.players2);
-            spawnKilled = game.mapa.getSpawn1();
-            spawnKiller = game.mapa.getSpawn2();
+            spawnKilled = game.gameMap.getSpawn1();
+            spawnKiller = game.gameMap.getSpawn2();
         } else {
             ownerKilled = game.p2.owner;
             ownerKiller = game.p1.owner;
             playersKilled.addAll(game.players2);
             playersKiller.addAll(game.players1);
-            spawnKilled = game.mapa.getSpawn2();
-            spawnKiller = game.mapa.getSpawn1();
+            spawnKilled = game.gameMap.getSpawn2();
+            spawnKiller = game.gameMap.getSpawn1();
         }
         playerDeath = d;
 
-        spectators.addAll(game.espectadores);
+        spectators.addAll(game.spectators);
         kitName = game.kit.getKitName();
-        mapName = game.mapa.getName();
+        mapName = game.gameMap.getName();
 
-        corner1 = game.mapa.getCorner1();
-        corner2 = game.mapa.getCorner2();
+        corner1 = game.gameMap.getCorner1();
+        corner2 = game.gameMap.getCorner2();
     }
 
     public Player getPlayerDeath() {
         return playerDeath;
     }
 
-    public List<Player> getSpectators() {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 
@@ -78,11 +85,11 @@ public class PartyDuelDeathEvent extends Event {
         return ownerKiller;
     }
 
-    public List<Player> getPlayersKilled() {
+    public Set<UUID> getPlayersKilled() {
         return playersKilled;
     }
 
-    public List<Player> getPlayersKiller() {
+    public Set<UUID> getPlayersKiller() {
         return playersKiller;
     }
 
@@ -93,9 +100,6 @@ public class PartyDuelDeathEvent extends Event {
     public Location getSpawnKiller() {
         return spawnKiller;
     }
-    
-    
-    
 
     private static final HandlerList HANDLERS = new HandlerList();
 

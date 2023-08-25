@@ -1,33 +1,32 @@
 package com.rmaafs.arenapvp.Party;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import com.rmaafs.arenapvp.API.PartyEventFFADeathEvent;
 import com.rmaafs.arenapvp.API.PartyEventFFAFinishEvent;
 import com.rmaafs.arenapvp.API.PartyEventFFAStartEvent;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.CHICKEN_EGG_POP;
-import static com.rmaafs.arenapvp.Extra.FIREWORK_LARGE_BLAST;
-import static com.rmaafs.arenapvp.Extra.NOTE_BASS;
-import static com.rmaafs.arenapvp.Extra.ORB_PICKUP;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_NO;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.Mapa;
-import com.rmaafs.arenapvp.Score;
+import com.rmaafs.arenapvp.API.PlayerTouchWaterEvent;
+import com.rmaafs.arenapvp.Juegos.Duel.PlayerEvent;
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.util.Extra;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+import static com.rmaafs.arenapvp.util.Extra.*;
+
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -35,34 +34,33 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class EventGame {
-    
-    public enum Tipo {
-        
-        FFA, GROUP, REDROVER
-    };
-    
-    Tipo tipo;
+
+    public enum EventType {
+        FFA, GROUP, RED_ROVER
+    }
+
+    EventType tipo;
     public Kit kit;
     public Party party;
-    public Mapa mapa;
-    
-    public List<Player> players = new ArrayList<>();
-    public List<Player> espectadores = new ArrayList<>();
+    public GameMap gameMap;
+
+    public Set<UUID> players = new HashSet<>();
+
+    public Set<UUID> espectadores = new HashSet<>();
     public int pretime, time;
     boolean daño = false;
-    
+
     HashMap<Player, Location> preLocs = new HashMap<>();
     List<ItemStack> drops = new ArrayList<>();
-    
+
     String staringgame;
     List<String> startedFFA, winner;
-    
+
     String playerkilled, youkilled, playerdeath, playerdeathdisconnect, youdeath;
-    
-    public EventGame(Tipo t, Player p) {
+
+    public EventGame(EventType t, Player p) {
         tipo = t;
-        party = partyControl.partys.get(p);
-        
+        party = partyControl.partyHash.get(p);
         playerkilled = Extra.tc(clang.getString("party.game.ffa.playerkilled"));
         youkilled = Extra.tc(clang.getString("party.game.youkilled"));
         playerdeath = Extra.tc(clang.getString("party.game.playerdeath"));
@@ -70,7 +68,7 @@ public class EventGame {
         youdeath = Extra.tc(clang.getString("party.game.youdeath"));
         winner = Extra.tCC(clang.getStringList("party.game.ffa.winner"));
     }
-    
+
     public boolean removePretime() {
         pretime--;
         if (pretime <= 0) {
@@ -83,25 +81,24 @@ public class EventGame {
         }
         return false;
     }
-    
+
     public void preStartGame(Kit k) {
         if ((party.owner.hasPermission("apvp.party.event.ffa." + k.getKitName().toLowerCase())) || (party.owner.hasPermission("apvp.party.event.ffa.*") && party.owner.hasPermission("apvp.party.event.ffa." + k.getKitName().toLowerCase()))) {
             kit = k;
             players.addAll(party.players);
-            
             staringgame = Extra.tc(clang.getString("party.game.startinggame"));
             startedFFA = Extra.tCC(clang.getStringList("party.game.ffa.started"));
             time = kit.maxTime;
-            
             pretime = 6;
             if (Extra.checkMapAvailables(k)) {
-                mapa = Extra.getMap(k);
-                if (tipo == Tipo.FFA) {
-                    partyControl.startingsEvents.add(this);
+                gameMap = Extra.getMap(k);
+                if (tipo == EventType.FFA) {
+                    partyControl.startingEvents.add(this);
                     preTeleportar();
                 }
             } else {
-                for (Player p : players) {
+                for (UUID id : players) {
+                    Player p = Bukkit.getPlayer(id);
                     p.sendMessage(extraLang.noMapsAvailable);
                     Extra.sonido(p, NOTE_BASS);
                 }
@@ -110,15 +107,15 @@ public class EventGame {
             party.owner.sendMessage("§cNo permission.");
         }
     }
-    
+
     public void preTeleportar() {
         boolean noTienePreSpawns = preLocs.isEmpty();
         boolean spawn1 = false;
-        
         PotionEffect pot = new PotionEffect(PotionEffectType.BLINDNESS, 30, 1);
-        for (Player p : players) {
+        for (UUID id : players) {
+            Player p = Bukkit.getPlayer(id);
             if (noTienePreSpawns) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 if (extraLang.duelEffectTeleport) {
                     p.addPotionEffect(pot);
                 }
@@ -132,19 +129,18 @@ public class EventGame {
 //                }
                 hotbars.ponerItemsHotbar(p);
             }
-            
             if (noTienePreSpawns) {
                 if (spawn1) {
-                    preLocs.put(p, mapa.getSpawn1());
+                    preLocs.put(p, gameMap.getSpawn1());
                 } else {
-                    preLocs.put(p, mapa.getSpawn2());
+                    preLocs.put(p, gameMap.getSpawn2());
                 }
                 spawn1 = !spawn1;
             }
             p.teleport(preLocs.get(p));
         }
     }
-    
+
     public void start() {
         preTeleportar();
         preLocs.clear();
@@ -155,21 +151,22 @@ public class EventGame {
             if (s.contains("<")) {
                 msg(s.replaceAll("<kit>", kit.getKitName())
                         .replaceAll("<owner>", party.owner.getName())
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", gameMap.getName())
                         .replaceAll("<time>", Extra.secToMin(time))
                         .replaceAll("<players>", "" + players.size()));
             } else {
                 msg(s);
             }
         }
-        for (Player p : players) {
+        for (UUID id : players) {
+            Player p = Bukkit.getPlayer(id);
             if (hotbars.esperandoEscojaHotbar.contains(p)) {
                 playerConfig.get(p).putInv(1, kit);
                 hotbars.esperandoEscojaHotbar.remove(p);
             }
             p.setGameMode(GameMode.SURVIVAL);
             Extra.sonido(p, FIREWORK_LARGE_BLAST);
-            
+
             if (kit.combo) {
                 p.setMaximumNoDamageTicks(1);
             }
@@ -181,18 +178,16 @@ public class EventGame {
             Extra.setScore(p, Score.TipoScore.PARTYEVENT);
         }
         daño = true;
-        Bukkit.getPluginManager().callEvent(new PartyEventFFAStartEvent(party.owner, players, kit.getKitName(), mapa));
+        Bukkit.getPluginManager().callEvent(new PartyEventFFAStartEvent(party.owner, players, kit.getKitName(), gameMap));
     }
-    
+
     public void leave(Player p, boolean online) {
-        if (players.contains(p)) {
+        if (players.contains(p.getUniqueId())) {
             msg(playerdeathdisconnect.replaceAll("<player>", p.getName()));
-            players.remove(p);
-            
+            players.remove(p.getUniqueId());
+
             if (players.size() == 1) {
-                if (partyControl.startingsEvents.contains(this)) {
-                    partyControl.startingsEvents.remove(this);
-                }
+                partyControl.startingEvents.remove(this);
                 ganador();
             } else {
                 for (ItemStack i : p.getInventory().getContents()) {
@@ -210,8 +205,8 @@ public class EventGame {
                 p.setFlying(false);
                 p.spigot().setCollidesWithEntities(true);
             }
-        } else if (espectadores.contains(p)) {
-            espectadores.remove(p);
+        } else if (espectadores.contains(p.getUniqueId())) {
+            espectadores.remove(p.getUniqueId());
             if (online) {
                 mostrarPlayer(p);
                 p.setFlying(false);
@@ -221,31 +216,29 @@ public class EventGame {
             }
         }
     }
-    
+
     public void morir(Player p, PlayerDeathEvent e) {
-        if (players.contains(p)) {
+        if (players.contains(p.getUniqueId())) {
             p.setHealth(20);
             int mykills = 0;
             if (e.getEntity().getKiller() != null && e.getEntity().getKiller() instanceof Player && e.getEntity().getKiller() != p) {
                 Player k = e.getEntity().getKiller();
                 msg(playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()));
-                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getSangre(k.getHealth())));
+                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
                 Extra.sonido(k, ORB_PICKUP);
             } else {
                 msg(playerdeath.replaceAll("<player>", p.getName()));
                 p.sendMessage(youdeath.replaceAll("<kills>", "" + mykills));
             }
-            
+
             Extra.sonido(p, VILLAGER_NO);
-            
-            if (players.contains(p)) {
-                players.remove(p);
-            }
-            
-            espectadores.add(p);
-            
+
+            players.remove(p.getUniqueId());
+
+            espectadores.add(p.getUniqueId());
+
             if (players.size() == 1) {
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.setGameMode(GameMode.ADVENTURE);
                 e.getDrops().clear();
                 ganador();
@@ -259,30 +252,64 @@ public class EventGame {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 5));
             }
             drops.addAll(e.getDrops());
-            Bukkit.getPluginManager().callEvent(new PartyEventFFADeathEvent(party, kit, mapa, espectadores, p));
+            Bukkit.getPluginManager().callEvent(new PartyEventFFADeathEvent(party, kit, gameMap, espectadores, p));
         }
     }
-    
+
+    public void deathInSumo(Player p, PlayerTouchWaterEvent e) {
+        if (players.contains(p.getUniqueId())) {
+            p.setHealth(20);
+            int mykills = 0;
+            if (e.getPlayer().getLastDamageCause() instanceof Player) {
+                Player k =  PlayerEvent.getLastAttacker(p);
+                msg(playerkilled.replaceAll("<player>", p.getName()).replaceAll("<killer>", k.getName()));
+                p.sendMessage(youkilled.replaceAll("<killer>", k.getName()).replaceAll("<health>", "" + Extra.getHealt(k.getHealth())));
+                Extra.sonido(k, ORB_PICKUP);
+            } else {
+                msg(playerdeath.replaceAll("<player>", p.getName()));
+                p.sendMessage(youdeath.replaceAll("<kills>", "" + mykills));
+            }
+            Extra.sonido(p, VILLAGER_NO);
+            players.remove(p.getUniqueId());
+            espectadores.add(p.getUniqueId());
+            if (players.size() == 1) {
+                Extra.cleanPlayer(p);
+                p.setGameMode(GameMode.ADVENTURE);
+                ganador();
+            } else {
+                ponerSpec(p);
+            }
+            if (extraLang.duelEffectDeathBlindness) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 1));
+            }
+            if (extraLang.duelEffectDeathSlow) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 5));
+            }
+            Bukkit.getPluginManager().callEvent(new PartyEventFFADeathEvent(party, kit, gameMap, espectadores, p));
+        }
+    }
+
     private void ganador() {
         daño = false;
-        final Player p = players.get(0);
+        final Player p = Bukkit.getPlayer(players.iterator().next());
         int maxtime = kit.maxTime;
         for (String s : winner) {
             if (s.contains("<")) {
                 msg(s.replaceAll("<player>", p.getName())
                         .replaceAll("<players>", "" + party.players.size())
                         .replaceAll("<time>", Extra.secToMin(maxtime - time))
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", gameMap.getName())
                         .replaceAll("<kit>", kit.getKitName())
                         .replaceAll("<owner>", party.owner.getName()));
             } else {
                 msg(s);
             }
         }
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.setMaximumNoDamageTicks(20);
         p.spigot().setCollidesWithEntities(true);
-        for (Player o : espectadores) {
+        for (UUID id: espectadores) {
+            Player o = Bukkit.getPlayer(id);
             mostrarPlayer(o);
             Extra.setScore(o, Score.TipoScore.PARTYMAIN);
         }
@@ -290,30 +317,27 @@ public class EventGame {
         for (ItemStack i : drops) {
             i.setTypeId(0);
         }
-        Bukkit.getPluginManager().callEvent(new PartyEventFFAFinishEvent(party, kit, mapa, espectadores, p));
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            public void run() {
-                partyControl.partysEvents.remove(party);
-                for (Player o : party.players) {
-                    if (hotbars.esperandoEscojaHotbar.contains(o)) {
-                        hotbars.esperandoEscojaHotbar.remove(o);
-                    }
-                    if (o.isOnline()) {
-                        extraLang.teleportSpawn(o);
-                        if (o == party.owner) {
-                            party.setHotbar(o);
-                        } else {
-                            hotbars.setLeave(o);
-                        }
+        Bukkit.getPluginManager().callEvent(new PartyEventFFAFinishEvent(party, kit, gameMap, espectadores, p));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            partyControl.partyEvents.remove(party);
+            for (UUID id : party.players) {
+                Player o = Bukkit.getPlayer(id);
+                hotbars.esperandoEscojaHotbar.remove(o);
+                if (o.isOnline()) {
+                    extraLang.teleportSpawn(o);
+                    if (o == party.owner) {
+                        party.setHotbar(o);
+                    } else {
+                        hotbars.setLeave(o);
                     }
                 }
-                Extra.terminarMapa(mapa, kit);
             }
+            terminarMapa(gameMap, kit);
         }, 20L);
     }
-    
+
     private void ponerSpec(final Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         if (extraLang.usespectatormode) {
             p.setGameMode(GameMode.valueOf("SPECTATOR"));
         } else {
@@ -323,25 +347,25 @@ public class EventGame {
             p.setGameMode(GameMode.CREATIVE);
             p.spigot().setCollidesWithEntities(false);
         }
-        if (!espectadores.contains(p)) {
-            espectadores.add(p);
-        }
+        espectadores.add(p.getUniqueId());
         hotbars.setLeave(p);
     }
-    
+
     private void ocultarPlayer(Player p) {
-        for (Player o : players) {
+        for (UUID id : players) {
+            Player o = Bukkit.getPlayer(id);
             if (o != p) {
                 o.hidePlayer(p);
             }
         }
-        for (Player o : espectadores) {
+        for (UUID id: espectadores) {
+            Player o = Bukkit.getPlayer(id);
             if (o != p) {
                 o.hidePlayer(p);
             }
         }
     }
-    
+
     private void mostrarPlayer(Player p) {
         p.setMaximumNoDamageTicks(20);
         p.spigot().setCollidesWithEntities(true);
@@ -351,7 +375,7 @@ public class EventGame {
             }
         }
     }
-    
+
     public void hit(final EntityDamageByEntityEvent e) {
         if (!daño || (e.getDamager() != null && e.getDamager() instanceof Player && !((Player) e.getDamager()).spigot().getCollidesWithEntities())) {
             e.setCancelled(true);
@@ -359,12 +383,12 @@ public class EventGame {
         if (extraLang.showhealwitharrow) {
             if (e.getDamager() instanceof Arrow) {
                 final Arrow a = (Arrow) e.getDamager();
-                if (a.getShooter() instanceof Player && ((Player) a.getShooter()) != ((Player) e.getEntity())) {
+                if (a.getShooter() instanceof Player && a.getShooter() != e.getEntity()) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                         public void run() {
                             final Player t = (Player) e.getEntity();
                             final Player dam = (Player) a.getShooter();
-                            String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getSangre(t.getHealth()));
+                            String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getHealt(t.getHealth()));
                             dam.sendMessage(s);
                             msgSpec(s);
                         }
@@ -375,10 +399,10 @@ public class EventGame {
     }
 
     public boolean place(Block b) {
-        mapa.puesto = true;
-        mapa.bloques.add(b);
-        if (b.getLocation().getBlockY() > mapa.maxY) {
-            mapa.maxY = b.getLocation().getBlockY();
+        gameMap.poss = true;
+        gameMap.blocks.add(b);
+        if (b.getLocation().getBlockY() > gameMap.maxY) {
+            gameMap.maxY = b.getLocation().getBlockY();
         }
         if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
@@ -402,42 +426,47 @@ public class EventGame {
         }
         return true;
     }
-    
+
     public void setLava(int y) {
-        mapa.lava = true;
-        mapa.puesto = true;
-        if (y > mapa.maxY) {
-            mapa.maxY = y;
+        gameMap.lava = true;
+        gameMap.poss = true;
+        if (y > gameMap.maxY) {
+            gameMap.maxY = y;
         }
     }
-    
+
     public void removerSec() {
         if (daño) {
             time--;
         }
     }
-    
+
     public void msg(String s) {
-        for (Player p : players) {
+        for (UUID id : players) {
+            Player p = Bukkit.getPlayer(id);
             p.sendMessage(s);
         }
-        for (Player p : espectadores) {
-            p.sendMessage(s);
+        for (UUID id: espectadores) {
+            Player o = Bukkit.getPlayer(id);
+            o.sendMessage(s);
         }
     }
-    
+
     public void msgSpec(String s) {
-        for (Player p : espectadores) {
-            p.sendMessage(s);
+        for (UUID id: espectadores) {
+            Player o = Bukkit.getPlayer(id);
+            o.sendMessage(s);
         }
     }
-    
+
     public void sonido(String s) {
-        for (Player p : players) {
+        for (UUID id : players) {
+            Player p = Bukkit.getPlayer(id);
             Extra.sonido(p, s);
         }
-        for (Player p : espectadores) {
-            Extra.sonido(p, s);
+        for (UUID id: espectadores) {
+            Player o = Bukkit.getPlayer(id);
+            Extra.sonido(o, s);
         }
     }
 }

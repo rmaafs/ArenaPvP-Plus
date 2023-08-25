@@ -1,9 +1,9 @@
 name: ArenaPvP
-version: 1.2.2
-main: com.rmaafs.arenapvp.Main
-author: Royendero
+version: 1.2.3
+main: com.rmaafs.arenapvp.ArenaPvP
+author: [Royendero,Nymoout]
 description: ArenaPvP
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI,SlimeWorldManager]
 commands:
   apvp:
     description: Admin commands
@@ -13,7 +13,7 @@ commands:
     description: View stats
   uinventario:
     description: View last inventory
-  party:
+  aparty:
     description: Party control
   pc:
     description: Party chat
@@ -21,6 +21,8 @@ commands:
     description: Gift rankeds matches.
   spec:
     description: Spectate a player.
+  duelbot:
+    description: Test a bot
 permissions:
     apvp.meetup.spectator:
         description: Use spectator in Meetup

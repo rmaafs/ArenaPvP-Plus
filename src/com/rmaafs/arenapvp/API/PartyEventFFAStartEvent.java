@@ -1,8 +1,8 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.rmaafs.arenapvp.Mapa;
+import java.util.*;
+
+import com.rmaafs.arenapvp.entity.GameMap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,23 +10,28 @@ import org.bukkit.event.HandlerList;
 
 public class PartyEventFFAStartEvent extends Event{
 
-    Player owner;
-    String kitName, mapName;
-    List<Player> players, spectators;
-    Location spawn1, spawn2, corner1, corner2;
+    private final Player owner;
+    private final String kitName;
+    private final String mapName;
+    private final Set<UUID> players;
+    private final Set<UUID> spectators;
+    private final Location spawn1;
+    private final Location spawn2;
+    private Location corner1;
+    private Location corner2;
     
-    public PartyEventFFAStartEvent(Player ow, List<Player> pla, String kit, Mapa mapa){
-        players = new ArrayList<>();
+    public PartyEventFFAStartEvent(Player ow, Set<UUID> pla, String kit, GameMap gameMap){
+        players = new HashSet<>();
         owner = ow;
         kitName = kit;
-        mapName = mapa.getName();
+        mapName = gameMap.getName();
         players.addAll(pla);
-        spectators = new ArrayList<>();
-        spawn1 = mapa.getSpawn1();
-        spawn2 = mapa.getSpawn2();
-        if (mapa.getCorner1() != null){
-            corner1 = mapa.getCorner1();
-            corner2 = mapa.getCorner2();
+        spectators = new HashSet<>();
+        spawn1 = gameMap.getSpawn1();
+        spawn2 = gameMap.getSpawn2();
+        if (gameMap.getCorner1() != null){
+            corner1 = gameMap.getCorner1();
+            corner2 = gameMap.getCorner2();
         }
     }
 
@@ -42,11 +47,11 @@ public class PartyEventFFAStartEvent extends Event{
         return mapName;
     }
 
-    public List<Player> getPlayers() {
+    public Set<UUID> getPlayers() {
         return players;
     }
 
-    public List<Player> getSpectators() {
+    public Set<UUID> getSpectators() {
         return spectators;
     }
 
@@ -69,13 +74,12 @@ public class PartyEventFFAStartEvent extends Event{
     public static HandlerList getHANDLERS() {
         return HANDLERS;
     }
-    
-    
-    
+
     private static final HandlerList HANDLERS = new HandlerList();
     public HandlerList getHandlers() {
         return HANDLERS;
     }
+
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }

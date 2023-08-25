@@ -1,22 +1,17 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.rmaafs.arenapvp.ArenaPvP;
 import com.rmaafs.arenapvp.GUIS.GuiEvent;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.entity.MeetupMap;
+import com.rmaafs.arenapvp.game.Game;
+import com.rmaafs.arenapvp.manager.config.PlayerConfig;
+import com.rmaafs.arenapvp.manager.data.SQL;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import com.rmaafs.arenapvp.manager.rank.Rangos;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -30,6 +25,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Extra {
 
     public static File config, lang, spawns, stats, scoreboards, ranks, cache;
@@ -38,14 +39,13 @@ public class Extra {
     public static HashMap<Player, PlayerConfig> playerConfig = new HashMap<>();
 
     public static HashMap<String, Kit> kits = new HashMap<>();
-    public static HashMap<Kit, List<Mapa>> mapLibres = new HashMap<>();
-    public static HashMap<Kit, List<Mapa>> mapOcupadas = new HashMap<>();
-    public static HashMap<Kit, List<MapaMeetup>> mapMeetupLibres = new HashMap<>();
-    public static HashMap<Kit, List<MapaMeetup>> mapMeetupOcupadas = new HashMap<>();
+    public static HashMap<Kit, List<GameMap>> mapLibres = new HashMap<>();
+    public static HashMap<Kit, List<GameMap>> mapOcupadas = new HashMap<>();
+    public static HashMap<Kit, List<MeetupMap>> mapMeetupLibres = new HashMap<>();
+    public static HashMap<Kit, List<MeetupMap>> mapMeetupOcupadas = new HashMap<>();
+    public static HashMap<Player, Game> jugandoUno = new HashMap<>();
 
-    public static HashMap<Player, Partida> jugandoUno = new HashMap<>();
-
-    public static List<Partida> preEmpezandoUno = new ArrayList<>();
+    public static List<Game> preEmpezandoUno = new ArrayList<>();
 
     public static HashMap<Player, Score> scores = new HashMap<>();
     public static List<Rangos> rangos = new ArrayList<>();
@@ -56,19 +56,19 @@ public class Extra {
     public static boolean regenRankedsUnrankeds = false;
 
     public static void setFiles() {
-        config = Main.plugin.getcConfig();
+        config = ArenaPvP.plugin.getcConfig();
         cconfig = YamlConfiguration.loadConfiguration(config);
-        lang = Main.plugin.getcLang();
+        lang = ArenaPvP.plugin.getcLang();
         clang = YamlConfiguration.loadConfiguration(lang);
-        spawns = Main.plugin.getcSpawns();
+        spawns = ArenaPvP.plugin.getcSpawns();
         cspawns = YamlConfiguration.loadConfiguration(spawns);
-        stats = Main.plugin.getcSstats();
+        stats = ArenaPvP.plugin.getcSstats();
         cstats = YamlConfiguration.loadConfiguration(stats);
-        scoreboards = Main.plugin.getcScoreboards();
+        scoreboards = ArenaPvP.plugin.getcScoreboards();
         cscoreboards = YamlConfiguration.loadConfiguration(scoreboards);
-        ranks = Main.plugin.getcRanks();
+        ranks = ArenaPvP.plugin.getcRanks();
         cranks = YamlConfiguration.loadConfiguration(ranks);
-        cache = Main.plugin.getcCache();
+        cache = ArenaPvP.plugin.getcCache();
         ccache = YamlConfiguration.loadConfiguration(cache);
 
         nopermission = tc(clang.getString("nopermission"));
@@ -184,30 +184,30 @@ public class Extra {
         if (checar != null && checar.isOnline()) {
             return true;
         }
-        online.sendMessage(Main.extraLang.playerOffline);
+        online.sendMessage(ArenaPvP.extraLang.playerOffline);
         return false;
     }
 
     public static boolean isPlaying(Player p) {
         if (jugandoUno.containsKey(p)
-                || Main.duelControl.esperandoRanked.containsValue(p)
-                || Main.duelControl.esperandoUnRanked.containsValue(p)
+                || ArenaPvP.duelControl.esperandoRanked.containsValue(p)
+                || ArenaPvP.duelControl.esperandoUnRanked.containsValue(p)
                 || CrearKitEvent.creandoKit.containsKey(p)
                 || CrearKitEvent.editandoKit.containsKey(p)
                 || CrearKitEvent.esperandoEditandoKit.contains(p)
                 || GuiEvent.esperandoEliminarKit.contains(p)
                 || CrearMapaEvent.creandoMapa.containsKey(p)
-                || Main.meetupControl.meetupsPlaying.containsKey(p)
-                || Main.meetupControl.creandoEventoMeetup.containsKey(p)
-                || Main.meetupControl.creandoMapaMeetup.containsKey(p)
-                || Main.meetupControl.esperandoCrearEvento.contains(p)
-                || Main.meetupControl.esperandoMapaMeetup.contains(p)
-                || Main.hotbars.editingSlotHotbar.containsKey(p)
-                || Main.hotbars.editingSlotHotbar.containsKey(p)
-                || Main.hotbars.esperandoEscojaHotbar.contains(p)
-                || Main.partyControl.partys.containsKey(p)
-                || !Main.extraLang.worlds.contains(p.getWorld().getName())
-                || Main.specControl.mirando.containsKey(p)) {
+                || ArenaPvP.meetupControl.meetupsPlaying.containsKey(p)
+                || ArenaPvP.meetupControl.creandoEventoMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.creandoMapaMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.esperandoCrearEvento.contains(p)
+                || ArenaPvP.meetupControl.esperandoMapaMeetup.contains(p)
+                || ArenaPvP.hotbars.editingSlotHotbar.containsKey(p)
+                || ArenaPvP.hotbars.editingSlotHotbar.containsKey(p)
+                || ArenaPvP.hotbars.esperandoEscojaHotbar.contains(p)
+                || ArenaPvP.partyControl.partyHash.containsKey(p)
+                || !ArenaPvP.extraLang.worlds.contains(p.getWorld().getName())
+                || ArenaPvP.specControl.mirando.containsKey(p)) {
             return false;
         }
         return true;
@@ -215,33 +215,33 @@ public class Extra {
 
     public static boolean isCheckPlayerPlaying(Player p, Player mensaje) {
         if (jugandoUno.containsKey(p)
-                || Main.duelControl.esperandoRanked.containsValue(p)
-                || Main.duelControl.esperandoUnRanked.containsValue(p)
+                || ArenaPvP.duelControl.esperandoRanked.containsValue(p)
+                || ArenaPvP.duelControl.esperandoUnRanked.containsValue(p)
                 || CrearKitEvent.creandoKit.containsKey(p)
                 || CrearKitEvent.editandoKit.containsKey(p)
                 || CrearKitEvent.esperandoEditandoKit.contains(p)
                 || GuiEvent.esperandoEliminarKit.contains(p)
                 || CrearMapaEvent.creandoMapa.containsKey(p)
-                || Main.meetupControl.meetupsPlaying.containsKey(p)
-                || Main.meetupControl.creandoEventoMeetup.containsKey(p)
-                || Main.meetupControl.creandoMapaMeetup.containsKey(p)
-                || Main.meetupControl.esperandoCrearEvento.contains(p)
-                || Main.meetupControl.esperandoMapaMeetup.contains(p)
-                || Main.hotbars.editingSlotHotbar.containsKey(p)
-                || Main.hotbars.esperandoEscojaHotbar.contains(p)
-                || Main.meetupControl.meetupsPlaying.containsKey(p)
-                || Main.meetupControl.esperandoMapaMeetup.contains(p)
-                || Main.meetupControl.esperandoCrearEvento.contains(p)
-                || Main.meetupControl.creandoMapaMeetup.containsKey(p)
-                || Main.meetupControl.creandoEventoMeetup.containsKey(p)
-                || Main.specControl.mirando.containsKey(p)) {
-            mensaje.sendMessage(Main.extraLang.playerPlayingOne);
+                || ArenaPvP.meetupControl.meetupsPlaying.containsKey(p)
+                || ArenaPvP.meetupControl.creandoEventoMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.creandoMapaMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.esperandoCrearEvento.contains(p)
+                || ArenaPvP.meetupControl.esperandoMapaMeetup.contains(p)
+                || ArenaPvP.hotbars.editingSlotHotbar.containsKey(p)
+                || ArenaPvP.hotbars.esperandoEscojaHotbar.contains(p)
+                || ArenaPvP.meetupControl.meetupsPlaying.containsKey(p)
+                || ArenaPvP.meetupControl.esperandoMapaMeetup.contains(p)
+                || ArenaPvP.meetupControl.esperandoCrearEvento.contains(p)
+                || ArenaPvP.meetupControl.creandoMapaMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.creandoEventoMeetup.containsKey(p)
+                || ArenaPvP.specControl.mirando.containsKey(p)) {
+            mensaje.sendMessage(ArenaPvP.extraLang.playerPlayingOne);
             return false;
-        } else if (Main.partyControl.partys.containsKey(p)) {
-            mensaje.sendMessage(Main.extraLang.playerInParty);
+        } else if (ArenaPvP.partyControl.partyHash.containsKey(p)) {
+            mensaje.sendMessage(ArenaPvP.extraLang.playerInParty);
             return false;
-        } else if (!Main.extraLang.worlds.contains(p.getWorld().getName())) {
-            mensaje.sendMessage(Main.extraLang.playernotintheworld);
+        } else if (!ArenaPvP.extraLang.worlds.contains(p.getWorld().getName())) {
+            mensaje.sendMessage(ArenaPvP.extraLang.playernotintheworld);
             return false;
         }
         return true;
@@ -249,28 +249,28 @@ public class Extra {
 
     public static boolean isCheckYouPlaying(Player p) {
         if (jugandoUno.containsKey(p)
-                || Main.duelControl.esperandoRanked.containsValue(p)
-                || Main.duelControl.esperandoUnRanked.containsValue(p)
+                || ArenaPvP.duelControl.esperandoRanked.containsValue(p)
+                || ArenaPvP.duelControl.esperandoUnRanked.containsValue(p)
                 || CrearKitEvent.creandoKit.containsKey(p)
                 || CrearKitEvent.editandoKit.containsKey(p)
                 || CrearKitEvent.esperandoEditandoKit.contains(p)
                 || GuiEvent.esperandoEliminarKit.contains(p)
                 || CrearMapaEvent.creandoMapa.containsKey(p)
-                || Main.meetupControl.meetupsPlaying.containsKey(p)
-                || Main.meetupControl.creandoEventoMeetup.containsKey(p)
-                || Main.meetupControl.creandoMapaMeetup.containsKey(p)
-                || Main.meetupControl.esperandoCrearEvento.contains(p)
-                || Main.meetupControl.esperandoMapaMeetup.contains(p)
-                || Main.hotbars.editingSlotHotbar.containsKey(p)
-                || Main.hotbars.esperandoEscojaHotbar.contains(p)
-                || Main.specControl.mirando.containsKey(p)) {
-            p.sendMessage(Main.extraLang.youPlayingOne);
+                || ArenaPvP.meetupControl.meetupsPlaying.containsKey(p)
+                || ArenaPvP.meetupControl.creandoEventoMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.creandoMapaMeetup.containsKey(p)
+                || ArenaPvP.meetupControl.esperandoCrearEvento.contains(p)
+                || ArenaPvP.meetupControl.esperandoMapaMeetup.contains(p)
+                || ArenaPvP.hotbars.editingSlotHotbar.containsKey(p)
+                || ArenaPvP.hotbars.esperandoEscojaHotbar.contains(p)
+                || ArenaPvP.specControl.mirando.containsKey(p)) {
+            p.sendMessage(ArenaPvP.extraLang.youPlayingOne);
             return false;
-        } else if (Main.partyControl.partys.containsKey(p)) {
-            p.sendMessage(Main.extraLang.youAreInParty);
+        } else if (ArenaPvP.partyControl.partyHash.containsKey(p)) {
+            p.sendMessage(ArenaPvP.extraLang.youAreInParty);
             return false;
-        } else if (!Main.extraLang.worlds.contains(p.getWorld().getName())) {
-            p.sendMessage(Main.extraLang.playernotintheworld);
+        } else if (!ArenaPvP.extraLang.worlds.contains(p.getWorld().getName())) {
+            p.sendMessage(ArenaPvP.extraLang.playernotintheworld);
             return false;
         }
         return true;
@@ -280,7 +280,7 @@ public class Extra {
 
         SQL.guardarStats(p, true);
 
-        Main.specControl.leave(p, false);
+        ArenaPvP.specControl.leave(p, false);
 
         if (CrearKitEvent.creandoKit.containsKey(p)) {
             CrearKitEvent.creandoKit.remove(p);
@@ -302,24 +302,24 @@ public class Extra {
         if (jugandoUno.containsKey(p)) {
             jugandoUno.get(p).finish(p);
         }
-        if (Main.meetupControl.meetupsPlaying.containsKey(p)) {
-            Main.meetupControl.meetupsPlaying.get(p).leave(p, false);
+        if (ArenaPvP.meetupControl.meetupsPlaying.containsKey(p)) {
+            ArenaPvP.meetupControl.meetupsPlaying.get(p).leave(p, false);
         }
         if (playerConfig.containsKey(p)) {
             playerConfig.get(p).stats.componer();
             playerConfig.remove(p);
         }
 
-        Main.guis.sacar(p);
-        Main.duelControl.sacar(p);
-        Main.hotbars.sacar(p);
-        Main.partyControl.sacar(p);
-        Main.meetupControl.sacar(p);
+        ArenaPvP.guis.sacar(p);
+        ArenaPvP.duelControl.sacar(p);
+        ArenaPvP.hotbars.sacar(p);
+        ArenaPvP.partyControl.sacar(p);
+        ArenaPvP.meetupControl.sacar(p);
     }
 
-    public static Mapa getMap(Kit k) {
-        Mapa m;
-        if (Main.extraLang.chooserandommaps) {
+    public static GameMap getMap(Kit k) {
+        GameMap m;
+        if (ArenaPvP.extraLang.chooserandommaps) {
             Random r = new Random();
             m = mapLibres.get(k).get(r.nextInt(mapLibres.get(k).size()));
         } else {
@@ -337,7 +337,7 @@ public class Extra {
         return true;
     }
 
-    public static void terminarMapa(Mapa m, Kit k) {
+    public static void terminarMapa(GameMap m, Kit k) {
         m.regen(k);
         mapOcupadas.get(k).remove(m);
         if (!mapLibres.get(k).contains(m)) {
@@ -345,7 +345,7 @@ public class Extra {
         }
     }
 
-    public static void terminarMapaMeetup(MapaMeetup m, Kit k) {
+    public static void terminarMapaMeetup(MeetupMap m, Kit k) {
         m.regen(k);
         mapMeetupOcupadas.get(k).remove(m);
         mapMeetupLibres.get(k).add(m);
@@ -393,7 +393,7 @@ public class Extra {
             fc.save(file);
 
         } catch (IOException ex) {
-            Logger.getLogger(Main.class
+            Logger.getLogger(ArenaPvP.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -446,7 +446,7 @@ public class Extra {
     }
 
     public static void avisoConsola(String s) {
-        Main.plugin.getServer().getConsoleSender().sendMessage(s);
+        ArenaPvP.plugin.getServer().getConsoleSender().sendMessage(s);
     }
 
     public static boolean existColor(String color) {
@@ -481,7 +481,7 @@ public class Extra {
         p.spigot().sendMessage(l1);
     }
 
-    public static void limpiarP(Player player) {
+    public static void cleanPlayer(Player player) {
         player.getInventory().clear();
         player.getInventory().setHelmet(new ItemStack(Material.AIR));
         player.getInventory().setChestplate(new ItemStack(Material.AIR));
@@ -496,7 +496,7 @@ public class Extra {
         player.setFireTicks(0);
     }
 
-    public static double getSangre(double sangre) {
+    public static double getHealt(double sangre) {
         if (sangre >= 19) {
             sangre = 10.0;
         } else if (sangre >= 18) {
@@ -546,7 +546,7 @@ public class Extra {
             CHEST_CLOSE, CHEST_OPEN, ITEM_PICKUP, VILLAGER_YES, VILLAGER_NO, HORSE_ARMOR, EXPLODE;
 
     public static void setSoundsVersion() {
-        if (Main.CVERSION.contains("1_7") || Main.CVERSION.contains("1_8")) {
+        if (ArenaPvP.CVERSION.contains("1_7") || ArenaPvP.CVERSION.contains("1_8")) {
             NOTE_BASS = "NOTE_BASS";
             CHICKEN_EGG_POP = "CHICKEN_EGG_POP";
             NOTE_PLING = "NOTE_PLING";

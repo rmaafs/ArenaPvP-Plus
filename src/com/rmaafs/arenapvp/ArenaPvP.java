@@ -5,17 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static com.rmaafs.arenapvp.Extra.cspawns;
-import static com.rmaafs.arenapvp.Extra.cstats;
-import static com.rmaafs.arenapvp.Extra.kits;
-import static com.rmaafs.arenapvp.Extra.mapLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupLibres;
-import static com.rmaafs.arenapvp.Extra.mapMeetupOcupadas;
-import static com.rmaafs.arenapvp.Extra.mapOcupadas;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
+import static com.rmaafs.arenapvp.util.Extra.cspawns;
+import static com.rmaafs.arenapvp.util.Extra.cstats;
+import static com.rmaafs.arenapvp.util.Extra.kits;
+import static com.rmaafs.arenapvp.util.Extra.mapLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupLibres;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupOcupadas;
+import static com.rmaafs.arenapvp.util.Extra.mapOcupadas;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
 
 import com.rmaafs.arenapvp.GUIS.GuiEvent;
 import com.rmaafs.arenapvp.GUIS.KitGui;
@@ -31,6 +30,19 @@ import com.rmaafs.arenapvp.Juegos.Stats.ClickPerSecond;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
 import com.rmaafs.arenapvp.Party.PartyControl;
+import com.rmaafs.arenapvp.commands.Command;
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.entity.MeetupMap;
+import com.rmaafs.arenapvp.manager.config.Lang;
+import com.rmaafs.arenapvp.manager.config.PlayerConfig;
+import com.rmaafs.arenapvp.manager.data.MySQL;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
+import com.rmaafs.arenapvp.manager.spec.SpecControl;
+import com.rmaafs.arenapvp.util.Convertor;
+import com.rmaafs.arenapvp.util.Extra;
+import com.rmaafs.arenapvp.util.Reloj;
+import com.rmaafs.arenapvp.util.file.FileKits;
 import com.rmaafs.arenapvp.versions.Packets;
 import com.rmaafs.arenapvp.versions.v1_7_R4;
 import com.rmaafs.arenapvp.versions.v1_X;
@@ -46,11 +58,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Main extends JavaPlugin implements Listener {
+public class ArenaPvP extends JavaPlugin implements Listener {
 
     //Todo listo al iniciar, leave de la party.
     public static Packets ver;
-    public static Main plugin;
+    public static ArenaPvP plugin;
     public static KitGui guis;
     public static Hotbars hotbars;
     public static DuelControl duelControl;
@@ -84,7 +96,7 @@ public class Main extends JavaPlugin implements Listener {
             cstats.save(stats);
             cspawns.save(spawns);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ArenaPvP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -128,10 +140,11 @@ public class Main extends JavaPlugin implements Listener {
         extraLang = new Lang();
 
         getCommand("apvp").setExecutor(new Command());
+        getCommand("duelbot").setExecutor(new Command());
         getCommand("duel").setExecutor(new Command());
         getCommand("stats").setExecutor(new Command());
         getCommand("uinventario").setExecutor(new Command());
-        getCommand("party").setExecutor(new Command());
+        getCommand("aparty").setExecutor(new Command());
         getCommand("pc").setExecutor(new Command());
         getCommand("giftrankeds").setExecutor(new Command());
         getCommand("spec").setExecutor(new Command());
@@ -155,7 +168,7 @@ public class Main extends JavaPlugin implements Listener {
         getServer().getConsoleSender().sendMessage("§3----------------------------");
 
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             hotbars.setMain(p);
             playerConfig.put(p, new PlayerConfig(p));
             Extra.setScore(p, Score.TipoScore.MAIN);
@@ -180,10 +193,10 @@ public class Main extends JavaPlugin implements Listener {
         File folder = new File(getDataFolder() + File.separator + "kits");
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles != null) {
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
                     try {
-                        File elkit = new File(getDataFolder() + File.separator + "kits" + File.separator + listOfFiles[i].getName());
+                        File elkit = new File(getDataFolder() + File.separator + "kits" + File.separator + listOfFile.getName());
                         FileConfiguration ckit = YamlConfiguration.loadConfiguration(elkit);
                         ItemStack item = new ItemStack(Material.AIR);
                         List<ItemStack> deleteBlocks = new ArrayList<>();
@@ -224,15 +237,15 @@ public class Main extends JavaPlugin implements Listener {
                         kits.put(k.kitName, k);
                         guis.acomodacion.setItem(k.slot, item);
                         guis.itemKits.put(item, k);
-                        
-                        
+
+
                         File carpetaHotbar = new File(plugin.getDataFolder() + File.separator + "hotbar");
-                        if (!carpetaHotbar.exists()){
+                        if (!carpetaHotbar.exists()) {
                             carpetaHotbar.mkdir();
                         }
-                        
-                        
-                        File hot = new File(plugin.getDataFolder() + File.separator + "hotbar" + File.separator + listOfFiles[i].getName());
+
+
+                        File hot = new File(plugin.getDataFolder() + File.separator + "hotbar" + File.separator + listOfFile.getName());
                         boolean g = false;
                         if (!hot.exists()) {
                             hot.createNewFile();
@@ -261,15 +274,15 @@ public class Main extends JavaPlugin implements Listener {
 //                                    Bukkit.getConsoleSender().sendMessage("§4ArenaPvP++ >> §bError sharing maps to " + k.kitName + ", maps of " + ckit.getString("mapsharing") + " no exist.");
 //                                }
                                 List<Kit> lis = new ArrayList<>();
-                                if (sharingMaps.containsKey(ckit.getString("mapsharing"))){
+                                if (sharingMaps.containsKey(ckit.getString("mapsharing"))) {
                                     lis = sharingMaps.get(ckit.getString("mapsharing"));
                                 }
                                 lis.add(k);
                                 sharingMaps.put(ckit.getString("mapsharing"), lis);
-                                List<Mapa> lista = new ArrayList<>();
-                                List<Mapa> lista2 = new ArrayList<>();
-                                List<MapaMeetup> lista3 = new ArrayList<>();
-                                List<MapaMeetup> lista4 = new ArrayList<>();
+                                List<GameMap> lista = new ArrayList<>();
+                                List<GameMap> lista2 = new ArrayList<>();
+                                List<MeetupMap> lista3 = new ArrayList<>();
+                                List<MeetupMap> lista4 = new ArrayList<>();
                                 mapLibres.put(k, lista);
                                 mapOcupadas.put(k, lista2);
                                 mapMeetupLibres.put(k, lista3);
@@ -279,7 +292,7 @@ public class Main extends JavaPlugin implements Listener {
                             loadMaps(k);
                         }
                     } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ArenaPvP.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -291,7 +304,7 @@ public class Main extends JavaPlugin implements Listener {
 
     public void kitsSharingMaps() {
         if (!sharingMaps.isEmpty()) {
-            for (Map.Entry<String, List<Kit>> entry : sharingMaps.entrySet()) {
+            for (java.util.Map.Entry<String, List<Kit>> entry : sharingMaps.entrySet()) {
                 String p = entry.getKey();
                 List<Kit> kl = entry.getValue();
                 for (Kit k : kl) {
@@ -316,18 +329,18 @@ public class Main extends JavaPlugin implements Listener {
         File f = new File(getDataFolder() + File.separator + "maps" + File.separator + k.kitName + ".yml");
         if (f.exists()) {
             FileConfiguration cf = YamlConfiguration.loadConfiguration(f);
-            List<Mapa> lista = new ArrayList<>();
-            List<Mapa> lista2 = new ArrayList<>();
+            List<GameMap> lista = new ArrayList<>();
+            List<GameMap> lista2 = new ArrayList<>();
             for (String s : cf.getKeys(false)) {
                 String w = cf.getString(s + ".w");
                 if (cf.contains(s + ".c1")) {
-                    lista.add(new Mapa(s,
+                    lista.add(new GameMap(s,
                             setLoc(cf, w, s + ".c1", false),
                             setLoc(cf, w, s + ".c2", false),
                             setLoc(cf, w, s + ".s1", true),
                             setLoc(cf, w, s + ".s2", true)));
                 } else {
-                    lista.add(new Mapa(s,
+                    lista.add(new GameMap(s,
                             setLoc(cf, w, s + ".s1", true),
                             setLoc(cf, w, s + ".s2", true)));
                 }
@@ -351,8 +364,8 @@ public class Main extends JavaPlugin implements Listener {
         File f = new File(getDataFolder() + File.separator + "meetupmaps" + File.separator + k.kitName + ".yml");
         if (f.exists()) {
             FileConfiguration cf = YamlConfiguration.loadConfiguration(f);
-            List<MapaMeetup> lista = new ArrayList<>();
-            List<MapaMeetup> lista2 = new ArrayList<>();
+            List<MeetupMap> lista = new ArrayList<>();
+            List<MeetupMap> lista2 = new ArrayList<>();
             for (String s : cf.getKeys(false)) {
                 String w = cf.getString(s + ".w");
                 if (cf.contains(s + ".c1")) {
@@ -363,7 +376,7 @@ public class Main extends JavaPlugin implements Listener {
                                 cf.getInt(s + ".spawn." + number + ".y"),
                                 cf.getInt(s + ".spawn." + number + ".z")));
                     }
-                    lista.add(new MapaMeetup(s,
+                    lista.add(new MeetupMap(s,
                             setLoc(cf, w, s + ".c1", false),
                             setLoc(cf, w, s + ".c2", false),
                             locs));

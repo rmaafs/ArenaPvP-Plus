@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.BURP;
-import static com.rmaafs.arenapvp.Extra.LEVEL_UP;
-import static com.rmaafs.arenapvp.Extra.ORB_PICKUP;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.mapMeetupLibres;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.plugin;
-import com.rmaafs.arenapvp.MapaMeetup;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.BURP;
+import static com.rmaafs.arenapvp.util.Extra.LEVEL_UP;
+import static com.rmaafs.arenapvp.util.Extra.ORB_PICKUP;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.mapMeetupLibres;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+import com.rmaafs.arenapvp.entity.MeetupMap;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -66,7 +66,7 @@ public class CreandoMapaMeetup {
         switch (accion) {
             case CORNER1:
                 p.sendMessage(corner.replaceAll("<number>", "1"));
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.getInventory().setItem(0, new ItemStack(35, 1, (short) 14));
                 break;
             case CORNER2:
@@ -74,7 +74,7 @@ public class CreandoMapaMeetup {
                 break;
             case SPAWNS:
                 p.sendMessage(spawn);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.getInventory().setItem(0, new ItemStack(35, 5, (short) 14));
                 p.setGameMode(GameMode.SURVIVAL);
                 p.setAllowFlight(true);
@@ -86,7 +86,7 @@ public class CreandoMapaMeetup {
                     accion = Accion.SPAWNS;
                     paso();
                 } else {
-                    Extra.limpiarP(p);
+                    Extra.cleanPlayer(p);
                     p.sendMessage(name);
                 }
                 break;
@@ -130,25 +130,25 @@ public class CreandoMapaMeetup {
 
     public void createMap(String s) {
         if (!mapMeetupLibres.containsKey(kit)) {
-            List<MapaMeetup> lista = new ArrayList<>();
+            List<MeetupMap> lista = new ArrayList<>();
             mapMeetupLibres.put(kit, lista);
         }
-        for (MapaMeetup m : mapMeetupLibres.get(kit)) {
+        for (MeetupMap m : mapMeetupLibres.get(kit)) {
             if (m.getName().toLowerCase().equals(s.toLowerCase())) {
                 p.sendMessage(nameexist);
                 paso();
                 return;
             }
         }
-        MapaMeetup m;
-        m = new MapaMeetup(s, corner1, corner2, spawns);
+        MeetupMap m;
+        m = new MeetupMap(s, corner1, corner2, spawns);
         mapMeetupLibres.get(kit).add(m);
         crearFile(s);
         p.sendMessage(created.replaceAll("<kit>", kit.getKitName()).replaceAll("<map>", m.getName()));
         if (meetupControl.creandoMapaMeetup.containsKey(p)) {
             meetupControl.creandoMapaMeetup.remove(p);
         }
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         hotbars.setMain(p);
         extraLang.teleportSpawn(p);
         Extra.sonido(p, LEVEL_UP);

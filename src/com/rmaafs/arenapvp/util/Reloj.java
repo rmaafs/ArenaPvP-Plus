@@ -1,21 +1,22 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.jugandoUno;
-import static com.rmaafs.arenapvp.Extra.scores;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
+import static com.rmaafs.arenapvp.util.Extra.scores;
 
 import com.rmaafs.arenapvp.Juegos.Meetup.GameMeetup;
 import com.rmaafs.arenapvp.Party.DuelGame;
 import com.rmaafs.arenapvp.Party.EventGame;
 import com.rmaafs.arenapvp.Party.Party;
 
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import static com.rmaafs.arenapvp.Main.plugin;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 
+import com.rmaafs.arenapvp.game.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -84,26 +85,26 @@ public class Reloj {
     }
 
     private void preEmpezarDuels() {
-        List<Partida> terminadas = new ArrayList<>();
-        for (Partida partida : Extra.preEmpezandoUno) {
-            if (partida.pretime == 0) {
-                partida.startGame(startingDuelStart);
-                terminadas.add(partida);
+        List<Game> terminadas = new ArrayList<>();
+        for (Game game : Extra.preEmpezandoUno) {
+            if (game.preTime == 0) {
+                game.startGame(startingDuelStart);
+                terminadas.add(game);
             } else {
-                partida.starting(startingGame.replaceAll("<time>", "" + partida.pretime));
-                partida.pretime--;
+                game.starting(startingGame.replaceAll("<time>", "" + game.preTime));
+                game.preTime--;
             }
         }
         Extra.preEmpezandoUno.removeAll(terminadas);
     }
 
     private void quitarSegundoPartidas() {
-        List<Partida> editadas = new ArrayList<>();
-        for (Map.Entry<Player, Partida> entry : jugandoUno.entrySet()) {
-            Partida partida = entry.getValue();
-            if (!editadas.contains(partida)) {
-                partida.removerSec();
-                editadas.add(partida);
+        List<Game> editadas = new ArrayList<>();
+        for (Map.Entry<Player, Game> entry : jugandoUno.entrySet()) {
+            Game game = entry.getValue();
+            if (!editadas.contains(game)) {
+                game.removerSec();
+                editadas.add(game);
             }
         }
     }
@@ -121,7 +122,7 @@ public class Reloj {
 
     private void quitarSegundoPartyDuel() {
         List<DuelGame> editadas = new ArrayList<>();
-        for (Map.Entry<Party, DuelGame> entry : partyControl.partysDuel.entrySet()) {
+        for (Map.Entry<Party, DuelGame> entry : partyControl.partyDuels.entrySet()) {
             DuelGame partida = entry.getValue();
             if (!editadas.contains(partida)) {
                 partida.removerSec();
@@ -132,7 +133,7 @@ public class Reloj {
 
     private void quitarSegundoPartyEvent() {
         List<EventGame> editadas = new ArrayList<>();
-        for (Map.Entry<Party, EventGame> entry : partyControl.partysEvents.entrySet()) {
+        for (Map.Entry<Party, EventGame> entry : partyControl.partyEvents.entrySet()) {
             EventGame partida = entry.getValue();
             if (!editadas.contains(partida)) {
                 partida.removerSec();
@@ -154,13 +155,13 @@ public class Reloj {
 
     private void quitarSegundoPrePartyEvents() {
         List<EventGame> empezadas = new ArrayList<>();
-        for (EventGame game : partyControl.startingsEvents) {
+        for (EventGame game : partyControl.startingEvents) {
             if (game.removePretime()) {
                 game.start();
                 empezadas.add(game);
             }
         }
-        partyControl.startingsEvents.removeAll(empezadas);
+        partyControl.startingEvents.removeAll(empezadas);
     }
 
     private void quitarSegundoPrePartyDuels() {

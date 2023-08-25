@@ -6,17 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.rmaafs.arenapvp.Convertor;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.kits;
-import com.rmaafs.arenapvp.FileKits;
-import com.rmaafs.arenapvp.Kit;
+import com.rmaafs.arenapvp.util.Convertor;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.kits;
+import com.rmaafs.arenapvp.util.file.FileKits;
+import com.rmaafs.arenapvp.manager.kit.Kit;
 
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.plugin;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -44,7 +44,7 @@ public class EditandoKit {
 
     String kitName, kitNameColor;
     ItemStack[] hotbar, armor;
-    List<ItemStack> deleteBlocks = new ArrayList<>();
+    List<ItemStack> deleteBlocks;
     ItemStack itemSpeed, itemStrength, itemSlow, itemFire, itemCombo, itemTime, itemReady, itemNatural;
     public ItemStack itemOnGui;
     int levelSpeed = 1, levelStrength = 1, levelSlow = 1, slot = 0;
@@ -145,14 +145,14 @@ public class EditandoKit {
                 break;
             case INVENTARIO:
                 p.sendMessage(inventory);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.getInventory().setContents(hotbar);
                 p.getInventory().setArmorContents(armor);
                 p.setGameMode(GameMode.CREATIVE);
                 break;
             case ITEMSBORRAR:
                 p.sendMessage(itemstodelete);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 for (ItemStack is : deleteBlocks) {
                     p.getInventory().addItem(is);
                 }
@@ -160,7 +160,7 @@ public class EditandoKit {
                 break;
             case POTIONS:
                 p.sendMessage(potions);
-                Extra.limpiarP(p);
+                Extra.cleanPlayer(p);
                 p.openInventory(inv);
                 break;
             case ITEM:

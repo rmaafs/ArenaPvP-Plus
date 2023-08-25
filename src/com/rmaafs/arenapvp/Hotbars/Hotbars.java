@@ -3,24 +3,24 @@ package com.rmaafs.arenapvp.Hotbars;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import com.rmaafs.arenapvp.Convertor;
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.ITEM_PICKUP;
-import static com.rmaafs.arenapvp.Extra.NOTE_BASS;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_YES;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.jugandoUno;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.duelControl;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import static com.rmaafs.arenapvp.Main.specControl;
-import com.rmaafs.arenapvp.Score;
+import com.rmaafs.arenapvp.util.Convertor;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.ITEM_PICKUP;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_BASS;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_YES;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.duelControl;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static com.rmaafs.arenapvp.ArenaPvP.specControl;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -137,7 +137,7 @@ public class Hotbars {
     }
 
     public void setLeave(Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.getInventory().setItem(slotLeave, itemLeave);
     }
 
@@ -148,12 +148,12 @@ public class Hotbars {
             duelControl.sacarRanked(p);
         } else if (meetupControl.meetupsPlaying.containsKey(p)) {
             meetupControl.meetupsPlaying.get(p).leave(p, true);
-        } else if (partyControl.partys.containsKey(p)) {
-            partyControl.partys.get(p).leave(p, true);
+        } else if (partyControl.partyHash.containsKey(p)) {
+            partyControl.partyHash.get(p).leave(p, true);
         } else if (specControl.mirando.containsKey(p)) {
             specControl.leave(p, true);
         }
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         setMain(p);
         Extra.sonido(p, NOTE_BASS);
         Extra.setScore(p, Score.TipoScore.MAIN);
@@ -166,7 +166,7 @@ public class Hotbars {
 
     public void clickLibro(Player p, int amount, Kit k, boolean middle) {
         extraLang.teleportSpawnHotbar(p);
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         p.setGameMode(GameMode.ADVENTURE);
         playerConfig.get(p).putHotbar(amount, k);
         editingHotbar.remove(p);
@@ -185,7 +185,7 @@ public class Hotbars {
         //guis.kitsHotbar.get(k).save();
 
         editingSlotHotbar.remove(p);
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         extraLang.teleportSpawn(p);
         p.sendMessage(editinghotbarsaved.replaceAll("<kit>", k.kitName).replaceAll("<slot>", "" + slot));
         Extra.sonido(p, VILLAGER_YES);
@@ -203,23 +203,23 @@ public class Hotbars {
 
     public void clickPonerHotbar(Player p, int amount) {
         if (jugandoUno.containsKey(p)) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             playerConfig.get(p).putInv(amount, jugandoUno.get(p).kit);
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);
             p.updateInventory();
         } else if (meetupControl.meetupsPlaying.containsKey(p)) {
-            Extra.limpiarP(p);
+            Extra.cleanPlayer(p);
             playerConfig.get(p).putInv(amount, meetupControl.meetupsPlaying.get(p).kit);
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);
             p.updateInventory();
-        } else if (partyControl.partys.containsKey(p)) {
-            Extra.limpiarP(p);
-            if (partyControl.partysEvents.containsKey(partyControl.partys.get(p))) {
-                playerConfig.get(p).putInv(amount, partyControl.partysEvents.get(partyControl.partys.get(p)).kit);
-            } else if (partyControl.partysDuel.containsKey(partyControl.partys.get(p))) {
-                playerConfig.get(p).putInv(amount, partyControl.partysDuel.get(partyControl.partys.get(p)).kit);
+        } else if (partyControl.partyHash.containsKey(p)) {
+            Extra.cleanPlayer(p);
+            if (partyControl.partyEvents.containsKey(partyControl.partyHash.get(p))) {
+                playerConfig.get(p).putInv(amount, partyControl.partyEvents.get(partyControl.partyHash.get(p)).kit);
+            } else if (partyControl.partyDuels.containsKey(partyControl.partyHash.get(p))) {
+                playerConfig.get(p).putInv(amount, partyControl.partyDuels.get(partyControl.partyHash.get(p)).kit);
             }
             Extra.sonido(p, ITEM_PICKUP);
             esperandoEscojaHotbar.remove(p);

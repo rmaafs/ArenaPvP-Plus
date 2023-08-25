@@ -1,4 +1,4 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,20 +12,29 @@ import com.rmaafs.arenapvp.API.RankedFinishEvent;
 import com.rmaafs.arenapvp.API.RankedStartEvent;
 import com.rmaafs.arenapvp.API.UnRankedFinishEvent;
 import com.rmaafs.arenapvp.API.UnRankedStartEvent;
-import static com.rmaafs.arenapvp.Extra.BURP;
-import static com.rmaafs.arenapvp.Extra.LEVEL_UP;
-import static com.rmaafs.arenapvp.Extra.NOTE_STICKS;
-import static com.rmaafs.arenapvp.Extra.SPLASH2;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_NO;
-import static com.rmaafs.arenapvp.Extra.jugandoUno;
-import static com.rmaafs.arenapvp.Extra.playerConfig;
-import static com.rmaafs.arenapvp.Extra.preEmpezandoUno;
-import static com.rmaafs.arenapvp.Main.duelControl;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.plugin;
-import static com.rmaafs.arenapvp.Main.ver;
+
+import static com.rmaafs.arenapvp.util.Extra.BURP;
+import static com.rmaafs.arenapvp.util.Extra.LEVEL_UP;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_STICKS;
+import static com.rmaafs.arenapvp.util.Extra.SPLASH2;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_NO;
+import static com.rmaafs.arenapvp.util.Extra.jugandoUno;
+import static com.rmaafs.arenapvp.util.Extra.playerConfig;
+import static com.rmaafs.arenapvp.util.Extra.preEmpezandoUno;
+import static com.rmaafs.arenapvp.ArenaPvP.duelControl;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
+import static com.rmaafs.arenapvp.ArenaPvP.ver;
+import static org.bukkit.potion.PotionEffectType.BLINDNESS;
+
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.manager.config.PlayerConfig;
+import com.rmaafs.arenapvp.manager.data.SQL;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
+import com.rmaafs.arenapvp.util.Extra;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -37,61 +46,65 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Partida {
-
-    enum Estilo {
-
+public class Game {
+    enum GameType {
         DUEL, UNRANKED, RANKED
-    };
+    }
 
-    boolean daño = false;
-
-    HashMap<Player, List<Integer>> listClicks = new HashMap<>();
-    int hitsp1 = 0, hitsp2 = 0, premaxp1 = 0, premaxp2 = 0, maxhitsp1 = 0, maxhitsp2 = 0;
-    int flechasp1 = 0, flechasp2 = 0;
-
-    List<Player> spectators = new ArrayList<>();
-    Player p1, p2;
+    private boolean damage = false;
+    private final HashMap<Player, List<Integer>> listClicks = new HashMap<>();
+    public int hitSp1 = 0;
+    public int hitSp2 = 0;
+    public int preMaxP1 = 0;
+    public int preMaxP2 = 0;
+    public int maxHitsP1 = 0;
+    public int maxHitsP2 = 0;
+    public int arrowsP1 = 0;
+    public int arrowsP2 = 0;
+    public List<Player> spectators = new ArrayList<>();
+    public Player p1, p2;
     public Kit kit;
-    Mapa mapa;
-    int bestOf = 1;
-    int winsp1 = 0, winsp2 = 0;
-    int time = 600, pretime;
-    String bestFormat = "";
-    Estilo estilo = Estilo.DUEL;
+    public GameMap gameMap;
+    public int bestOf = 1;
+    public int winsP1 = 0;
+    public int winsP2 = 0;
+    public int time = 600;
+    public int preTime;
+    public String bestFormat = "";
+    public GameType gameType = GameType.DUEL;
 
-    public Partida(Player p, Player pp, Kit k, Mapa m, String bestFor, int best) {
-        p1 = p;
-        p2 = pp;
-        kit = k;
-        mapa = m;
+    public Game(Player player, Player duelPlayer, Kit kit, GameMap gameMap, String bestFor, int best) {
+        p1 = player;
+        p2 = duelPlayer;
+        this.kit = kit;
+        this.gameMap = gameMap;
         bestFormat = bestFor;
         bestOf = best;
-        preEmpezar();
-        
-        if (!playerConfig.containsKey(p1)){
+        preStart();
+
+        if (!playerConfig.containsKey(p1)) {
             playerConfig.put(p1, new PlayerConfig(p1));
         }
-        if (!playerConfig.containsKey(p2)){
+        if (!playerConfig.containsKey(p2)) {
             playerConfig.put(p2, new PlayerConfig(p2));
         }
     }
 
-    public Partida(Player p, Player pp, Kit k, Mapa m, boolean ranked) {
+    public Game(Player p, Player pp, Kit k, GameMap m, boolean ranked) {
         p1 = p;
         p2 = pp;
         kit = k;
-        mapa = m;
-        
-        if (!playerConfig.containsKey(p1)){
+        gameMap = m;
+
+        if (!playerConfig.containsKey(p1)) {
             playerConfig.put(p1, new PlayerConfig(p1));
         }
-        if (!playerConfig.containsKey(p2)){
+        if (!playerConfig.containsKey(p2)) {
             playerConfig.put(p2, new PlayerConfig(p2));
         }
-        
+
         if (ranked) {
-            estilo = Estilo.RANKED;
+            gameType = GameType.RANKED;
             if (!p1.hasPermission("apvp.rankedfree." + k.getKitName().toLowerCase())) {
                 playerConfig.get(p1).removeRanked();
             }
@@ -101,7 +114,7 @@ public class Partida {
             }
             playerConfig.get(p2).addPlayed(kit);
         } else {
-            estilo = Estilo.UNRANKED;
+            gameType = GameType.UNRANKED;
             if (!p1.hasPermission("apvp.unrankedfree." + k.getKitName().toLowerCase())) {
                 playerConfig.get(p1).removeUnRanked();
             }
@@ -109,26 +122,24 @@ public class Partida {
                 playerConfig.get(p2).removeUnRanked();
             }
         }
-        preEmpezar();
+        preStart();
     }
 
-    private void preEmpezar() {
-        List<Integer> lista1 = new ArrayList<>();
-        List<Integer> lista2 = new ArrayList<>();
-        listClicks.put(p1, lista1);
-        listClicks.put(p2, lista2);
-        pretime = extraLang.pretimematch;
-        time = kit.maxTime + pretime;
-        preparar(p1);
-        preparar(p2);
+    private void preStart() {
+        listClicks.put(p1, new ArrayList<>());
+        listClicks.put(p2, new ArrayList<>());
+        preTime = extraLang.pretimematch;
+        time = kit.maxTime + preTime;
+        preparePlayers(p1);
+        preparePlayers(p2);
     }
 
-    private void preparar(Player p) {
+    private void preparePlayers(Player p) {
         p.closeInventory();
         p.setGameMode(GameMode.ADVENTURE);
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         if (extraLang.duelEffectTeleport) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 1));
+            p.addPotionEffect(new PotionEffect(BLINDNESS, 30, 1));
         }
 //        if (kit.combo) {
 //            p.setMaximumNoDamageTicks(1);
@@ -138,39 +149,39 @@ public class Partida {
 //                p.addPotionEffect(pot);
 //            }
 //        }
-        mandarSpawn(p);
+        teleportToSpawn(p);
         hotbars.ponerItemsHotbar(p);
     }
 
-    public void mandarSpawn(Player p) {
+    public void teleportToSpawn(Player p) {
         if (p1 == p) {
-            p1.teleport(mapa.getSpawn1());
+            p1.teleport(gameMap.getSpawn1());
         } else {
-            p2.teleport(mapa.getSpawn2());
+            p2.teleport(gameMap.getSpawn2());
         }
         Extra.sonido(p, SPLASH2);
     }
 
     public void starting(String s) {
         msg(s);
-        sonido(NOTE_STICKS);
-        if (pretime == 3) {
-            mandarSpawn(p1);
-            mandarSpawn(p2);
+        playSound(NOTE_STICKS);
+        if (preTime == 3) {
+            teleportToSpawn(p1);
+            teleportToSpawn(p2);
         }
     }
 
     public void startGame(List<String> msg) {
-        hitsp1 = 0;
-        hitsp2 = 0;
-        maxhitsp1 = 0;
-        maxhitsp2 = 0;
-        premaxp1 = 0;
-        premaxp2 = 0;
-        flechasp1 = 0;
-        flechasp2 = 0;
+        hitSp1 = 0;
+        hitSp2 = 0;
+        maxHitsP1 = 0;
+        maxHitsP2 = 0;
+        preMaxP1 = 0;
+        preMaxP2 = 0;
+        arrowsP1 = 0;
+        arrowsP2 = 0;
 
-        if (estilo == Estilo.RANKED) {
+        if (gameType == GameType.RANKED) {
             for (String s : duelControl.startingRanked) {
                 msg(s.replaceAll("<player1>", p1.getName())
                         .replaceAll("<player2>", p2.getName())
@@ -178,13 +189,13 @@ public class Partida {
                         .replaceAll("<elo2>", "" + playerConfig.get(p2).getElo(kit))
                         .replaceAll("<rank1>", playerConfig.get(p1).getRank(kit))
                         .replaceAll("<rank2>", playerConfig.get(p2).getRank(kit))
-                        .replaceAll("<map>", mapa.getName())
+                        .replaceAll("<map>", gameMap.getName())
                         .replaceAll("<time>", Extra.secToMin(time))
                         .replaceAll("<kit>", kit.kitName));
             }
             Extra.setScore(p1, Score.TipoScore.RANKED);
             Extra.setScore(p2, Score.TipoScore.RANKED);
-            Bukkit.getPluginManager().callEvent(new RankedStartEvent(p1, p2, kit.getKitName(), mapa));
+            Bukkit.getPluginManager().callEvent(new RankedStartEvent(p1, p2, kit.getKitName(), gameMap));
         } else {
             for (String s : msg) {
                 msg(s.replaceAll("<player1>", p1.getName())
@@ -192,21 +203,21 @@ public class Partida {
                         .replaceAll("<kit>", kit.kitName)
                         .replaceAll("<time>", Extra.secToMin(time))
                         .replaceAll("<format>", bestFormat)
-                        .replaceAll("<map>", mapa.getName()));
+                        .replaceAll("<map>", gameMap.getName()));
             }
-            if (estilo == Estilo.UNRANKED) {
+            if (gameType == GameType.UNRANKED) {
                 Extra.setScore(p1, Score.TipoScore.UNRANKED);
                 Extra.setScore(p2, Score.TipoScore.UNRANKED);
-                Bukkit.getPluginManager().callEvent(new UnRankedStartEvent(p1, p2, kit.getKitName(), mapa));
+                Bukkit.getPluginManager().callEvent(new UnRankedStartEvent(p1, p2, kit.getKitName(), gameMap));
             } else {
                 Extra.setScore(p1, Score.TipoScore.DUEL);
                 Extra.setScore(p2, Score.TipoScore.DUEL);
-                Bukkit.getPluginManager().callEvent(new DuelStartEvent(p1, p2, kit.getKitName(), mapa, bestOf, winsp1, winsp2));
+                Bukkit.getPluginManager().callEvent(new DuelStartEvent(p1, p2, kit.getKitName(), gameMap, bestOf, winsP1, winsP2));
             }
 
         }
 
-        sonido(BURP);
+        playSound(BURP);
         p1.setGameMode(GameMode.SURVIVAL);
         p2.setGameMode(GameMode.SURVIVAL);
         if (hotbars.esperandoEscojaHotbar.contains(p1)) {
@@ -245,20 +256,20 @@ public class Partida {
             }
         }
 
-        daño = true;
+        damage = true;
 
-        mandarSpawn(p1);
-        mandarSpawn(p2);
+        teleportToSpawn(p1);
+        teleportToSpawn(p2);
     }
 
     public void finish(final Player l) {
-        daño = false;
+        damage = false;
         Player f = p2;
         if (p2 == l) {
             f = p1;
-            winsp1++;
+            winsP1++;
         } else {
-            winsp2++;
+            winsP2++;
         }
         final Player w = f;
 
@@ -279,25 +290,25 @@ public class Partida {
             promcs2 = promcs2 + (i / listClicks.get(l).size());
         }
 
-        if (premaxp1 > maxhitsp1) {
-            maxhitsp1 = premaxp1;
+        if (preMaxP1 > maxHitsP1) {
+            maxHitsP1 = preMaxP1;
         }
-        if (premaxp2 > maxhitsp2) {
-            maxhitsp2 = premaxp2;
-        }
-
-        int h1 = hitsp1, h2 = hitsp2, m1 = maxhitsp1, m2 = maxhitsp2;
-        if (w == p2) {
-            h1 = hitsp2;
-            h2 = hitsp1;
-            m1 = maxhitsp2;
-            m2 = maxhitsp1;
+        if (preMaxP2 > maxHitsP2) {
+            maxHitsP2 = preMaxP2;
         }
 
-        int f1 = flechasp1, f2 = flechasp2;
+        int h1 = hitSp1, h2 = hitSp2, m1 = maxHitsP1, m2 = maxHitsP2;
         if (w == p2) {
-            f1 = flechasp2;
-            f2 = flechasp1;
+            h1 = hitSp2;
+            h2 = hitSp1;
+            m1 = maxHitsP2;
+            m2 = maxHitsP1;
+        }
+
+        int f1 = arrowsP1, f2 = arrowsP2;
+        if (w == p2) {
+            f1 = arrowsP2;
+            f2 = arrowsP1;
         }
 
         for (String s : duelControl.winStats) {
@@ -324,7 +335,7 @@ public class Partida {
 
         msg(duelControl.win.replaceAll("<winner>", w.getName())
                 .replaceAll("<loser>", l.getName())
-                .replaceAll("<health>", "" + Extra.getSangre(w.getHealth()))
+                .replaceAll("<health>", "" + Extra.getHealt(w.getHealth()))
                 .replaceAll("<kit>", kit.kitName));
 
         ponerLastInventory(w);
@@ -333,11 +344,11 @@ public class Partida {
         Extra.text(w, duelControl.msgLastInv, duelControl.hoverLastInv.replaceAll("<player>", l.getName()), "/uinventario " + l.getName(), "AQUA");
         Extra.text(l, duelControl.msgLastInv, duelControl.hoverLastInv.replaceAll("<player>", w.getName()), "/uinventario " + w.getName(), "AQUA");
 
-        Extra.limpiarP(w);
-        Extra.limpiarP(l);
+        Extra.cleanPlayer(w);
+        Extra.cleanPlayer(l);
 
         if (extraLang.duelEffectDeathBlindness) {
-            l.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 1));
+            l.addPotionEffect(new PotionEffect(BLINDNESS, 30, 1));
         }
         if (extraLang.duelEffectDeathSlow) {
             l.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 5));
@@ -346,19 +357,13 @@ public class Partida {
             l.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20, 1));
             w.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20, 1));
         }
-        sonido(LEVEL_UP);
+        playSound(LEVEL_UP);
 
-        if (Extra.preEmpezandoUno.contains(jugandoUno.get(w))) {
-            Extra.preEmpezandoUno.remove(jugandoUno.get(w));
-        }
-        if (hotbars.esperandoEscojaHotbar.contains(w)) {
-            hotbars.esperandoEscojaHotbar.remove(w);
-        }
-        if (hotbars.esperandoEscojaHotbar.contains(l)) {
-            hotbars.esperandoEscojaHotbar.remove(l);
-        }
+        Extra.preEmpezandoUno.remove(jugandoUno.get(w));
+        hotbars.esperandoEscojaHotbar.remove(w);
+        hotbars.esperandoEscojaHotbar.remove(l);
 
-        if (estilo == Estilo.RANKED) {
+        if (gameType == GameType.RANKED) {
             int elo = Extra.getDiferenciaElo(playerConfig.get(w).getElo(kit) - playerConfig.get(l).getElo(kit));
 
             playerConfig.get(w).addElo(kit, elo);
@@ -373,14 +378,14 @@ public class Partida {
                     .replaceAll("<elo>", "" + elo));
             Extra.sonido(w, LEVEL_UP);
             Extra.sonido(l, VILLAGER_NO);
-            Bukkit.getPluginManager().callEvent(new RankedFinishEvent(w, l, kit.getKitName(), mapa, elo));
-        } else if (estilo == Estilo.UNRANKED) {
-            Bukkit.getPluginManager().callEvent(new UnRankedFinishEvent(w, l, kit.getKitName(), mapa));
+            Bukkit.getPluginManager().callEvent(new RankedFinishEvent(w, l, kit.getKitName(), gameMap, elo));
+        } else if (gameType == GameType.UNRANKED) {
+            Bukkit.getPluginManager().callEvent(new UnRankedFinishEvent(w, l, kit.getKitName(), gameMap));
         } else {
             if (w == p1) {
-                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), mapa, bestOf, winsp1, winsp2));
+                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), gameMap, bestOf, winsP1, winsP2));
             } else {
-                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), mapa, bestOf, winsp2, winsp1));
+                Bukkit.getPluginManager().callEvent(new DuelFinishEvent(w, l, kit.getKitName(), gameMap, bestOf, winsP2, winsP1));
             }
         }
 
@@ -391,32 +396,32 @@ public class Partida {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             public void run() {
                 if ((bestOf != 1 && w.isOnline() && l.isOnline())
-                        && ((bestOf == 3 && (winsp1 != 2 && winsp2 != 2))
-                        || (bestOf == 5 && (winsp1 != 3 && winsp2 != 3)))) {
+                        && ((bestOf == 3 && (winsP1 != 2 && winsP2 != 2))
+                        || (bestOf == 5 && (winsP1 != 3 && winsP2 != 3)))) {
                     preEmpezandoUno.add(jugandoUno.get(w));
-                    mapa.regen(kit);
-                    preEmpezar();
+                    gameMap.regen(kit);
+                    preStart();
                 } else {
                     sacarPartida(w);
                     sacarPartida(l);
                     if (bestOf != 1) {
-                        int points1 = winsp1;
-                        int points2 = winsp2;
+                        int points1 = winsP1;
+                        int points2 = winsP2;
                         if (w == p2) {
-                            points1 = winsp2;
-                            points2 = winsp1;
+                            points1 = winsP2;
+                            points2 = winsP1;
                         }
                         msg(duelControl.won.replaceAll("<winner>", w.getName())
                                 .replaceAll("<loser>", l.getName())
                                 .replaceAll("<points1>", "" + points1)
                                 .replaceAll("<points2>", "" + points2));
                     }
-                    Extra.terminarMapa(mapa, kit);
-                    if (estilo == Estilo.RANKED) {
+                    Extra.terminarMapa(gameMap, kit);
+                    if (gameType == GameType.RANKED) {
                         guis.setNumberRankedPlaying(kit, false);
                         SQL.guardarStats(w, false);
                         SQL.guardarStats(l, false);
-                    } else if (estilo == Estilo.UNRANKED) {
+                    } else if (gameType == GameType.UNRANKED) {
                         guis.setNumberUnRankedPlaying(kit, false);
                     }
                 }
@@ -447,7 +452,7 @@ public class Partida {
         p2.sendMessage(s);
     }
 
-    public void sonido(String s) {
+    public void playSound(String s) {
         Extra.sonido(p1, s);
         Extra.sonido(p2, s);
     }
@@ -460,7 +465,7 @@ public class Partida {
 
     public void removerSec() {
         time--;
-        if (daño) {
+        if (damage) {
             if (ClickPerSecond.cooldown.containsKey(p1)) {
                 listClicks.get(p1).add(ClickPerSecond.cooldown.get(p1));
                 ClickPerSecond.cooldown.remove(p1);
@@ -473,10 +478,10 @@ public class Partida {
     }
 
     public boolean place(Block b) {
-        mapa.puesto = true;
-        mapa.bloques.add(b);
-        if (b.getLocation().getBlockY() > mapa.maxY) {
-            mapa.maxY = b.getLocation().getBlockY();
+        gameMap.poss = true;
+        gameMap.blocks.add(b);
+        if (b.getLocation().getBlockY() > gameMap.maxY) {
+            gameMap.maxY = b.getLocation().getBlockY();
         }
         if (b.getType().equals(Material.FIRE) && kit.deleteBlocks.contains(new ItemStack(Material.getMaterial(259)))) {
             return false;
@@ -502,48 +507,48 @@ public class Partida {
     }
 
     public void setLava(int y) {
-        mapa.lava = true;
-        mapa.puesto = true;
-        if (y > mapa.maxY) {
-            mapa.maxY = y;
+        gameMap.lava = true;
+        gameMap.poss = true;
+        if (y > gameMap.maxY) {
+            gameMap.maxY = y;
         }
     }
 
     public void dañar(final EntityDamageByEntityEvent e) {
-        if (!daño) {
+        if (!damage) {
             e.setCancelled(true);
         } else {
             if (e.getDamager() instanceof Player) {
-                if (((Player) e.getEntity()) == p1) {
-                    hitsp1++;
-                    premaxp1++;
-                    if (premaxp2 > maxhitsp2) {
-                        maxhitsp2 = premaxp2;
+                if (e.getEntity() == p1) {
+                    hitSp1++;
+                    preMaxP1++;
+                    if (preMaxP2 > maxHitsP2) {
+                        maxHitsP2 = preMaxP2;
                     }
-                    premaxp2 = 0;
+                    preMaxP2 = 0;
                 } else {
-                    hitsp2++;
-                    premaxp2++;
-                    if (premaxp1 > maxhitsp1) {
-                        maxhitsp1 = premaxp1;
+                    hitSp2++;
+                    preMaxP2++;
+                    if (preMaxP1 > maxHitsP1) {
+                        maxHitsP1 = preMaxP1;
                     }
-                    premaxp1 = 0;
+                    preMaxP1 = 0;
                 }
             } else if (e.getDamager() instanceof Arrow) {
                 final Arrow a = (Arrow) e.getDamager();
-                if (a.getShooter() instanceof Player && ((Player) a.getShooter()) != ((Player) e.getEntity())) {
+                if (a.getShooter() instanceof Player && a.getShooter() != e.getEntity()) {
                     Player p = (Player) a.getShooter();
                     if (p == p1) {
-                        flechasp1++;
+                        arrowsP1++;
                     } else {
-                        flechasp2++;
+                        arrowsP2++;
                     }
                     if (extraLang.showhealwitharrow) {
                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                             public void run() {
                                 final Player t = (Player) e.getEntity();
                                 final Player dam = (Player) a.getShooter();
-                                String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getSangre(t.getHealth()));
+                                String s = extraLang.viewheal.replaceAll("<player>", t.getName()).replaceAll("<heal>", "" + Extra.getHealt(t.getHealth()));
                                 dam.sendMessage(s);
                                 msgSpec(s);
                             }

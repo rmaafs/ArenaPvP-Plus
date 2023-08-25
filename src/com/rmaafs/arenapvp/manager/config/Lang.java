@@ -1,10 +1,12 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.manager.config;
 
 import java.util.List;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Extra.cscoreboards;
-import static com.rmaafs.arenapvp.Extra.cspawns;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.util.Extra.cscoreboards;
+import static com.rmaafs.arenapvp.util.Extra.cspawns;
+
+import com.rmaafs.arenapvp.util.Extra;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

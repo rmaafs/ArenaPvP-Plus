@@ -7,7 +7,7 @@
     <groupId>com.rmaafs.arenapvp</groupId>
     <artifactId>ArenaPvP</artifactId>
     <name>ArenaPvP+</name>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <description>Plugin de Minecraft competitivo</description>
 
     <repositories>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.8-SNAPSHOT</version>
+            <version>1.16-R0.4</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -44,6 +44,14 @@
             <version>2.10.9</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/PlaceholderAPI-2.10.9.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rmaafs.arenapvp</groupId>
+            <artifactId>Bot</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Bot.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -71,6 +79,14 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
         </plugins>

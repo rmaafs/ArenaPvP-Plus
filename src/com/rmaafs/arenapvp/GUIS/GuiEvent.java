@@ -6,15 +6,15 @@ import java.util.List;
 import com.rmaafs.arenapvp.KitControl.CrearKit;
 import com.rmaafs.arenapvp.KitControl.CrearKitEvent;
 import com.rmaafs.arenapvp.KitControl.EditandoKit;
-import com.rmaafs.arenapvp.MapControl.CrearMapa;
+import com.rmaafs.arenapvp.MapControl.CreateMap;
 import com.rmaafs.arenapvp.MapControl.CrearMapaEvent;
 
-import static com.rmaafs.arenapvp.Main.duelControl;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.hotbars;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import static com.rmaafs.arenapvp.Main.partyControl;
-import static com.rmaafs.arenapvp.Main.plugin;
+import static com.rmaafs.arenapvp.ArenaPvP.duelControl;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import static com.rmaafs.arenapvp.ArenaPvP.partyControl;
+import static com.rmaafs.arenapvp.ArenaPvP.plugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -81,19 +81,19 @@ public class GuiEvent implements Listener {
             } else if (e.getInventory().getName().equals(partyControl.invEventsName)
                     || e.getInventory().getName().equals(partyControl.invConfigName)) {
                 e.setCancelled(true);
-                partyControl.partys.get(p).clickGui(p, i);
+                partyControl.partyHash.get(p).clickGui(p, i);
             } else if (e.getInventory().getName().equals(partyControl.invPartysName)) {
                 e.setCancelled(true);
-                partyControl.partys.get(p).clickGuiPartys(p, i);
-            } else if (partyControl.partys.containsKey(p)
-                    && partyControl.partysEvents.containsKey(partyControl.partys.get(p))
+                partyControl.partyHash.get(p).clickGuiPartys(p, i);
+            } else if (partyControl.partyHash.containsKey(p)
+                    && partyControl.partyEvents.containsKey(partyControl.partyHash.get(p))
                     && e.getInventory().getName().equals(guis.invChooseKit.getName())) {
                 e.setCancelled(true);
-                partyControl.partysEvents.get(partyControl.partys.get(p)).preStartGame(guis.getKitSlot(e.getSlot()));
+                partyControl.partyEvents.get(partyControl.partyHash.get(p)).preStartGame(guis.getKitSlot(e.getSlot()));
             } else if (e.getInventory().getName().equals(guis.invChooseKit.getName())
-                    && partyControl.preduels.containsKey(p)) {
+                    && partyControl.preDuels.containsKey(p)) {
                 e.setCancelled(true);
-                partyControl.partys.get(p).mandarDuel(guis.getKitSlot(e.getSlot()));
+                partyControl.partyHash.get(p).mandarDuel(guis.getKitSlot(e.getSlot()));
             } //---------------------------------------- 
             else if (e.getClickedInventory() != null && e.getClickedInventory().equals(guis.invChooseKit)) {
                 e.setCancelled(true);
@@ -199,14 +199,14 @@ public class GuiEvent implements Listener {
                 meetupControl.esperandoMapaMeetup.remove(p);
             } else if (meetupControl.esperandoCrearEvento.contains(p)) {
                 meetupControl.esperandoCrearEvento.remove(p);
-            } else if (partyControl.partys.containsKey(p)
-                    && partyControl.partysEvents.containsKey(partyControl.partys.get(p))
-                    && partyControl.partysEvents.get(partyControl.partys.get(p)).kit == null /*&& e.getInventory().getName().equals(guis.invChooseKit.getName())*/) {
-                partyControl.partysEvents.remove(partyControl.partys.get(p));
-            } else if (partyControl.partys.containsKey(p)
-                    && partyControl.preduels.containsKey(p)
-                    && partyControl.preduels.get(p).getKit() == null) {
-                partyControl.preduels.remove(p);
+            } else if (partyControl.partyHash.containsKey(p)
+                    && partyControl.partyEvents.containsKey(partyControl.partyHash.get(p))
+                    && partyControl.partyEvents.get(partyControl.partyHash.get(p)).kit == null /*&& e.getInventory().getName().equals(guis.invChooseKit.getName())*/) {
+                partyControl.partyEvents.remove(partyControl.partyHash.get(p));
+            } else if (partyControl.partyHash.containsKey(p)
+                    && partyControl.preDuels.containsKey(p)
+                    && partyControl.preDuels.get(p).getKit() == null) {
+                partyControl.preDuels.remove(p);
             }
         } else if (e.getInventory().getName().equals(guis.guiPreviewKitName)) {
             if (meetupControl.viendoMiddle.contains(p)) {
@@ -219,6 +219,6 @@ public class GuiEvent implements Listener {
     public void clickCrearMapa(ItemStack i, Player p) {
         p.closeInventory();
         guis.escojiendoCrearMapa.remove(p);
-        CrearMapaEvent.creandoMapa.put(p, new CrearMapa(p, guis.itemKits.get(i)));
+        CrearMapaEvent.creandoMapa.put(p, new CreateMap(p, guis.itemKits.get(i)));
     }
 }

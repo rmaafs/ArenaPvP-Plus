@@ -1,16 +1,16 @@
 package com.rmaafs.arenapvp.Juegos.Meetup;
 
-import com.rmaafs.arenapvp.Extra;
-import static com.rmaafs.arenapvp.Extra.HORSE_ARMOR;
-import static com.rmaafs.arenapvp.Extra.NOTE_BASS;
-import static com.rmaafs.arenapvp.Extra.NOTE_PLING;
-import static com.rmaafs.arenapvp.Extra.VILLAGER_YES;
-import static com.rmaafs.arenapvp.Extra.cconfig;
-import static com.rmaafs.arenapvp.Extra.clang;
-import com.rmaafs.arenapvp.Kit;
-import static com.rmaafs.arenapvp.Main.guis;
-import static com.rmaafs.arenapvp.Main.meetupControl;
-import com.rmaafs.arenapvp.Score;
+import com.rmaafs.arenapvp.util.Extra;
+import static com.rmaafs.arenapvp.util.Extra.HORSE_ARMOR;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_BASS;
+import static com.rmaafs.arenapvp.util.Extra.NOTE_PLING;
+import static com.rmaafs.arenapvp.util.Extra.VILLAGER_YES;
+import static com.rmaafs.arenapvp.util.Extra.cconfig;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import com.rmaafs.arenapvp.manager.kit.Kit;
+import static com.rmaafs.arenapvp.ArenaPvP.guis;
+import static com.rmaafs.arenapvp.ArenaPvP.meetupControl;
+import com.rmaafs.arenapvp.manager.scoreboard.Score;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

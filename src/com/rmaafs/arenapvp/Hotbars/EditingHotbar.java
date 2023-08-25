@@ -1,6 +1,6 @@
 package com.rmaafs.arenapvp.Hotbars;
 
-import com.rmaafs.arenapvp.Kit;
+import com.rmaafs.arenapvp.manager.kit.Kit;
 
 public class EditingHotbar {
 

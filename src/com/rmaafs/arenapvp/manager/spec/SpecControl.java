@@ -1,11 +1,13 @@
-package com.rmaafs.arenapvp;
+package com.rmaafs.arenapvp.manager.spec;
 
 import java.util.HashMap;
-import static com.rmaafs.arenapvp.Extra.LEVEL_UP;
-import static com.rmaafs.arenapvp.Extra.ORB_PICKUP;
-import static com.rmaafs.arenapvp.Extra.clang;
-import static com.rmaafs.arenapvp.Main.extraLang;
-import static com.rmaafs.arenapvp.Main.hotbars;
+import static com.rmaafs.arenapvp.util.Extra.LEVEL_UP;
+import static com.rmaafs.arenapvp.util.Extra.ORB_PICKUP;
+import static com.rmaafs.arenapvp.util.Extra.clang;
+import static com.rmaafs.arenapvp.ArenaPvP.extraLang;
+import static com.rmaafs.arenapvp.ArenaPvP.hotbars;
+
+import com.rmaafs.arenapvp.util.Extra;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -72,7 +74,7 @@ public class SpecControl {
     }
 
     private void ponerSpec(final Player p) {
-        Extra.limpiarP(p);
+        Extra.cleanPlayer(p);
         if (extraLang.usespectatormode) {
             p.setGameMode(GameMode.valueOf("SPECTATOR"));
         } else {

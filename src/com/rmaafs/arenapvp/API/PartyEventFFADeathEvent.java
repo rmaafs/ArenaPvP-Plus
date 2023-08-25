@@ -1,37 +1,42 @@
 package com.rmaafs.arenapvp.API;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.rmaafs.arenapvp.Party.Party;
-import com.rmaafs.arenapvp.Kit;
-import com.rmaafs.arenapvp.Mapa;
+import com.rmaafs.arenapvp.entity.GameMap;
+import com.rmaafs.arenapvp.manager.kit.Kit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PartyEventFFADeathEvent extends Event{
+public class PartyEventFFADeathEvent extends Event {
 
-    Player owner, death;
-    String kitName, mapName;
-    List<Player> players, spectators;
-    Location spawn1, spawn2, corner1, corner2;
-    
-    public PartyEventFFADeathEvent(Party party, Kit kit, Mapa mapa, List<Player> spec, Player d){
-        players = new ArrayList<>();
-        spectators = new ArrayList<>();
+    private final Player owner;
+    private final Player death;
+    private final String kitName;
+    private final String mapName;
+    private final Set<UUID> players;
+    private final Set<UUID> spectators;
+    private final Location spawn1;
+    private final Location spawn2;
+    private Location corner1;
+    private Location corner2;
+
+    public PartyEventFFADeathEvent(Party party, Kit kit, GameMap gameMap, Set<UUID> spec, Player d) {
+        players = new HashSet<>();
+        spectators = new HashSet<>();
         owner = party.owner;
         death = d;
         kitName = kit.getKitName();
-        mapName = mapa.getName();
+        mapName = gameMap.getName();
         players.addAll(party.players);
         spectators.addAll(spec);
-        spawn1 = mapa.getSpawn1();
-        spawn2 = mapa.getSpawn2();
-        if (kit.isRegen()){
-            corner1 = mapa.getCorner1();
-            corner2 = mapa.getCorner2();
+        spawn1 = gameMap.getSpawn1();
+        spawn2 = gameMap.getSpawn2();
+        if (kit.isRegen()) {
+            corner1 = gameMap.getCorner1();
+            corner2 = gameMap.getCorner2();
         }
     }
 
@@ -47,11 +52,11 @@ public class PartyEventFFADeathEvent extends Event{
         return mapName;
     }
 
-    public List<Player> getPlayers() {
+    public  Set<UUID> getPlayers() {
         return players;
     }
 
-    public List<Player> getSpectators() {
+    public  Set<UUID> getSpectators() {
         return spectators;
     }
 
@@ -75,14 +80,12 @@ public class PartyEventFFADeathEvent extends Event{
         return death;
     }
 
-    
-    
-    
-    
     private static final HandlerList HANDLERS = new HandlerList();
+
     public HandlerList getHandlers() {
         return HANDLERS;
     }
+
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }

@@ -5,6 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scoreboard.Scoreboard;
 public class ScoreBoardRefreshed extends Event{
+
     private final Scoreboard board;
     private final Player player;
 
